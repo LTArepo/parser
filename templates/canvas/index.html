@@ -1,0 +1,28 @@
+<html>
+    <head>
+	<script src="/static/canvas/js/node_modules/systemjs/dist/system.js"></script>
+	<script src="/static/canvas/js/node_modules/typescript/lib/typescript.js"></script>
+
+	<script>
+	    System.config({
+		transpiler: 'typescript',
+		packages: {
+		    '/static/canvas/src': {
+			defaultExtension: 'ts'
+		    }
+		}
+	    });
+	    System.import('/static/canvas/src/panels.ts')
+	    System.import('/static/canvas/src/interface.ts')
+	    System
+		.import('/static/canvas/src/main.ts')
+		.then(null, console.error.bind(console));
+	</script>
+
+    </head>
+	
+    <body>
+	hello world
+    </body>
+
+</html>
