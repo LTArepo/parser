@@ -1,0 +1,15 @@
+#interface-container{
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+}
+
+.panel{
+    pointer-events: all;
+    width: 100px;
+    height: 80px;
+    background-color: #333;
+}

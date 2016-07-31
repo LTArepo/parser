@@ -1,8 +1,12 @@
+declare var $: any
+
 interface Refreshable {
     refresh(): void
 }
 
+/** Base class for every programatically renderable element */
 class RenderableElement {
+    elemHTML: string = ''
     cssClasses: string = ''
     $container: any
     $elem: any
@@ -16,9 +20,9 @@ class RenderableElement {
     }
 
     render() {
-        //this.$container.append(this.$elem)
-        //this.$elem.addClass(this.cssClasses)
-        console.log(this.cssClasses)
+        this.$elem = $(this.elemHTML)
+        this.$container.append(this.$elem)
+        this.$elem.addClass(this.cssClasses)
     }
 
     destroy() {
