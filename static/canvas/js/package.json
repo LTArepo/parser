@@ -1,0 +1,17 @@
+{
+  "name": "canvas-js",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "typescript": "~1.8.10",
+    "systemjs": "~0.19.35",
+    "jquery": "~3.1.0",
+    "dragula": "~3.7.1"
+  }
+}
