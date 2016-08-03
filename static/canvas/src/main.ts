@@ -19,15 +19,15 @@ function init() {
 }
 
 function configureInterface() {
-    var window = new SettingsPanel($interface, 0, 0)
-    window.render()
+    // var window = new SettingsPanel($interface, 0, 0)
+    // window.render()
 }
 
 function addTestNodes() {
-    getComponents('/', x => console.log(x))
-    getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
-    getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
-    getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
+    // getComponents('/', x => console.log(x))
+    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
+    // getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
+    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
 }
 
 /** passes a list of the components (and directories) of a given path to the callback */
