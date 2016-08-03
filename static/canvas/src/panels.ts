@@ -1,4 +1,5 @@
 import { RenderableElement, RootRenderableElement, ChildRenderableElement } from './screen'
+import * as Cells from './cells'
 
 class Panel extends RootRenderableElement {
 
@@ -39,7 +40,7 @@ class Subpanel extends ChildRenderableElement {
 /** subpanel that contains Cell objects */
 class MatrixSubpanel extends Subpanel {
 
-    addCell(cell: Cell) {
+    addCell(cell: Cells.Cell) {
         cell.generate(this)
     }
 }
@@ -63,40 +64,6 @@ class WindowTopbar extends Subpanel {
 
 }
 
-// ==================================================
-//		    MATRIX CELLS
-// ==================================================
-
-class Cell extends ChildRenderableElement {
-    elemHTML = '<div></div>'
-    cssClasses = this.cssClasses + 'in-cell '
-
-    render($container) {
-        super.render($container)
-        this.renderContents()
-    }
-
-    renderContents() { }
-}
-
-class Row extends Cell {
-    cssClasses = this.cssClasses + 'in-row-cell '
-}
-
-class LabelCell extends Cell {
-    text: string = ''
-
-    constructor(text: string) {
-        super()
-        this.text = text
-    }
-
-    renderContents() {
-        let label = '<div class="cell-label">' + this.text + '</div>'
-        this.$elem.append(label)
-    }
-}
-
-export { Panel, Window, Subpanel, Cell }
+export { Panel, Window, Subpanel }
 export { MatrixSubpanel }
 
