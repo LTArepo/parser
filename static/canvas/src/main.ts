@@ -1,8 +1,8 @@
-import { Panel } from './panels'
+import { Panel, Window } from './panels'
+import { SettingsPanel } from './interface'
 
 declare var $: any
 declare var dragula: any
-console.log($)
 
 var $interface = $('#interface-container')
 var $canvas = $('#canvas-container')
@@ -12,16 +12,18 @@ var $body = $('body')
 init()
 function init() {
     configureInterface()
+    addTestNodes()
+
+    // Configure drag and drop
+    dragula([document.querySelector('#canvas-container')])
 }
 
 function configureInterface() {
-    // Drawing interface
-    var panel = new Panel($interface, 0, 0)
-    panel.render()
-    panel.destroy()
-    dragula([document.querySelector('#canvas-container')])
+    var window = new SettingsPanel($interface, 0, 0)
+    window.render()
+}
 
-    // Test nodes
+function addTestNodes() {
     getComponents('/', x => console.log(x))
     getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
     getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))

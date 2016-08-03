@@ -1,40 +1,23 @@
-declare var $: any
+import { Panel, Window, Subpanel, Cell } from './panels'
+import { MatrixSubpanel } from './panels'
+import { RenderableElement, InterfaceElement } from './screen'
 
-interface Refreshable {
-    refresh(): void
-}
-
-/** Base class for every programatically renderable element */
-class RenderableElement {
-    elemHTML: string = ''
-    cssClasses: string = ''
-    $container: any
-    $elem: any
-    x: number
-    y: number
-
-    constructor($container: any, x: number, y: number) {
-        this.$container = $container
-        this.x = x
-        this.y = y
-    }
+class SettingsPanel extends Panel {
+    contentSubpanel: MatrixSubpanel
 
     render() {
-        this.$elem = $(this.elemHTML)
-        this.$container.append(this.$elem)
-        this.$elem.addClass(this.cssClasses)
+        super.render()
+        this.configureContents()
     }
 
-    destroy() {
-        this.$elem.remove()
+    configureContents() {
+        this.contentSubpanel = new MatrixSubpanel(this.$elem)
+        this.contentSubpanel.render()
+
+        var cell = new Cell(this.contentSubpanel.$elem)
+        cell.render()
     }
 
 }
 
-class InterfaceElement extends RenderableElement {
-    cssClasses = this.cssClasses + 'interface '
-}
-
-export { RenderableElement }
-export { InterfaceElement }
-
+export { SettingsPanel }
