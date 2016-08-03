@@ -69,10 +69,5 @@ class ChildRenderableElement extends RenderableElement {
 
 }
 
-class InterfaceElement extends RenderableElement {
-    cssClasses = this.cssClasses + 'in-interface '
-}
-
-
-export { RenderableElement, ChildRenderableElement, RootRenderableElement, InterfaceElement }
+export { RenderableElement, ChildRenderableElement, RootRenderableElement }
 

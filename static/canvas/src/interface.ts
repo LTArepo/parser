@@ -1,6 +1,7 @@
-import { Panel, Window, Subpanel, Cell } from './panels'
+import { Panel, Window, Subpanel } from './panels'
 import { MatrixSubpanel } from './panels'
-import { RenderableElement, InterfaceElement } from './screen'
+import { RenderableElement } from './screen'
+import * as Cells from './cells'
 
 class SettingsPanel extends Panel {
     contentSubpanel: MatrixSubpanel
@@ -14,10 +15,9 @@ class SettingsPanel extends Panel {
         this.contentSubpanel = new MatrixSubpanel()
         this.addSubpanel(this.contentSubpanel)
 
-        var cell = new Cell()
-        this.contentSubpanel.addCell(cell)
+        let label = new Cells.Label('Prueba')
+        this.contentSubpanel.addCell(label)
     }
-
 }
 
 export { SettingsPanel }

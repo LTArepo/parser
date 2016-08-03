@@ -84,8 +84,16 @@ class Row extends Cell {
 }
 
 class LabelCell extends Cell {
-    renderContents() {
+    text: string = ''
 
+    constructor(text: string) {
+        super()
+        this.text = text
+    }
+
+    renderContents() {
+        let label = '<div class="cell-label">' + this.text + '</div>'
+        this.$elem.append(label)
     }
 }
 
