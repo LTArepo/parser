@@ -11,11 +11,11 @@ class SettingsPanel extends Panel {
     }
 
     configureContents() {
-        this.contentSubpanel = new MatrixSubpanel(this.$elem)
-        this.contentSubpanel.render()
+        this.contentSubpanel = new MatrixSubpanel()
+        this.addSubpanel(this.contentSubpanel)
 
-        var cell = new Cell(this.contentSubpanel.$elem)
-        cell.render()
+        var cell = new Cell()
+        this.contentSubpanel.addCell(cell)
     }
 
 }

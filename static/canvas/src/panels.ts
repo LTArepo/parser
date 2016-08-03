@@ -1,9 +1,16 @@
-import { RenderableElement, InterfaceElement } from './screen'
+import { RenderableElement, RootRenderableElement, ChildRenderableElement } from './screen'
 
-class Panel extends InterfaceElement {
+class Panel extends RootRenderableElement {
+
+    subpanels: Array<Subpanel> = []
 
     elemHTML = '<div></div>'
     cssClasses = this.cssClasses + 'in-panel '
+
+    addSubpanel(subpanel) {
+        subpanel.generate(this)
+        this.subpanels.push(subpanel)
+    }
 }
 
 class Window extends Panel {
@@ -16,44 +23,33 @@ class Window extends Panel {
     }
 
     configureTopbar() {
-        this.topbar = new WindowTopbar(this.$elem, this)
-        this.topbar.render()
+        this.topbar = new WindowTopbar()
+        this.topbar.generate(this)
     }
 }
 
+
 /** panel inside a panel */
-class Subpanel extends RenderableElement {
+class Subpanel extends ChildRenderableElement {
     elemHTML = '<div></div>'
     cssClasses = this.cssClasses + 'in-subpanel '
+
 }
 
 /** subpanel that contains Cell objects */
 class MatrixSubpanel extends Subpanel {
 
     addCell(cell: Cell) {
+        cell.generate(this)
     }
-}
-
-class Cell extends RenderableElement {
-    elemHTML = '<div></div>'
-    cssClasses = this.cssClasses + 'in-cell '
-}
-
-class Row extends Cell {
-    cssClasses = this.cssClasses + 'in-row-cell '
 }
 
 class WindowTopbar extends Subpanel {
     cssClasses = this.cssClasses + 'in-window-topbar '
-    windowObject: Window
+    parent: Window
 
-    constructor($container: any, windowObject: Window) {
-        super($container)
-        this.windowObject = windowObject
-    }
-
-    render() {
-        super.render()
+    render($container) {
+        super.render($container)
         this.configureButtons()
     }
 
@@ -65,6 +61,32 @@ class WindowTopbar extends Subpanel {
 
     }
 
+}
+
+// ==================================================
+//		    MATRIX CELLS
+// ==================================================
+
+class Cell extends ChildRenderableElement {
+    elemHTML = '<div></div>'
+    cssClasses = this.cssClasses + 'in-cell '
+
+    render($container) {
+        super.render($container)
+        this.renderContents()
+    }
+
+    renderContents() { }
+}
+
+class Row extends Cell {
+    cssClasses = this.cssClasses + 'in-row-cell '
+}
+
+class LabelCell extends Cell {
+    renderContents() {
+
+    }
 }
 
 export { Panel, Window, Subpanel, Cell }
