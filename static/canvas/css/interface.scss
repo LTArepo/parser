@@ -20,6 +20,7 @@
 }
 .in-topbar-container {
     display: inline-block;
+    font-size: 0;
 }
 .in-topbar-container-logo {
     padding: 25px 20px;
@@ -29,7 +30,7 @@
 }
 .in-topbar-item {
     font-size: 14px;
-    padding: 25px 20px 21px;
+    padding: 25px 25px 21px;
     text-decoration: none;
     color: #a6a6a6;
     -webkit-transition: background .3s ease-out, color .3s ease-out;
@@ -41,24 +42,25 @@
         color: #262626;
     }
     &.templates-item {
+        display: inline-block;
         color: #92e7ff;
         border-left: 1px solid #525151;
     }
     &.settings-item {
         display: inline-block;
         background: #525151;
-        padding: 24px 20px 23px;
+        padding: 24px 25px 23px;
         &:hover {
             background: #f5f5f5;
         }
     }
     &.actions-item {
         display: inline-block;
-        color: #f7f7f7;
-        background: #86fcce;
-        padding: 24px 20px 23px;
+        color: #383838;
+        background: #9aceff;
+        padding: 24px 25px 23px;
         &:hover {
-            background: #000;
+            background: #fff;
         }
     }
     .download-item {
@@ -78,8 +80,7 @@
     pointer-events: all;
     background-color: #525151;
     color: #fff;
-    width: 300px;
-    padding: 30px;
+    width: 350px;
 }
 
 .in-window{
