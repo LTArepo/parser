@@ -1,11 +1,63 @@
+@import 'reset';
+@import 'helpers';
+
 #interface-container{
     font-family: 'Titillium Web';
-    pointer-events: none;
+    /*pointer-events: none;*/
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     width: 100vw;
     height: 100vh;
+}
+
+.in-topbar {
+    position: fixed;
+    width: 100%;
+    background: #383838;
+}
+.in-topbar-container {
+    display: inline-block;
+}
+.in-topbar-container-logo {
+    padding: 25px 20px;
+}
+.in-topbar-container-menu {
+    margin-right: 40px;
+}
+.in-topbar-item {
+    display: inline-block;
+    font-size: 14px;
+    padding: 25px 20px 21px;
+    text-decoration: none;
+    color: #a6a6a6;
+    -webkit-transition: background .3s ease-out, color .3s ease-out;
+    -moz-transition: background .3s ease-out, color .3s ease-out;
+    -o-transition: background .3s ease-out, color .3s ease-out;
+    transition: background .3s ease-out, color .3s ease-out;
+    &:hover, &.active {
+        background: #f5f5f5;
+        color: #262626;
+    }
+    &.templates-item {
+        color: #92e7ff;
+    }
+    &.settings-item {
+        background: #525151;
+        &:hover {
+            background: #f5f5f5;
+        }
+    }
+    &.actions-item {
+        color: #f7f7f7;
+        background: #86fcce;
+        &:hover {
+            background: #000;
+        }
+    }
+}
+.in-topbar-icon {
+    margin-left: 10px;
 }
 
 .in-panel{

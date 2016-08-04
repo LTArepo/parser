@@ -9,7 +9,10 @@ var $canvas = $('#canvas-container')
 var $body = $('body')
 
 /** entry point */
-init()
+$(document).ready(function () {
+    init()
+})
+
 function init() {
     configureInterface()
     addTestNodes()
@@ -22,6 +25,18 @@ function configureInterface() {
     // var window = new SettingsPanel($interface, 0, 0)
     // window.render()
     configureTestButton()
+    configureTopbar()
+}
+
+function configureTopbar() {
+    var $settingsMenu = $('#settingsMenu')
+
+    $settingsMenu.click(function () {
+        let x = $settingsMenu.offset().left
+        let y = $settingsMenu.offset().top + $settingsMenu.height()
+        let settings_panel = new SettingsPanel($interface, x, y)
+        settings_panel.render()
+    })
 }
 
 function configureTestButton() {

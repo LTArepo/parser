@@ -40,6 +40,7 @@ class RootRenderableElement extends RenderableElement {
         this.$elem = $(this.elemHTML)
         this.$container.append(this.$elem)
         this.$elem.addClass(this.cssClasses)
+        this.$elem.css({ left: this.x, top: this.y })
     }
 
     destroy() {
