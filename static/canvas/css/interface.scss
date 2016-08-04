@@ -24,10 +24,9 @@
     padding: 25px 20px;
 }
 .in-topbar-container-menu {
-    margin-right: 40px;
+    margin-right: 20px;
 }
 .in-topbar-item {
-    display: inline-block;
     font-size: 14px;
     padding: 25px 20px 21px;
     text-decoration: none;
@@ -42,19 +41,31 @@
     }
     &.templates-item {
         color: #92e7ff;
+        border-left: 1px solid #525151;
     }
     &.settings-item {
+        display: inline-block;
         background: #525151;
+        padding: 24px 20px 23px;
         &:hover {
             background: #f5f5f5;
         }
     }
     &.actions-item {
+        display: inline-block;
         color: #f7f7f7;
         background: #86fcce;
+        padding: 24px 20px 23px;
         &:hover {
             background: #000;
         }
+    }
+    .download-item {
+        background: #fff;
+        color: #000;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 20px;
     }
 }
 .in-topbar-icon {
@@ -62,12 +73,12 @@
 }
 
 .in-panel{
-    pointer-events: all;
-    min-width: 100px;
-    min-height: 80px;
-    background-color: #333;
     position: absolute;
-    color: white;
+    pointer-events: all;
+    background-color: #525151;
+    color: #fff;
+    width: 300px;
+    padding: 30px;
 }
 
 .in-window{
