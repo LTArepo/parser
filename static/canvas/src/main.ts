@@ -1,5 +1,5 @@
 import { Panel, Window } from './panels'
-import { SettingsPanel } from './interface'
+import { SettingsPanel, EditionPanel } from './interface'
 
 declare var $: any
 declare var dragula: any
@@ -25,7 +25,13 @@ function configureInterface() {
     // var window = new SettingsPanel($interface, 0, 0)
     // window.render()
     configureTestButton()
+    configureEditionPanel()
     configureTopbar()
+}
+
+function configureEditionPanel() {
+    var edition_panel = new EditionPanel($interface, $interface.width() - 400, 300)
+    edition_panel.render()
 }
 
 function configureTopbar() {
