@@ -3,7 +3,7 @@
 
 #interface-container{
     font-family: 'Titillium Web';
-    /*pointer-events: none;*/
+    pointer-events: none;
     position: absolute;
     left: 0;
     top: 0;
@@ -12,6 +12,7 @@
 }
 
 .in-topbar {
+    pointer-events: all;
     position: fixed;
     width: 100%;
     background: #383838;
