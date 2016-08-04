@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import request, render_template
 import os, json
 
 app = Flask(__name__)
@@ -24,6 +24,17 @@ def getComponent(path):
         return json.dumps(component_data)
     return json.dumps(['nothing found'])
     
+@app.route('/downloadpage/', methods=['POST'])
+def downloadPage():
+    document = request.form.get('document')
+    return str(document)[20:40]
+
+# ==================================================
+#                       Logic
+# ==================================================
+
+
+
 
 # ==================================================
 #                      Utilities

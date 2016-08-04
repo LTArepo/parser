@@ -21,13 +21,20 @@ function init() {
 function configureInterface() {
     // var window = new SettingsPanel($interface, 0, 0)
     // window.render()
+    configureTestButton()
+}
+
+function configureTestButton() {
+    $('#test-button').click(function () {
+        downloadPage()
+    })
 }
 
 function addTestNodes() {
     // getComponents('/', x => console.log(x))
-    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
-    // getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
-    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
+    getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
+    getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
+    getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
 }
 
 /** passes a list of the components (and directories) of a given path to the callback */
@@ -42,9 +49,16 @@ function getComponent(path, callback) {
     $.getJSON('http://localhost:5000/getcomponent/' + path, callback)
 }
 
+function downloadPage() {
+    //let node_array = []; $('#canvas-container').children().each(function () { node_array.push(this.HTML) })
+    $('#ed-document').val(document.body.innerHTML)
+    document.getElementById('ed-save-form').submit()
+}
+
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
 }
+
 
 // ==================================================
 //			UTILITIES

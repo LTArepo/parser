@@ -33,9 +33,20 @@
     </head>
 	
     <body>
-	<div id='ghost-topbar' style='height:45px; width:100%;'></div>
+
+	<div id='ed-ghost-topbar' style='height:45px; width:100%;'></div>
+
+	<form id='ed-save-form' name="myform" action="http://localhost:5000/downloadpage/" method="POST">
+		<input id='ed-document' type="hidden" name="document" value="content">
+		<input id='ed-pageConfig' type="hidden" name="pageConfig" value="content">
+		<input id='ed-nodes' type="hidden" name="nodes" value="content">
+	</form>
+	
+
 	<div id='canvas-container'></div>
 	<div id='interface-container'></div>
+
+	<div id='test-button' style='padding:10px; background-color: #333; color: white; position: absolute; bottom: 30px; left: 30px; cursor: pointer;'> Test button</div>
     </body>
 
 </html>
