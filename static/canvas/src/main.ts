@@ -42,6 +42,7 @@ function configureEditionPanel() {
 function configureTopbar() {
     var $settingsMenu = $('#settingsMenu')
 
+    // Preferencias button
     $settingsMenu.click(function () {
         let x = $settingsMenu.offset().left
         let y = $settingsMenu.offset().top + $settingsMenu.height()
@@ -49,11 +50,11 @@ function configureTopbar() {
         settings_panel.render()
     })
 
+    // Importar button
     document.getElementById('page-uploader').addEventListener('change', function (event) {
         var reader = new FileReader()
         reader.onload = onReaderLoad
         reader.readAsText(event.target.files[0])
-
         function onReaderLoad(event) {
             var text = event.target.result
             loadUploadedPage(text)
@@ -68,7 +69,6 @@ function configureTestButton() {
 }
 
 function addTestNodes() {
-    // getComponents('/', x => console.log(x))
     getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
     getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
     getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
