@@ -21,6 +21,11 @@ function init() {
     dragula([document.querySelector('#canvas-container')])
 }
 
+// ==================================================
+//		INTERFACE CONFIGURATION
+// ==================================================
+
+
 function configureInterface() {
     // var window = new SettingsPanel($interface, 0, 0)
     // window.render()
@@ -43,6 +48,17 @@ function configureTopbar() {
         let settings_panel = new SettingsPanel($interface, x, y)
         settings_panel.render()
     })
+
+    document.getElementById('page-uploader').addEventListener('change', function (event) {
+        var reader = new FileReader()
+        reader.onload = onReaderLoad
+        reader.readAsText(event.target.files[0])
+
+        function onReaderLoad(event) {
+            var text = event.target.result
+            loadUploadedPage(text)
+        }
+    })
 }
 
 function configureTestButton() {
@@ -58,6 +74,12 @@ function addTestNodes() {
     getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
 }
 
+
+// ==================================================
+//		    CANVAS METHODS
+// ==================================================
+
+
 /** passes a list of the components (and directories) of a given path to the callback */
 function getComponents(path, callback) {
     path = formatPath(path)
@@ -71,9 +93,13 @@ function getComponent(path, callback) {
 }
 
 function downloadPage() {
-    //let node_array = []; $('#canvas-container').children().each(function () { node_array.push(this.HTML) })
     $('#ed-document').val(document.body.innerHTML)
     document.getElementById('ed-save-form').submit()
+}
+
+/** Loads a backup file selected with the page-uploader input */
+function loadUploadedPage(text: string) {
+    console.log(text)
 }
 
 function addComponentToCanvas($node, options = {}) {
