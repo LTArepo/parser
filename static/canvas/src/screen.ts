@@ -10,8 +10,17 @@ class RenderableElement {
     cssClasses: string = ''
     $container: any
     $elem: any
+    options: any
 
-    constructor() { }
+    constructor(options = {}) {
+        this.options = options
+        this.initialConfig()
+    }
+
+    initialConfig() {
+        if (this.options.cssClasses) this.cssClasses += this.options.cssClasses
+        if (this.options.closeOnClickOut) this.cssClasses += 'close-on-click-out '
+    }
 
     setContainer($container) {
         this.$container = $container
@@ -28,8 +37,8 @@ class RootRenderableElement extends RenderableElement {
     x: number
     y: number
 
-    constructor($container: any, x: number = 0, y: number = 0) {
-        super()
+    constructor($container: any, x: number = 0, y: number = 0, options = {}) {
+        super(options)
         this.$container = $container
         this.x = x
         this.y = y

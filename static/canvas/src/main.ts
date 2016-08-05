@@ -27,11 +27,10 @@ function init() {
 
 
 function configureInterface() {
-    // var window = new SettingsPanel($interface, 0, 0)
-    // window.render()
     configureTestButton()
     configureEditionPanel()
     configureTopbar()
+    configureMouseEvents()
 }
 
 function configureEditionPanel() {
@@ -46,7 +45,7 @@ function configureTopbar() {
     $settingsMenu.click(function () {
         let x = $settingsMenu.offset().left
         let y = $settingsMenu.offset().top + $settingsMenu.height()
-        let settings_panel = new SettingsPanel($interface, x, y)
+        let settings_panel = new SettingsPanel($interface, x, y, { closeOnClickOut: true })
         settings_panel.render()
     })
 
@@ -65,6 +64,24 @@ function configureTopbar() {
 function configureTestButton() {
     $('#test-button').click(function () {
         downloadPage()
+    })
+}
+
+function configureMouseEvents() {
+    // Menu closing system
+    $('body').click(function (e) {
+        var $target = $(e.target)
+        if (!$target.closest('.close-on-click-out').length && !$target.closest('.in-interface').length) {
+            closeCloseOnClickOutElements()
+        }
+    })
+}
+
+function closeCloseOnClickOutElements() {
+    $('.close-on-click-out').each(function () {
+        if ($(this).is(':visible')) {
+            $(this).hide()
+        }
     })
 }
 

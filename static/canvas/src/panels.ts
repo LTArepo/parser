@@ -8,7 +8,7 @@ class Panel extends RootRenderableElement {
     subpanels: Array<Subpanel> = []
 
     elemHTML = '<div></div>'
-    cssClasses = this.cssClasses + 'in-panel '
+    cssClasses = this.cssClasses + 'in-interface in-panel '
 
     addSubpanel(subpanel) {
         subpanel.generate(this)
@@ -17,7 +17,7 @@ class Panel extends RootRenderableElement {
 }
 
 class Window extends Panel {
-    cssClasses = this.cssClasses + 'in-window '
+    cssClasses = this.cssClasses + 'in-interface in-window '
     topbar: WindowTopbar
 
     render() {
