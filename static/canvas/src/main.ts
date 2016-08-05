@@ -59,6 +59,23 @@ function configureTopbar() {
             loadUploadedPage(text)
         }
     })
+
+    //Cargar barra de opciones
+    $('.in-topbar-item').click(function(e) {
+        e.preventDefault()
+        if (!$(this).hasClass('active')) {
+            var target = $(this).attr('href')
+            $('.in-topbar-item').removeClass('active')
+            $('.options-container').hide()
+            $(target).show()
+            $('.in-topbar-options').slideDown()
+            $(this).addClass('active')    
+        } else {
+            $('.in-topbar-options').slideUp()
+            $(this).removeClass('active')
+        }
+        //loadSuboptions()
+    });
 }
 
 function configureTestButton() {
