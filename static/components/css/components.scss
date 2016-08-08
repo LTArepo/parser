@@ -1,0 +1,25 @@
+/***** CONTAINERS *****/
+.full-width {width: 100%}
+.one-fourth, .one-third, .one-half, .two-third, .three-fourth {float: left}
+.one-fourth {width: 25%}
+.one-third {width: 33%}
+.one-half {width: 50%}
+.two-third {width: 66%}
+.three-fourth {width: 75%}
+
+
+/***
+*
+*
+* RESPONSIVE
+*
+*
+***/
+/*** Mobile ***/
+@media screen and (max-width: 767px) {
+	body {
+		width: 90%;
+		padding: 0 5%;
+	}
+	.one-fourth, .one-third, .one-half, .two-third, .three-fourth {width: 100%}
+}
