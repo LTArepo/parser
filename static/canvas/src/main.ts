@@ -96,7 +96,7 @@ function configureNodeList() {
             }
         })
     }
-    loadComponents('|container', $containers)
+    loadComponents('|containers', $containers)
     loadComponents('|blocks', $blocks)
     loadComponents('|contents', $contents)
     loadComponents('|floats', $floats)
