@@ -69,6 +69,7 @@ function configureNodeList() {
     var $blocks = $('#blocksOptions')
     var $contents = $('#contentsOptions')
     var $floats = $('#floatsOptions')
+    var $topbar_options = $('.in-topbar-options')
 
     // Collapse node list
     $('.in-topbar-item').click(function (e) {
@@ -90,10 +91,9 @@ function configureNodeList() {
     function loadComponents(path, $container) {
         getComponents(path, function (data) {
             if (data.length) {
-                let nodes = data.map(x => generateComponentOptionNode(x))
+                let nodes = data.map(x => generateComponentOptionNode(x, path))
                 $container.append(nodes)
             }
-
         })
     }
     loadComponents('|container', $containers)
@@ -101,13 +101,18 @@ function configureNodeList() {
     loadComponents('|contents', $contents)
     loadComponents('|floats', $floats)
 
-    function generateComponentOptionNode(component_filename) {
+    function generateComponentOptionNode(component_filename, path) {
         let component_name = component_filename.replace('.html', '')
         let html = '<div class="option-container text-center"><a id="containerFullWidth" href="#">'
         html += '<img class="option-img" src="/static/canvas/img/components_thumbnails/' + component_name
         html += '" width="87" height="60" alt="' + component_name + '" title="' + component_name + '">'
         html += '<p class="no-margin option-label">' + component_name + '</p></a></div>'
-        return html
+        let $node = $(html)
+        $node.click(function () {
+            getComponent(path + '/' + component_filename, x => addComponentToCanvas($(x.html), x.options))
+            $topbar_options.slideUp()
+        })
+        return $node
     }
 
 }
