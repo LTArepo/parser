@@ -13,16 +13,15 @@ def listComponents(path):
     path = parsePath(path, 'components')
     if os.path.isdir(path):
         return json.dumps(os.listdir(path))
-    return json.dumps(['nothing found'])
+    return json.dumps([])
 
 @app.route('/getcomponent/<path>')
 def getComponent(path):
-    print 'INSIDE GETCOMPONENT'
     path = parsePath(path, 'components')
     if os.path.isfile(path):
         component_data = parseComponent(path)
         return json.dumps(component_data)
-    return json.dumps(['nothing found'])
+    return json.dumps([])
     
 @app.route('/downloadpage/', methods=['POST'])
 def downloadPage():

@@ -60,8 +60,18 @@ function configureTopbar() {
         }
     })
 
-    //Cargar barra de opciones
-    $('.in-topbar-item').click(function(e) {
+    configureNodeList() // Barra desplegable de seleccion de nodos
+
+}
+
+function configureNodeList() {
+    var $containers = $('#containersOptions')
+    var $blocks = $('#blocksOptions')
+    var $contents = $('#contentsOptions')
+    var $floats = $('#floatsOptions')
+
+    // Collapse node list
+    $('.in-topbar-item').click(function (e) {
         e.preventDefault()
         if (!$(this).hasClass('active')) {
             var target = $(this).attr('href')
@@ -69,13 +79,37 @@ function configureTopbar() {
             $('.options-container').hide()
             $(target).show()
             $('.in-topbar-options').slideDown()
-            $(this).addClass('active')    
+            $(this).addClass('active')
         } else {
             $('.in-topbar-options').slideUp()
             $(this).removeClass('active')
         }
-        //loadSuboptions()
     });
+
+    // Load component list contents 
+    function loadComponents(path, $container) {
+        getComponents(path, function (data) {
+            if (data.length) {
+                let nodes = data.map(x => generateComponentOptionNode(x))
+                $container.append(nodes)
+            }
+
+        })
+    }
+    loadComponents('|container', $containers)
+    loadComponents('|blocks', $blocks)
+    loadComponents('|contents', $contents)
+    loadComponents('|floats', $floats)
+
+    function generateComponentOptionNode(component_filename) {
+        let component_name = component_filename.replace('.html', '')
+        let html = '<div class="option-container text-center"><a id="containerFullWidth" href="#">'
+        html += '<img class="option-img" src="/static/canvas/img/components_thumbnails/' + component_name
+        html += '" width="87" height="60" alt="' + component_name + '" title="' + component_name + '">'
+        html += '<p class="no-margin option-label">' + component_name + '</p></a></div>'
+        return html
+    }
+
 }
 
 function configureTestButton() {
