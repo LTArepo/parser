@@ -45,7 +45,9 @@ function configureTopbar() {
     $settingsMenu.click(function () {
         let x = $settingsMenu.offset().left
         let y = $settingsMenu.offset().top + $settingsMenu.height()
-        let settings_panel = new SettingsPanel($interface, x, y, { closeOnClickOut: true })
+        let settings_panel = new SettingsPanel($interface, x, y, {
+            slideUpOnClickOut: true
+        })
         settings_panel.render()
     })
 
@@ -105,7 +107,7 @@ function configureNodeList() {
         let component_name = component_filename.replace('.html', '')
         let html = '<div class="option-container text-center"><a id="containerFullWidth" href="#">'
         html += '<img class="option-img" src="/static/canvas/img/components_thumbnails/' + component_name
-        html += '" width="87" height="60" alt="' + component_name + '" title="' + component_name + '">'
+        html += '.gif" width="87" height="60" alt="' + component_name + '" title="' + component_name + '">'
         html += '<p class="no-margin option-label">' + component_name + '</p></a></div>'
         let $node = $(html)
         $node.click(function () {
@@ -136,7 +138,13 @@ function configureMouseEvents() {
 function closeCloseOnClickOutElements() {
     $('.close-on-click-out').each(function () {
         if ($(this).is(':visible')) {
-            $(this).hide()
+            $(this).fadeOut()
+        }
+    })
+
+    $('.slide-up-on-click-out').each(function () {
+        if ($(this).is(':visible')) {
+            $(this).slideUp()
         }
     })
 }

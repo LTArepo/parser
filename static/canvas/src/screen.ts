@@ -20,6 +20,7 @@ class RenderableElement {
     initialConfig() {
         if (this.options.cssClasses) this.cssClasses += this.options.cssClasses
         if (this.options.closeOnClickOut) this.cssClasses += 'close-on-click-out '
+        if (this.options.slideUpOnClickOut) this.cssClasses += 'slide-up-on-click-out '
     }
 
     setContainer($container) {
