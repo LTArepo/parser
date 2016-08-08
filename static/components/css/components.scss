@@ -1,5 +1,10 @@
 /***** CONTAINERS *****/
 .full-width {width: 100%}
+.container-large, .container-small {
+	position: relative;
+	margin: 0 auto;
+}
+.container-large, .container-small {width: 996px;}
 .one-fourth, .one-third, .one-half, .two-third, .three-fourth {float: left}
 .one-fourth {width: 25%}
 .one-third {width: 33%}
@@ -15,11 +20,19 @@
 *
 *
 ***/
+/*** Large Desktop ***/
+@media screen and (min-width: 1360px) {
+	.container-large {width: 1338px;}
+}
+/*** Tablet Vertical ***/
+@media screen and (max-width: 900px) {
+	.one-fourth {width: 50%}
+}
 /*** Mobile ***/
 @media screen and (max-width: 767px) {
 	body {
 		width: 90%;
 		padding: 0 5%;
 	}
-	.one-fourth, .one-third, .one-half, .two-third, .three-fourth {width: 100%}
+	.container-large, .container-small, .one-fourth, .one-third, .one-half, .two-third, .three-fourth {width: 100%}
 }
