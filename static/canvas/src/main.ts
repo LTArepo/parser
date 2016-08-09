@@ -105,10 +105,11 @@ function configureNodeList() {
 
     function generateComponentOptionNode(component_filename, path) {
         let component_name = component_filename.replace('.html', '')
-        let html = '<div class="option-container text-center"><a id="containerFullWidth" href="#">'
-        html += '<img class="option-img" src="/static/canvas/img/components_thumbnails/' + component_name
-        html += '.gif" width="87" height="60" alt="' + component_name + '" title="' + component_name + '">'
-        html += '<p class="no-margin option-label">' + component_name + '</p></a></div>'
+        let thumbnails_path = '/static/canvas/img/components_thumbnails'
+        let html = `<div class="option-container text-center"><a id="containerFullWidth" href="#">
+	<img class="option-img" src="${thumbnails_path}/${component_name}.gif" width="87" height="60"
+	alt="${component_name}" title="${component_name}">
+	<p class="no-margin option-label">${component_name}</p></a></div>`
         let $node = $(html)
         $node.click(function () {
             getComponent(path + '/' + component_filename, x => addComponentToCanvas($(x.html), x.options))
