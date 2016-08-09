@@ -32,12 +32,20 @@ class EditionPanel extends Window {
         let margin_entry = new Cells.NumberInputs(number_inputs)
 
         let padding_label = new Cells.Label('Márgenes interiores')
+        number_inputs = [
+            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+        ]
+        let padding_entry = new Cells.NumberInputs(number_inputs)
 
         this.contentSubpanel.addCell(align_label)
         this.contentSubpanel.addCell(align_entry)
         this.contentSubpanel.addCell(margin_label)
         this.contentSubpanel.addCell(margin_entry)
         this.contentSubpanel.addCell(padding_label)
+        this.contentSubpanel.addCell(padding_entry)
     }
 }
 

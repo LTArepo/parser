@@ -147,7 +147,7 @@ export class NumberInputs extends Cell {
 			<div class="ce-number-input-label">${b.label}</div>
 		</div>`
             let $node = $(html)
-            $node.change(() => b.callback($node.val()))
+            $node.change(() => b.callback($node.find('input').val()))
             return $node
         })
         this.$elem.append(this.$inputs)
