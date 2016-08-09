@@ -2,8 +2,10 @@
 	margin: 10px 20px 20px;
 }
 
-.ce-label{
-
+.cell-label{
+	color: #f7f7f7;
+	font-size: 14px;
+	margin-bottom: 10px;
 }
 
 .ce-textInput, .ce-select {
@@ -20,5 +22,16 @@
 
 .ce-textInput{
     
+}
+
+.ce-icon-button-container, .ce-number-input-container {
+	float: left;
+	width: 25%;
+	text-align: center;
+}
+.ce-icon-button-label, .ce-number-input-label {
+	color: #bbbbbb;
+	font-size: 12px;	
+	margin-top: 8px;
 }
 

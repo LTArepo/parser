@@ -92,7 +92,7 @@ export interface IconButton {
 
 export class IconButtons extends Cell {
 
-    cssClasses = this.cssClasses + 'ce-three-icons '
+    cssClasses = this.cssClasses + 'ce-three-icons clearfix '
     buttons: Array<IconButton>
     $buttons: any
 
@@ -130,7 +130,7 @@ export interface NumberInput {
 
 export class NumberInputs extends Cell {
 
-    cssClasses = this.cssClasses + 'ce-number-inputs '
+    cssClasses = this.cssClasses + 'ce-number-inputs clearfix '
     inputs: Array<NumberInput>
     $inputs: any
 
