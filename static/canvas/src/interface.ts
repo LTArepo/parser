@@ -15,15 +15,37 @@ class EditionPanel extends Window {
         this.contentSubpanel = new MatrixSubpanel()
         this.addSubpanel(this.contentSubpanel)
 
-        let title_label = new Cells.Label('Título')
-        let title_entry = new Cells.TextInput(x => console.log(x))
-        let doctype_label = new Cells.Label('Tipo de documento')
-        let doctype_select = new Cells.Select(x => console.log(x), ['Formato', 'Branded'])
+        let align_label = new Cells.Label('Alineación')
+        let buttons: Array<Cells.IconButton> = [
+            { label: 'Izquierda', icon_path: 'icon_path', callback: () => console.log('Izquierda') },
+            { label: 'Centrado', icon_path: 'icon_path', callback: () => console.log('Centrado') },
+            { label: 'Derecha', icon_path: 'icon_path', callback: () => console.log('Derecha') }]
+        let align_entry = new Cells.IconButtons(buttons)
 
-        this.contentSubpanel.addCell(title_label)
-        this.contentSubpanel.addCell(title_entry)
-        this.contentSubpanel.addCell(doctype_label)
-        this.contentSubpanel.addCell(doctype_select)
+        let margin_label = new Cells.Label('Márgenes exteriores')
+        let number_inputs: Array<Cells.NumberInput> = [
+            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+        ]
+        let margin_entry = new Cells.NumberInputs(number_inputs)
+
+        let padding_label = new Cells.Label('Márgenes interiores')
+        number_inputs = [
+            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+        ]
+        let padding_entry = new Cells.NumberInputs(number_inputs)
+
+        this.contentSubpanel.addCell(align_label)
+        this.contentSubpanel.addCell(align_entry)
+        this.contentSubpanel.addCell(margin_label)
+        this.contentSubpanel.addCell(margin_entry)
+        this.contentSubpanel.addCell(padding_label)
+        this.contentSubpanel.addCell(padding_entry)
     }
 }
 
