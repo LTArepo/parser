@@ -63,7 +63,6 @@ function configureTopbar() {
     })
 
     configureNodeList() // Barra desplegable de seleccion de nodos
-
 }
 
 function configureNodeList() {
@@ -93,9 +92,12 @@ function configureNodeList() {
     function loadComponents(path, $container) {
         getComponents(path, function (data) {
             if (data.length) {
+                $container.append('<div class="owl-carousel owl-topbar"></div>')
                 let nodes = data.map(x => generateComponentOptionNode(x, path))
-                $container.append(nodes)
+                $container.children('.owl-topbar').append(nodes)
             }
+            if (path=='|floats')
+                activateTopbarCarousel()
         })
     }
     loadComponents('|containers', $containers)
@@ -106,7 +108,7 @@ function configureNodeList() {
     function generateComponentOptionNode(component_filename, path) {
         let component_name = component_filename.replace('.html', '')
         let thumbnails_path = '/static/canvas/img/components_thumbnails'
-        let html = `<div class="option-container text-center"><a id="containerFullWidth" href="#">
+        let html = `<div class="option-container text-center"><a href="#">
 	<img class="option-img" src="${thumbnails_path}/${component_name}.gif" width="87" height="60"
 	alt="${component_name}" title="${component_name}">
 	<p class="no-margin option-label">${component_name}</p></a></div>`
@@ -114,10 +116,19 @@ function configureNodeList() {
         $node.click(function () {
             getComponent(path + '/' + component_filename, x => addComponentToCanvas($(x.html), x.options))
             $topbar_options.slideUp()
+            $('.in-topbar-item.active').removeClass('active')
         })
         return $node
     }
 
+}
+
+function activateTopbarCarousel() {
+    $(".owl-topbar").owlCarousel({
+        items: 8,
+        navigation: true,
+        navigationText: ['<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-left.png" width="16" height="16">','<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-right.png" width="16" height="16">']
+    })
 }
 
 function configureTestButton() {
