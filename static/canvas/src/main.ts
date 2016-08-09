@@ -185,6 +185,22 @@ function loadUploadedPage(text: string) {
 
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
+    let node_offset = $node.offset()
+
+    if (options.container) {
+        let $interface_layer = $('<div class="in-node-layer" style="border: 1px dashed black; position: absolute;"></div>')
+
+        // add to refresh!!
+        $interface.append($interface_layer)
+        $interface_layer.css({
+            left: node_offset.left,
+            top: node_offset.top,
+            width: $node.width(),
+            height: $node.height()
+        })
+
+
+    }
 }
 
 
