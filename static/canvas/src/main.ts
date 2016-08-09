@@ -202,6 +202,10 @@ function addComponentToCanvas($node, options = {}) {
 
 
     }
+
+    function parseNodeOptions($node) {
+        // Ids para tabs ?
+    }
 }
 
 
