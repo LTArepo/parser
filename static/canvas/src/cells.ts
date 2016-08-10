@@ -158,12 +158,50 @@ export class NumberInputs extends Cell {
     }
 }
 
+export class FileUpload extends Cell {
+    cssClasses = this.cssClasses + 'ce-file-upload '
+    placeholder: string
+    $text_input: any
+    $file_input: any
+    $label: any
+
+    constructor(placeholder: string) {
+        super()
+        this.placeholder = placeholder
+    }
+
+    renderContents() {
+        let id = 'ce-file-upload-' + generateID()
+        this.$text_input = $('<input class="ce-file-upload-text-input" placeholder="' + this.placeholder + '">')
+        this.$file_input = $('<input id="' + id + '" name="' + id + '" type="file" class="ce-file-upload-file-input hidden-input">')
+        this.$label = $('<label for="' + id + '" class="ce-file-upload-button">button</label>')
+
+        this.$elem.append(this.$text_input)
+        this.$elem.append(this.$file_input)
+        this.$elem.append(this.$label)
+
+        document.getElementById(id).addEventListener('change', function (event) {
+            var reader = new FileReader()
+            reader.onload = onReaderLoad
+            reader.readAsText(event.target.files[0])
+            function onReaderLoad(event) {
+                var text = event.target.result
+                console.log(text)
+            }
+        })
+    }
+}
+
 
 
 
 // ==================================================
 //			UTILITIES
 // ==================================================
+
+function generateID() {
+    return Math.random().toString(36).substr(2, 5)
+}
 
 function onEnter($elem, callback) {
     $elem.keyup(function (e) {

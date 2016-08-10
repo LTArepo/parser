@@ -17,7 +17,7 @@ class EditionPanel extends Window {
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
         this.tabSubpanel.addTab({ icon_path: 'tab_path', tabGenerator: this.posicionamientoTab })
-        this.tabSubpanel.addTab({ icon_path: 'tab_path', tabGenerator: this.testTab })
+        this.tabSubpanel.addTab({ icon_path: 'tab_path', tabGenerator: this.estiloTab })
         this.tabSubpanel.loadTab(this.posicionamientoTab)
     }
 
@@ -56,12 +56,12 @@ class EditionPanel extends Window {
         panel.addCell(padding_entry)
     }
 
-    testTab(panel) {
+    estiloTab(panel) {
 
-        let label1 = new Cells.Label('Alineación')
-        let label2 = new Cells.Label('Alineación')
-        panel.addCell(label1)
-        panel.addCell(label2)
+        let bgimage_label = new Cells.Label('Imagen de fondo')
+        let bgimage_entry = new Cells.FileUpload('placeholder')
+        panel.addCell(bgimage_label)
+        panel.addCell(bgimage_entry)
     }
 
 
