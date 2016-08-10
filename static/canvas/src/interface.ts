@@ -60,10 +60,11 @@ class EditionPanel extends Window {
 
         let bgimage_label = new Cells.Label('Imagen de fondo')
         let bgimage_entry = new Cells.FileUpload('placeholder')
+        let bgimage_helper = new Cells.TextHelper('Selecciona una imagen de tu ordenador')
         panel.addCell(bgimage_label)
         panel.addCell(bgimage_entry)
+        panel.addCell(bgimage_helper)
     }
-
 
 }
 

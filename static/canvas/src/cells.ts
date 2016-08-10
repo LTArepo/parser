@@ -33,6 +33,24 @@ export class Label extends Cell {
     }
 }
 
+export class TextHelper extends Cell {
+    cssClasses = this.cssClasses + 'ce-text-helper '
+    text: string = ''
+    $text: any
+
+    constructor(text: string) {
+        super()
+        this.text = text
+    }
+
+    renderContents() {
+        this.$text = $('<div class="ce-text-helper-text">' + this.text + '</div>')
+        this.$elem.append(this.$text)
+
+    }
+
+}
+
 export class TextInput extends Cell {
     cssClasses = this.cssClasses + 'ce-textInput '
     placeholder: string
