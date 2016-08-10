@@ -1,10 +1,12 @@
 import { Panel, Window, Subpanel } from './panels'
-import { MatrixSubpanel } from './panels'
+import { MatrixSubpanel, TabbedMatrixSubpanel } from './panels'
 import { RenderableElement } from './screen'
 import * as Cells from './cells'
 
+declare var $: any
+
 class EditionPanel extends Window {
-    contentSubpanel: MatrixSubpanel
+    tabSubpanel: TabbedMatrixSubpanel
 
     render() {
         super.render()
@@ -12,8 +14,14 @@ class EditionPanel extends Window {
     }
 
     configureContents() {
-        this.contentSubpanel = new MatrixSubpanel()
-        this.addSubpanel(this.contentSubpanel)
+        this.tabSubpanel = new TabbedMatrixSubpanel()
+        this.addSubpanel(this.tabSubpanel)
+        this.tabSubpanel.addTab({ icon_path: 'tab_path', tabGenerator: this.posicionamientoTab })
+        this.tabSubpanel.addTab({ icon_path: 'tab_path', tabGenerator: this.testTab })
+        this.tabSubpanel.loadTab(this.posicionamientoTab)
+    }
+
+    posicionamientoTab(panel) {
 
         let align_label = new Cells.Label('Alineación')
         let buttons: Array<Cells.IconButton> = [
@@ -40,13 +48,23 @@ class EditionPanel extends Window {
         ]
         let padding_entry = new Cells.NumberInputs(number_inputs)
 
-        this.contentSubpanel.addCell(align_label)
-        this.contentSubpanel.addCell(align_entry)
-        this.contentSubpanel.addCell(margin_label)
-        this.contentSubpanel.addCell(margin_entry)
-        this.contentSubpanel.addCell(padding_label)
-        this.contentSubpanel.addCell(padding_entry)
+        panel.addCell(align_label)
+        panel.addCell(align_entry)
+        panel.addCell(margin_label)
+        panel.addCell(margin_entry)
+        panel.addCell(padding_label)
+        panel.addCell(padding_entry)
     }
+
+    testTab(panel) {
+
+        let label1 = new Cells.Label('Alineación')
+        let label2 = new Cells.Label('Alineación')
+        panel.addCell(label1)
+        panel.addCell(label2)
+    }
+
+
 }
 
 class SettingsPanel extends Panel {

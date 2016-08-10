@@ -40,10 +40,101 @@ class Subpanel extends ChildRenderableElement {
 
 /** subpanel that contains Cell objects */
 class MatrixSubpanel extends Subpanel {
+    cssClasses = this.cssClasses + 'in-matrix-subpanel '
+    cells: Array<Cells.Cell> = []
 
     addCell(cell: Cells.Cell) {
         cell.generate(this)
+        this.cells.push(cell)
     }
+
+    destroy() {
+        super.destroy()
+        this.clean()
+    }
+
+    clean() {
+        this.cells.forEach(x => x.destroy())
+        this.cells = []
+    }
+}
+
+interface Tab {
+    icon_path: string
+    tabGenerator: (subanel: MatrixSubpanel) => void
+}
+
+class TabRow extends Subpanel {
+    cssClasses = this.cssClasses + 'in-tabrow-subpanel '
+    tabs: Array<Tab>
+    $tabs: any
+
+    constructor(tabs = []) {
+        super()
+        this.tabs = tabs
+    }
+
+    generate(parent) {
+        super.generate(parent)
+        this.renderTabs()
+    }
+
+    renderTabs() {
+        var parent = <TabbedMatrixSubpanel>this.parent
+        this.$tabs = this.tabs.map(function (t) {
+            let html =
+                `<div class='in-tabrow-tab'>
+			<img class='in-tabrow-tab-icon' src='${t.icon_path}'>
+		</div>`
+            let $node = $(html)
+            $node.click(() => parent.loadTab(t.tabGenerator))
+            return $node
+        })
+        this.$elem.append(this.$tabs)
+    }
+
+    refreshTabs() {
+        this.$elem.empty()
+        this.renderTabs()
+    }
+
+    addTab(tab: Tab) {
+        this.tabs.push(tab)
+        this.refreshTabs()
+    }
+}
+
+class TabbedMatrixSubpanel extends Subpanel {
+
+    cssClasses = this.cssClasses + 'in-tabbed-subpanel '
+    contentSubpanel: MatrixSubpanel
+    tabRow: TabRow
+
+    /** The element must be generated before loading tabs */
+    loadTab(tabGenerator: (subpanel: MatrixSubpanel) => void) {
+        if (this.generated) {
+            this.contentSubpanel.clean()
+            tabGenerator(this.contentSubpanel)
+        }
+    }
+
+    addTab(tab: Tab) {
+        this.tabRow.addTab(tab)
+    }
+
+    generate(parent) {
+        super.generate(parent)
+        this.tabRow = new TabRow()
+        this.tabRow.generate(this)
+        this.contentSubpanel = new MatrixSubpanel()
+        this.contentSubpanel.generate(this)
+    }
+
+    destroy() {
+        super.destroy()
+        this.contentSubpanel.destroy()
+    }
+
 }
 
 class WindowTopbar extends Subpanel {
@@ -101,5 +192,5 @@ class WindowTopbar extends Subpanel {
 }
 
 export { Panel, Window, Subpanel }
-export { MatrixSubpanel }
+export { MatrixSubpanel, TabbedMatrixSubpanel }
 

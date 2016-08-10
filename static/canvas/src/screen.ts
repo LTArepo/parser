@@ -64,11 +64,13 @@ class RootRenderableElement extends RenderableElement {
 */
 class ChildRenderableElement extends RenderableElement {
     parent: RenderableElement
+    generated: boolean = false
 
     /** Sets the element parent as well as getting appended and rendered. */
     generate(parent: RenderableElement) {
         this.parent = parent
         this.render(parent.$elem)
+        this.generated = true
     }
 
     render($container) {
@@ -76,6 +78,10 @@ class ChildRenderableElement extends RenderableElement {
         this.$elem = $(this.elemHTML)
         this.$container.append(this.$elem)
         this.$elem.addClass(this.cssClasses)
+    }
+
+    destroy() {
+        this.$elem.remove()
     }
 
 }
