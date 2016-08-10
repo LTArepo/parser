@@ -96,7 +96,7 @@ function configureNodeList() {
                 let nodes = data.map(x => generateComponentOptionNode(x, path))
                 $container.children('.owl-topbar').append(nodes)
             }
-            if (path=='|floats')
+            if (path == '|floats')
                 activateTopbarCarousel()
         })
     }
@@ -127,7 +127,7 @@ function activateTopbarCarousel() {
     $(".owl-topbar").owlCarousel({
         items: 8,
         navigation: true,
-        navigationText: ['<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-left.png" width="16" height="16">','<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-right.png" width="16" height="16">']
+        navigationText: ['<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-left.png" width="16" height="16">', '<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-right.png" width="16" height="16">']
     })
 }
 
@@ -162,9 +162,9 @@ function closeCloseOnClickOutElements() {
 }
 
 function addTestNodes() {
-    getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
-    getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
-    getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
+    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
+    // getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
+    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
 }
 
 
@@ -199,7 +199,7 @@ function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
     let node_offset = $node.offset()
 
-    if (options.container) {
+    if ($node.hasClass('in-container')) {
         let $interface_layer = $('<div class="in-node-layer" style="border: 1px dashed black; position: absolute;"></div>')
 
         // add to refresh!!
