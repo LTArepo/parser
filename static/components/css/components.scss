@@ -1,3 +1,12 @@
+@import 'font-awesome';
+
+/*** Mixins ***/
+@mixin font-size($sizeValue: 18) {
+    font-size: ($sizeValue) + px;
+    line-height: ($sizeValue + 8) + px;
+}
+
+
 /** HELPERS **/
 .clearfix:after {
      visibility: hidden;
@@ -10,6 +19,7 @@
 .clearfix { display: inline-block; }
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
+.visible-mobile {display: none!important;}
 
 
 /***** CONTAINERS *****/
@@ -25,6 +35,50 @@
 .one-half {width: 50%}
 .two-third {width: 66%}
 .three-fourth {width: 75%}
+
+
+/***** BLOCKS *****/
+//Topbar
+.topbar {
+	position: fixed;
+	width: 100%;
+    z-index: 100;
+    background: #282828;
+}
+.topbar-logo-container {
+	float: left;
+	padding: 17px 0;
+}
+.topbar-logo {
+	margin-left: 40px;
+	position: relative;
+	top: 2px;
+}
+.topbar-share-container {
+	float: right;
+	padding: 15px 0;
+	margin-right: 40px;
+}
+.topbar-share-item {
+	display: inline-block;
+	margin-left: 10px;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 50%;
+	text-align: center;
+	text-decoration: none;
+	background: #fff;
+	color: #282828;
+	-webkit-transition: background .3s ease-out, color .3s ease-out;
+	-moz-transition: background .3s ease-out, color .3s ease-out;
+	-o-transition: background .3s ease-out, color .3s ease-out;
+	transition: background .3s ease-out, color .3s ease-out;
+	&:hover {
+		background: #000;
+		color: #fff;
+	}
+}
 
 
 /***
@@ -44,6 +98,8 @@
 }
 /*** Mobile ***/
 @media screen and (max-width: 767px) {
+	.hidden-mobile {display: none;}
+	.visible-mobile {display: inline-block;}
 	body {
 		width: 90%;
 		padding: 0 5%;
