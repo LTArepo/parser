@@ -20,6 +20,7 @@
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
 .visible-mobile {display: none!important;}
+.block {display: block;}
 
 
 /***** CONTAINERS *****/
@@ -70,6 +71,59 @@
 	text-decoration: none;
 	background: #fff;
 	color: #282828;
+	-webkit-transition: background .3s ease-out, color .3s ease-out;
+	-moz-transition: background .3s ease-out, color .3s ease-out;
+	-o-transition: background .3s ease-out, color .3s ease-out;
+	transition: background .3s ease-out, color .3s ease-out;
+	&:hover {
+		background: #000;
+		color: #fff;
+	}
+}
+
+//Aside
+.aside-top-mobile {
+	position: fixed;
+	background:#222;
+	padding: 5px 5%;
+	width: 90%;
+	z-index: 100;
+}
+.aside-logo-container {
+	float: left;
+	width: 30%;
+}
+.aside-share-container {
+	float: right;
+	width: 70%;
+}
+.aside-rrss {
+	margin: 0 0 0 10px;
+}
+.aside-left {
+	position: fixed;
+	top: 45%;
+	left: 0;
+	background: #000;
+	z-index: 100;
+	padding: 20px 10px;
+}
+.aside-left-logo {
+	padding-bottom: 5px;
+	border-bottom: 1px solid #fff;
+	margin-bottom: 15px;
+}
+.aside-left-rrss {
+	width: 25px;
+	height: 25px;
+	line-height: 25px;
+	background: #fff;
+	color: #000;
+	margin: 10px 0;
+	border-radius: 50%;
+	font-size: 14px;
+	text-align: center;
+	text-decoration: none;
 	-webkit-transition: background .3s ease-out, color .3s ease-out;
 	-moz-transition: background .3s ease-out, color .3s ease-out;
 	-o-transition: background .3s ease-out, color .3s ease-out;
