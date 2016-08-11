@@ -31,9 +31,9 @@ class EditionPanel extends Window {
 
         let align_label = new Cells.Label('Alineación')
         let buttons: Array<Cells.IconButton> = [
-            { label: 'Izquierda', icon_path: '/static/canvas/img/icons-panel/icon-align-left.png', callback: () => console.log('Izquierda') },
-            { label: 'Centrado', icon_path: '/static/canvas/img/icons-panel/icon-align-center.png', callback: () => console.log('Centrado') },
-            { label: 'Derecha', icon_path: '/static/canvas/img/icons-panel/icon-align-right.png', callback: () => console.log('Derecha') }]
+            { label: 'Izquierda', icon_path: '/static/canvas/img/icons-panel/icon-align-left-inactive.png', callback: () => console.log('Izquierda') },
+            { label: 'Centrado', icon_path: '/static/canvas/img/icons-panel/icon-align-center-inactive.png', callback: () => console.log('Centrado') },
+            { label: 'Derecha', icon_path: '/static/canvas/img/icons-panel/icon-align-right-inactive.png', callback: () => console.log('Derecha') }]
         let align_entry = new Cells.IconButtons(buttons)
 
         let margin_label = new Cells.Label('Márgenes exteriores')

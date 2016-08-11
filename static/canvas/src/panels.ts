@@ -65,7 +65,7 @@ interface Tab {
 }
 
 class TabRow extends Subpanel {
-    cssClasses = this.cssClasses + 'in-tabrow-subpanel '
+    cssClasses = this.cssClasses + 'in-tabrow-subpanel clearfix '
     tabs: Array<Tab>
     $tabs: any
 

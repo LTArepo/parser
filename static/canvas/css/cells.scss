@@ -1,11 +1,20 @@
 .ce-cell{
-	margin: 10px 20px 20px;
+	padding: 10px 20px;
+	&.ce-three-icons, &.ce-number-inputs {
+		border-bottom: 1px solid #4f4f4f;
+	}
+	&.ce-three-icons {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		padding-top: 0;
+	}
 }
+
 
 .cell-label{
 	color: #f7f7f7;
 	font-size: 14px;
-	margin-bottom: 10px;
 }
 
 .ce-textInput, .ce-select {
@@ -26,8 +35,32 @@
 
 .ce-icon-button-container, .ce-number-input-container {
 	float: left;
-	width: 25%;
 	text-align: center;
+}
+.ce-icon-button-container {
+	width: 25%;
+	padding: 5px 10px 0;
+	cursor: pointer;
+	box-sizing: border-box;
+	&:hover {
+		background: #9aceff;
+		> .ce-icon-button-label {
+			color: #000;
+		}
+	}
+}
+.ce-number-input-container {
+	width: 22%;
+	margin-right: 4%;
+	&:last-child {
+		margin-right: 0;
+	}
+	input {
+		width: 100%;
+		border: 0;
+		border-radius: 4px;
+		padding: 5px;
+	}
 }
 .ce-icon-button-label, .ce-number-input-label {
 	color: #bbbbbb;
