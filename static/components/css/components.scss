@@ -71,6 +71,14 @@ $milio: 'milio-font', Arial, Helvetica, serif;
 
 
 /** HELPERS **/
+body {
+	font-family: $titillium;
+	font-weight: 400;
+	@include font-size();
+}
+p {margin: 0 0 40px;}
+
+/** HELPERS **/
 .clearfix:after {
      visibility: hidden;
      display: block;
@@ -250,6 +258,22 @@ $milio: 'milio-font', Arial, Helvetica, serif;
 		color: #fff;
 		@include font-size(12);
 	}
+}
+
+
+
+/***** CONTENTS *****/
+//H2
+.section-title {
+	font-family: $milio;
+	font-weight: 700;
+	font-style: italic;
+	color: #000;
+	@include font-size(60);
+	margin-bottom: 60px;
+}
+.section-min-title {
+	@include font-size(38);
 }
 
 
