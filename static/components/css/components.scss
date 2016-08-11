@@ -1,9 +1,72 @@
 @import 'font-awesome';
 
+/*** Variables ***/
+$titillium: 'Titillium Web', sans-serif;
+$milio: 'milio-font', Arial, Helvetica, serif;
+
 /*** Mixins ***/
 @mixin font-size($sizeValue: 18) {
     font-size: ($sizeValue) + px;
     line-height: ($sizeValue + 8) + px;
+}
+
+@mixin translate($orientation:null) {
+	@if not($orientation) {
+		-ms-transform: translate(-50%,-50%); /* IE 9 */
+	   	-webkit-transform: translate(-50%,-50%); /* Safari */
+	   	-moz-transform: translate(-50%,-50%);
+	   	-o-transform: translate(-50%,-50%);
+	    transform: translate(-50%,-50%);	
+   } @else {
+   		@if ( $orientation == "vertical" ) {
+			-ms-transform: translateY(-50%); /* IE 9 */
+		   	-webkit-transform: translateY(-50%); /* Safari */
+		   	-moz-transform: translateY(-50%);
+		   	-o-transform: translateY(-50%);
+		    transform: translateY(-50%);
+   		} @else {
+			-ms-transform: translateX(-50%); /* IE 9 */
+		   	-webkit-transform: translateX(-50%); /* Safari */
+		   	-moz-transform: translateX(-50%);
+		   	-o-transform: translateX(-50%);
+		    transform: translateX(-50%);
+   		}
+   }
+}
+
+
+/** FONTS **/
+@font-face {
+    font-family: 'milio-font';
+    src: url('http://www.ecestaticos.com/fonts/milio/Milio-Demibold.eot?1');
+    src: url('http://www.ecestaticos.com/fonts/milio/Milio-Demibold.eot?1#iefix') format('embedded-opentype'),
+     url('http://www.ecestaticos.com/fonts/milio/Milio-Demibold.woff?1') format('woff?1'),
+     url('http://www.ecestaticos.com/fonts/milio/Milio-Demibold.ttf?1') format('truetype'),
+     url('http://www.ecestaticos.com/fonts/milio/Milio-Demibold.svg?1#milioregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face{
+	font-family:'milio-font';
+	src:url('http://www.elconfidencial.com/fonts/generic/milio-heavy/milio-heavy-webfont.eot?2');
+	src:url('http://www.elconfidencial.com/fonts/generic/milio-heavy/milio-heavy-webfont.eot?2#iefix') format('embedded-opentype'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy/milio-heavy-webfont.woff2?2') format('woff2'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy/milio-heavy-webfont.woff?2') format('woff'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy/milio-heavy-webfont.ttf?2') format('truetype'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy/milio-heavy-webfont.svg?2#milioheavy') format('svg');
+	font-weight:700;
+	font-style:normal;
+}
+@font-face{
+	font-family:'milio-font';
+	src:url('http://www.elconfidencial.com/fonts/generic/milio-heavy-italic/milio-heavy-italic-webfont.eot?2');
+	src:url('http://www.elconfidencial.com/fonts/generic/milio-heavy-italic/milio-heavy-italic-webfont.eot?2#iefix') format('embedded-opentype'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy-italic/milio-heavy-italic-webfont.woff2?2') format('woff2'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy-italic/milio-heavy-italic-webfont.woff?2') format('woff'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy-italic/milio-heavy-italic-webfont.ttf?2') format('truetype'),
+		url('http://www.elconfidencial.com/fonts/generic/milio-heavy-italic/milio-heavy-italic-webfont.svg?2#milioheavyitalic') format('svg');
+	font-weight:700;
+	font-style:italic;
 }
 
 
@@ -21,6 +84,9 @@
 .clearfix { display: block; }
 .visible-mobile {display: none!important;}
 .block {display: block;}
+.text-center {text-align: center;}
+.text-right {text-align: right;}
+.text-uppercase {text-decoration: uppercase;}
 
 
 /***** CONTAINERS *****/
@@ -81,6 +147,45 @@
 	}
 }
 
+//Header
+.header-full-screen {
+	position: relative;
+	height: 100vh;
+	background: #313131;
+}
+.header-title-container {
+	position:absolute;
+  	top:50%;
+  	left: 50%;
+  	@include translate();
+  	z-index: 10;
+}
+.header-main-title {
+	color: #fff;
+}
+.header-title1, .header-title2 {display: block}
+.header-title1 {
+	@include font-size(34);
+	letter-spacing: 5px;
+}
+.header-title2 {
+	@include font-size(52);
+	letter-spacing: 10px;
+}
+.header-author {
+	font-family: $milio;
+	color: #fff;
+	@include font-size(24);
+	letter-spacing: 3px;
+	margin-top: 40px;
+}
+.scroll-down-container {
+	position: absolute;
+	bottom:20px;
+	left:50%;
+	@include translate('horizontal');
+}
+
 //Aside
 .aside-top-mobile {
 	position: fixed;
@@ -134,6 +239,19 @@
 	}
 }
 
+//Footer
+.footer {
+	background: #171717;
+	padding: 80px;
+	@include font-size(10);
+	color: #aaa;
+	letter-spacing: 2px;
+	h5 {
+		color: #fff;
+		@include font-size(12);
+	}
+}
+
 
 /***
 *
@@ -159,4 +277,10 @@
 		padding: 0 5%;
 	}
 	.container-large, .container-small, .one-fourth, .one-third, .one-half, .two-third, .three-fourth {width: 100%}
+	/***** BLOCKS *****/
+	//Footer
+	.footer {
+		width: 90%;
+		padding: 40px 5%;
+	}
 }
