@@ -21,6 +21,9 @@
 .clearfix { display: block; }
 .visible-mobile {display: none!important;}
 .block {display: block;}
+.text-center {text-align: center;}
+.text-right {text-align: right;}
+.text-uppercase {text-decoration: uppercase;}
 
 
 /***** CONTAINERS *****/
@@ -134,6 +137,19 @@
 	}
 }
 
+//Footer
+.footer {
+	background: #171717;
+	padding: 80px;
+	@include font-size(10);
+	color: #aaa;
+	letter-spacing: 2px;
+	h5 {
+		color: #fff;
+		@include font-size(12);
+	}
+}
+
 
 /***
 *
@@ -159,4 +175,10 @@
 		padding: 0 5%;
 	}
 	.container-large, .container-small, .one-fourth, .one-third, .one-half, .two-third, .three-fourth {width: 100%}
+	/***** BLOCKS *****/
+	//Footer
+	.footer {
+		width: 90%;
+		padding: 40px 5%;
+	}
 }
