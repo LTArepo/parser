@@ -61,9 +61,47 @@ class EditionPanel extends Window {
         let bgimage_label = new Cells.Label('Imagen de fondo')
         let bgimage_entry = new Cells.FileUpload('placeholder')
         let bgimage_helper = new Cells.TextHelper('Selecciona una imagen de tu ordenador')
+
+        let bgcolor_label = new Cells.Label('Color de fondo')
+        let bgcolor_entry = new Cells.ColorPicker(x => console.log(x))
+        let bgcolor_helper = new Cells.TextHelper('Si consultas las paletas, abrirá otra pestaña')
+
+        let borders_label = new Cells.Label('Bordes')
+        let number_inputs: Array<Cells.NumberInput> = [
+            { label: 'Grosor', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+        ]
+        let borders_entry = new Cells.NumberInputs(number_inputs)
+        let borders_color = new Cells.ColorPicker(x => console.log(x))
+        let borders_helper = new Cells.TextHelper('Color del borde. Si consultas las paletas, abrirá otra pestaña')
+
+        let sombra_label = new Cells.Label('Sombra')
+        number_inputs = [
+            { label: 'Anchura', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Altura', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Radio', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Difusión', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+        ]
+        let sombra_entry = new Cells.NumberInputs(number_inputs)
+        let sombra_color = new Cells.ColorPicker(x => console.log(x))
+        let sombra_helper = new Cells.TextHelper('Color sombra. Si consultas las paletas, abrirá otra pestaña')
+
         panel.addCell(bgimage_label)
         panel.addCell(bgimage_entry)
         panel.addCell(bgimage_helper)
+
+        panel.addCell(bgcolor_label)
+        panel.addCell(bgcolor_entry)
+        panel.addCell(bgcolor_helper)
+
+        panel.addCell(borders_label)
+        panel.addCell(borders_entry)
+        panel.addCell(borders_color)
+        panel.addCell(borders_helper)
+
+        panel.addCell(sombra_label)
+        panel.addCell(sombra_entry)
+        panel.addCell(sombra_color)
+        panel.addCell(sombra_helper)
     }
 
 }

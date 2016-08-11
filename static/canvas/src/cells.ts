@@ -1,6 +1,7 @@
 import { ChildRenderableElement } from './screen.ts'
 
 declare var $: any
+declare var jscolor: any
 
 export class Cell extends ChildRenderableElement {
     elemHTML = '<div></div>'
@@ -46,7 +47,6 @@ export class TextHelper extends Cell {
     renderContents() {
         this.$text = $('<div class="ce-text-helper-text">' + this.text + '</div>')
         this.$elem.append(this.$text)
-
     }
 
 }
@@ -207,6 +207,34 @@ export class FileUpload extends Cell {
                 console.log(text)
             }
         })
+    }
+}
+
+export class ColorPicker extends Cell {
+    cssClasses = this.cssClasses + 'ce-color-picker '
+    callback: (color: string) => any
+    $color_picker: any
+    $text_input: any
+    $button: any
+
+    constructor(callback) {
+        super()
+        this.callback = callback
+    }
+
+    renderContents() {
+        let id = 'ce-color-picker-text-' + generateID()
+        this.$text_input = $('<input id="' + id + '" type="text" ' +
+            'class="ce-color-picker-text-input" placeholder="placeholder">')
+        this.$color_picker = $('<input type="text" class="ce-color-picker-picker">')
+        this.$button = $('<a target="_blank" href="http://www.palettable.io">Consultar paletas</a>')
+
+        this.$elem.append(this.$text_input)
+        this.$elem.append(this.$color_picker)
+        this.$elem.append(this.$button)
+
+        this.$color_picker.spectrum({ color: '#f00' })
+
     }
 }
 
