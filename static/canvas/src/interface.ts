@@ -7,6 +7,12 @@ declare var $: any
 
 class EditionPanel extends Window {
     tabSubpanel: TabbedMatrixSubpanel
+    $node: any
+
+    constructor($container, $node) {
+        super($container)
+        this.$node = $node
+    }
 
     render() {
         super.render()
@@ -102,6 +108,10 @@ class EditionPanel extends Window {
         panel.addCell(sombra_entry)
         panel.addCell(sombra_color)
         panel.addCell(sombra_helper)
+    }
+
+    preferenciasTab(panel, options = {}) {
+
     }
 
 }

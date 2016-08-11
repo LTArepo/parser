@@ -111,10 +111,10 @@ class TabbedMatrixSubpanel extends Subpanel {
     tabRow: TabRow
 
     /** The element must be generated before loading tabs */
-    loadTab(tabGenerator: (subpanel: MatrixSubpanel) => void) {
+    loadTab(tabGenerator: (subpanel: MatrixSubpanel, options) => void, options = {}) {
         if (this.generated) {
             this.contentSubpanel.clean()
-            tabGenerator(this.contentSubpanel)
+            tabGenerator(this.contentSubpanel, options)
         }
     }
 
