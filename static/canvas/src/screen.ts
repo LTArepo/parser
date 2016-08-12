@@ -35,15 +35,16 @@ class RenderableElement {
     Render method is called directly, once instantiated.
 */
 class RootRenderableElement extends RenderableElement {
+    renderQueue: Array<RenderableElement>
     x: number
     y: number
 
-    constructor($container: any, x: number = 0, y: number = 0, options = {}) {
+    constructor($container: any, renderQueue: Array<RenderableElement>, x: number = 0, y: number = 0, options = {}) {
         super(options)
+        this.renderQueue = renderQueue
         this.$container = $container
         this.x = x
         this.y = y
-        //this.render()
     }
 
     render() {
@@ -51,6 +52,7 @@ class RootRenderableElement extends RenderableElement {
         this.$container.append(this.$elem)
         this.$elem.addClass(this.cssClasses)
         this.$elem.css({ left: this.x, top: this.y })
+        this.renderQueue.push(this)
     }
 
     destroy() {

@@ -1,16 +1,16 @@
 import { Panel, Window, Subpanel } from './panels'
 import { MatrixSubpanel, TabbedMatrixSubpanel } from './panels'
-import { RenderableElement } from './screen'
+import { RenderableElement, ChildRenderableElement, RootRenderableElement } from './screen'
 import * as Cells from './cells'
 
 declare var $: any
 
-class EditionPanel extends Window {
+export class EditionPanel extends Window {
     tabSubpanel: TabbedMatrixSubpanel
     $node: any
 
-    constructor($container, $node) {
-        super($container)
+    constructor($container, $node, renderQueue: Array<RenderableElement>, x, y) {
+        super($container, renderQueue, x, y)
         this.$node = $node
     }
 
@@ -112,11 +112,131 @@ class EditionPanel extends Window {
 
     preferenciasTab(panel, options = {}) {
 
+        if (options['classes'].indexOf('in-image')) {
+
+        }
+    }
+}
+
+export class NodeInterface {
+    nodeLayer: NodeLayer
+    nodeTopbar: NodeTopbar
+    renderQueue: Array<RenderableElement>
+    $container: any
+    $node: any
+
+    constructor($container, $node, renderQueue: Array<RenderableElement>) {
+        this.renderQueue = renderQueue
+        this.$container = $container
+        this.$node = $node
+    }
+
+    render() {
+        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.renderQueue)
+        this.nodeTopbar.render()
+
+        if (this.$node.hasClass('in-container')) {
+            this.nodeLayer = new NodeLayer(this.$container, this.$node, this.renderQueue)
+            this.nodeLayer.render()
+        }
+    }
+}
+
+export class NodeLayer extends RootRenderableElement {
+    cssClasses = this.cssClasses + 'in-node-layer '
+    renderQueue: Array<RenderableElement>
+    elemHTML = '<div></div>'
+    node_offset: any
+    $node: any
+
+
+    constructor($container, $node, renderQueue: Array<RenderableElement>) {
+        super($container, renderQueue)
+        this.$node = $node
+    }
+
+    render() {
+        console.log('in')
+        super.render()
+    }
+
+    refresh() {
+        if (this.$node.is(':visible')) {
+            this.node_offset = this.$node.offset()
+            this.$elem.css({
+                left: this.node_offset.left,
+                top: this.node_offset.top,
+                width: this.$node.width(),
+                height: this.$node.height()
+            })
+        }
     }
 
 }
 
-class SettingsPanel extends Panel {
+export class NodeTopbar extends Panel {
+    cssClasses = this.cssClasses + 'in-node-topbar '
+    node_offset: any
+    mouseOver: boolean = true
+    mouseOut1: boolean = false
+    mouseOut2: boolean = false
+    width: number
+    $node: any
+
+    constructor($container, $node, renderQueue: Array<RenderableElement>) {
+        super($container, renderQueue)
+        let node_offset = $node.offset()
+        this.x = node_offset.left
+        this.y = node_offset.top
+        this.width = $node.width()
+        this.$node = $node
+    }
+
+    render() {
+        super.render()
+        this.$elem.css({ width: this.width })
+        this.addListeners()
+    }
+
+    refresh() {
+        if (this.$node.is(':visible')) {
+            this.node_offset = this.$node.offset()
+            this.$elem.css({ left: this.node_offset.left, top: this.node_offset.top, width: this.$node.width() })
+        }
+    }
+
+    addListeners() {
+        this.$node.mouseover($.proxy(function () {
+            this.mouseOver = true
+            this.mouseOut1 = false
+            this.show()
+        }, this))
+        this.$elem.mouseover($.proxy(function () {
+            this.mouseOver = true
+            this.mouseOut2 = false
+            this.show()
+        }, this))
+        this.$node.mouseout($.proxy(function () {
+            this.mouseOut1 = false
+            if (!this.mouseOut1 && !this.mouseOut2) this.hide()
+        }, this))
+        this.$elem.mouseout($.proxy(function () {
+            this.mouseOut2 = false
+            if (!this.mouseOut1 && !this.mouseOut2) this.hide()
+        }, this))
+    }
+
+    show() {
+        this.$elem.show()
+    }
+
+    hide() {
+        this.$elem.hide()
+    }
+
+}
+
+export class SettingsPanel extends Panel {
     contentSubpanel: MatrixSubpanel
 
     render() {
@@ -140,4 +260,3 @@ class SettingsPanel extends Panel {
     }
 }
 
-export { SettingsPanel, EditionPanel }

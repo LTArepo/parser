@@ -14,6 +14,10 @@ class Panel extends RootRenderableElement {
         subpanel.generate(this)
         this.subpanels.push(subpanel)
     }
+
+    refresh() {
+
+    }
 }
 
 class Window extends Panel {
