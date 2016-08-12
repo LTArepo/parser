@@ -22,8 +22,14 @@ export class EditionPanel extends Window {
     configureContents() {
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
-        this.tabSubpanel.addTab({ icon_path: '/static/canvas/img/icons-panel/format-icon.png', tabGenerator: this.posicionamientoTab })
-        this.tabSubpanel.addTab({ icon_path: '/static/canvas/img/icons-panel/style-icon.png', tabGenerator: this.estiloTab })
+        this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/format-icon.png',
+            tabGenerator: this.posicionamientoTab
+        })
+        this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/style-icon.png',
+            tabGenerator: this.estiloTab
+        })
         this.tabSubpanel.loadTab(this.posicionamientoTab)
     }
 
@@ -33,7 +39,7 @@ export class EditionPanel extends Window {
         let buttons: Array<Cells.IconButton> = [
             {
                 label: 'Izquierda',
-                icon_path: '/static/canvas/img/icons-panel/''icon-align-left-inactive.png',
+                icon_path: '/static/canvas/img/icons-panel/icon-align-left-inactive.png',
                 callback: () => console.log('Izquierda')
             },
             {
@@ -223,9 +229,8 @@ export class NodeTopbar extends Panel {
         let $delete_button = $('<div class="in-node-topbar-delete-button">x<div>')
         this.$elem.append([$title, $append_button, $duplicate_button, $delete_button])
 
-        $append_button.click($.proxy(function () {
-            this.editionCallback(this.$node)
-        }), this)
+
+        $append_button.click(() => this.editionCallback(this.$node))
     }
 
     refresh() {
