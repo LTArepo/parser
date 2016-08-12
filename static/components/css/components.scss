@@ -277,6 +277,53 @@ p {margin: 0 0 40px;}
 }
 
 
+
+/***** FLOATS *****/
+//Scroll up
+.scroll-up-container {
+	position: fixed;
+	bottom: 40px;
+	right: 40px;
+}
+.scroll-up {
+	width: 50px;
+	height: 50px;
+	color: #fff;
+	background: #1a1a1a;
+	line-height: 50px;
+	border-radius: 50%;
+	text-align: center;
+	font-size: 30px;
+	text-decoration: none;
+}
+
+//Audio
+.audio-podcast-fixed {
+	position: fixed;
+	bottom: -1px;
+	right: 0;
+	background: rgba(255,255,255,.7);
+    padding: 20px;
+    max-width: 150px;
+	.controls {
+		cursor: pointer;
+		width: 80px;
+		height: 80px;
+		line-height: 80px;
+		border-radius: 50%;
+		text-align: center;
+		background: #000 url(http://www.ecestaticos.com/file/7df34dea61ac2d0769e96102bfb66d4c/1457720077.png)no-repeat center;
+		color: #fff;
+		font-size: 32px;
+		margin-bottom: 10px;
+		margin: 0 auto;
+	}
+	.hide-audio {
+		display: none;
+	}
+}
+
+
 /***
 *
 *
@@ -288,9 +335,34 @@ p {margin: 0 0 40px;}
 @media screen and (min-width: 1360px) {
 	.container-large {width: 1338px;}
 }
+/*** Small Desktop ***/
+@media screen and (max-width: 1023px) {
+	/***** FLOATS *****/
+	//Audio
+	.audio-podcast-fixed {
+		padding: 10px;
+		.controls {
+			width: 60px;
+			height: 60px;
+			line-height: 60px;
+		}
+	}
+}
+/*** iPad - Landscape ***/
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+	/***** FLOATS *****/
+	//Audio
+	.audio-podcast-fixed .note {display: none}
+}
 /*** Tablet Vertical ***/
 @media screen and (max-width: 900px) {
 	.one-fourth {width: 50%}
+}
+/*** iPad - Portrait ***/
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+	/***** FLOATS *****/
+	//Audio
+    .audio-podcast-fixed .note {display: none}
 }
 /*** Mobile ***/
 @media screen and (max-width: 767px) {
@@ -306,5 +378,34 @@ p {margin: 0 0 40px;}
 	.footer {
 		width: 90%;
 		padding: 40px 5%;
+	}
+	/***** FLOATS *****/
+	//Audio
+	.audio-podcast-fixed {
+		padding: 10px;
+		width: 100%;
+		max-width: 100%;
+		background: rgba(18, 184, 194,.8);
+		.controls {
+			width: 40px;
+			height: 40px;
+			line-height: 40px;
+			font-size: 20px;
+			background-size: 65%;
+			margin: 0 10px 0 0;
+			display: inline-block;
+		}
+		.note {
+			text-transform: uppercase;
+			font-size: 12px;
+			color: #fff;
+		}
+		.hide-audio {
+			display: block;
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			color: #fff;
+		}
 	}
 }

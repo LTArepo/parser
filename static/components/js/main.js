@@ -5,14 +5,17 @@ $(document).ready(function(){
        fullScreen();         
     });
 
-    $('.scroll-down').on('click',function (e) {
+    $('.scroll-down').on('click',function(e) {
         e.preventDefault();
-
         $('html, body').stop().animate({
             'scrollTop': $(window).height()
         }, 900, 'swing');
-
     });
+
+    $('.scroll-up').on('click', function(e) {
+        e.preventDefault();
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    })
 })
 
 
