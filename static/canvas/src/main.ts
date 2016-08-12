@@ -221,26 +221,16 @@ function loadUploadedPage(text: string) {
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
 
-    let node_interface = new NodeInterface($interface, $node, _panels)
+    let node_interface = new NodeInterface($interface, $node, _panels, selectNode)
     node_interface.render()
-    if ($node.hasClass('in-container')) {
-        // let $interface_layer = $('<div class="in-node-layer" style="border: 1px dashed black; position: absolute;"></div>')
-
-        // // add to refresh!!
-        // $interface.append($interface_layer)
-        // $interface_layer.css({
-        //     left: node_offset.left,
-        //     top: node_offset.top,
-        //     width: $node.width(),
-        //     height: $node.height()
-        // })
-
-
-    }
 
     function parseNodeOptions($node) {
         // Ids para tabs ?
     }
+}
+
+function selectNode($node) {
+    console.log('node')
 }
 
 
