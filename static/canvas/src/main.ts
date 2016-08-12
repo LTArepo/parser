@@ -1,14 +1,21 @@
 import { Panel, Window } from './panels'
-import { SettingsPanel, EditionPanel } from './interface'
+import { SettingsPanel, EditionPanel, NodeTopbar, NodeInterface } from './interface'
 
 declare var $: any
 declare var dragula: any
+declare var requestAnimFrame: any
 
 var $interface = $('#interface-container')
 var $canvas = $('#canvas-container')
 var $body = $('body')
 
-/** entry point */
+var _panels = []
+
+
+// ==================================================
+//		   INITIALIZATION 
+// ==================================================
+
 $(document).ready(function () {
     init()
 })
@@ -22,9 +29,24 @@ function init() {
 }
 
 // ==================================================
-//		INTERFACE CONFIGURATION
+//		     RENDER LOOP
 // ==================================================
 
+(function animloop() {
+    requestAnimationFrame(animloop)
+    render()
+})()
+
+function render() {
+    var panels_length = _panels.length
+    for (var i = 0; i < panels_length; i++) {
+        _panels[i].refresh()
+    }
+}
+
+// ==================================================
+//		INTERFACE CONFIGURATION
+// ==================================================
 
 function configureInterface() {
     configureTestButton()
@@ -34,8 +56,9 @@ function configureInterface() {
 }
 
 function configureEditionPanel() {
-    var edition_panel = new EditionPanel($interface, $interface.width() - 400, 300)
+    var edition_panel = new EditionPanel($interface, $body, _panels, $interface.width() - 400, 300)
     edition_panel.render()
+
 }
 
 function configureTopbar() {
@@ -45,7 +68,7 @@ function configureTopbar() {
     $settingsMenu.click(function () {
         let x = $settingsMenu.offset().left
         let y = $settingsMenu.offset().top + $settingsMenu.height()
-        let settings_panel = new SettingsPanel($interface, x, y, {
+        let settings_panel = new SettingsPanel($interface, _panels, x, y, {
             slideUpOnClickOut: true
         })
         settings_panel.render()
@@ -197,19 +220,20 @@ function loadUploadedPage(text: string) {
 
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
-    let node_offset = $node.offset()
 
+    let node_interface = new NodeInterface($interface, $node, _panels)
+    node_interface.render()
     if ($node.hasClass('in-container')) {
-        let $interface_layer = $('<div class="in-node-layer" style="border: 1px dashed black; position: absolute;"></div>')
+        // let $interface_layer = $('<div class="in-node-layer" style="border: 1px dashed black; position: absolute;"></div>')
 
-        // add to refresh!!
-        $interface.append($interface_layer)
-        $interface_layer.css({
-            left: node_offset.left,
-            top: node_offset.top,
-            width: $node.width(),
-            height: $node.height()
-        })
+        // // add to refresh!!
+        // $interface.append($interface_layer)
+        // $interface_layer.css({
+        //     left: node_offset.left,
+        //     top: node_offset.top,
+        //     width: $node.width(),
+        //     height: $node.height()
+        // })
 
 
     }

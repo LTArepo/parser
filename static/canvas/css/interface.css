@@ -84,7 +84,7 @@ table {
   left: 0;
   top: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   z-index: 100; }
 
 #canvas-container {
@@ -96,6 +96,7 @@ table {
 
 /* TOPBAR TOP */
 .in-topbar {
+  z-index: 200;
   pointer-events: all;
   position: fixed;
   width: 100%;
@@ -230,6 +231,16 @@ table {
   cursor: pointer; }
   .in-tabrow-tab.active {
     background: #515151; }
+
+/* NODE INTERFACE */
+.in-node-layer {
+  border: 1px dashed black;
+  position: absolute; }
+
+.in-node-topbar {
+  display: none;
+  height: 40px;
+  background-color: #525151; }
 
 /* HELPERS */
 .no-text-select {
