@@ -9,6 +9,12 @@
 		justify-content: center;
 		padding-top: 0;
 	}
+	&.ce-text-helper {
+		padding: 0 20px;
+	}
+	&.ce-file-upload {
+		padding-bottom: 0;
+	}
 }
 
 
@@ -62,9 +68,28 @@
 		padding: 5px;
 	}
 }
-.ce-icon-button-label, .ce-number-input-label {
+.ce-icon-button-label, .ce-number-input-label, .ce-text-helper-text {
 	color: #bbbbbb;
 	font-size: 12px;	
 	margin-top: 8px;
 }
-
+.ce-file-upload-text-input {
+	border: 0;
+	border-radius: 4px;
+	padding: 5px;
+	&:focus {
+		background: #9aceff;
+		outline: none;
+	}
+}
+.ce-file-upload-button {
+	display: inline-block;
+	margin-left: 10px;
+	padding: 4px 10px;
+	background: #383838 url(../img/upload-icon.png)no-repeat center;
+	width: 18px;
+	height: 17px;
+	position: relative;
+	top: 8px;
+	cursor: pointer;
+}
