@@ -1,5 +1,5 @@
 *~
 *#*
 *.pyc
-*.css*
 node_modules
+*.css.map
