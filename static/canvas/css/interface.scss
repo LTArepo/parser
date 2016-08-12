@@ -192,6 +192,27 @@
     height: 40px;
     background-color: #525151;
 }
+.in-node-topbar-title {
+    float: left;
+    margin: 5px 0 0 20px;
+}
+.in-node-topbar-append-button, .in-node-topbar-duplicate-button, .in-node-topbar-delete-button {
+    float: right;
+    padding: 2px;
+    margin: 8px 10px;
+    width: 19px;
+    height: 17px;
+    cursor: pointer;
+}
+.in-node-topbar-append-button {
+    background: url(../img/icons-node/edit-icon-inactive.png)no-repeat center;
+}
+.in-node-topbar-duplicate-button {
+    background: url(../img/icons-node/duplicate-icon-inactive.png)no-repeat center;
+}
+.in-node-topbar-delete-button {
+    background: url(../img/icons-node/erase-icon-inactive.png)no-repeat center;
+}
 
 /* HELPERS */
 .no-text-select {
