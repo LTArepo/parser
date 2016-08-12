@@ -227,7 +227,7 @@ export class ColorPicker extends Cell {
         this.$text_input = $('<input id="' + id + '" type="text" ' +
             'class="ce-color-picker-text-input" placeholder="placeholder">')
         this.$color_picker = $('<input type="text" class="ce-color-picker-picker">')
-        this.$button = $('<a class="btn-link-ext" href="http://www.palettable.io">Consultar paletas</a>')
+        this.$button = $('<a class="btn-link-ext" href="http://www.palettable.io" target="_blank">Consultar paletas</a>')
 
         this.$elem.append(this.$text_input)
         this.$elem.append(this.$color_picker)
