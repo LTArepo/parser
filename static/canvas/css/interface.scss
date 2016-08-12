@@ -154,7 +154,7 @@
 }
 
 .in-window{
-    max-width: 300px;
+    //max-width: 300px;
 }
 
 .in-subpanel{
@@ -172,9 +172,9 @@
 }
 .in-tabrow-tab {
     float: left;
-    padding: 10px 20px;
+    padding: 15px 20px;
     cursor: pointer;
-    &.active {
+    &.active, &:hover {
         background: #515151;
     }
 }
