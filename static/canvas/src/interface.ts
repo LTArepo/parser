@@ -22,8 +22,8 @@ export class EditionPanel extends Window {
     configureContents() {
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
-        this.tabSubpanel.addTab({ icon_path: 'tab_path', tabGenerator: this.posicionamientoTab })
-        this.tabSubpanel.addTab({ icon_path: 'tab_path', tabGenerator: this.estiloTab })
+        this.tabSubpanel.addTab({ icon_path: '/static/canvas/img/icons-panel/format-icon.png', tabGenerator: this.posicionamientoTab })
+        this.tabSubpanel.addTab({ icon_path: '/static/canvas/img/icons-panel/style-icon.png', tabGenerator: this.estiloTab })
         this.tabSubpanel.loadTab(this.posicionamientoTab)
     }
 
