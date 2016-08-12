@@ -196,6 +196,15 @@ export class NodeTopbar extends Panel {
         super.render()
         this.$elem.css({ width: this.width })
         this.addListeners()
+        this.renderContents()
+    }
+
+    renderContents() {
+        let $title = $('<div class="in-node-topbar-title">title<div>')
+        let $append_button = $('<div class="in-node-topbar-append-button">x<div>')
+        let $duplicate_button = $('<div class="in-node-topbar-duplicate-button">x<div>')
+        let $delete_button = $('<div class="in-node-topbar-delete-button">x<div>')
+        this.$elem.append([$title, $append_button, $duplicate_button, $delete_button])
     }
 
     refresh() {
