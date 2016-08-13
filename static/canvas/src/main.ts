@@ -10,6 +10,7 @@ var $canvas = $('#canvas-container')
 var $body = $('body')
 
 var _panels = []
+var _editionPanel: EditionPanel
 
 
 // ==================================================
@@ -25,6 +26,7 @@ function init() {
     addTestNodes()
 
     // Configure drag and drop
+    // @TODO: Refresh on drop
     dragula([document.querySelector('#canvas-container')])
 }
 
@@ -50,15 +52,21 @@ function render() {
 
 function configureInterface() {
     configureTestButton()
-    configureEditionPanel()
     configureTopbar()
     configureMouseEvents()
 }
 
-function configureEditionPanel() {
-    var edition_panel = new EditionPanel($interface, $body, _panels, $interface.width() - 400, 300)
-    edition_panel.render()
+function createEditionPanel($target_node) {
+    destroyEditionPanel()
+    _editionPanel = new EditionPanel($interface, $target_node, _panels, $interface.width() - 400, 300)
+    _editionPanel.render()
+}
 
+function destroyEditionPanel() {
+    if (_editionPanel) {
+        _editionPanel.destroy()
+        _editionPanel = undefined
+    }
 }
 
 function configureTopbar() {
@@ -230,7 +238,11 @@ function addComponentToCanvas($node, options = {}) {
 }
 
 function selectNode($node) {
-    console.log('node')
+    if (_editionPanel) {
+        _editionPanel.targetNode($node)
+    } else {
+        createEditionPanel($node)
+    }
 }
 
 

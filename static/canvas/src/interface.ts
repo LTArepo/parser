@@ -19,6 +19,12 @@ export class EditionPanel extends Window {
         this.configureContents()
     }
 
+    targetNode($node) {
+        this.$node = $node
+        this.destroy()
+        this.render()
+    }
+
     configureContents() {
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
@@ -145,7 +151,7 @@ export class NodeInterface {
     $container: any
     $node: any
 
-    constructor($container, $node, renderQueue: Array<RenderableElement>, editionCallback: ($node) => any) {
+    constructor($container, $node, renderQueue: Array<RenderableElement>, editionCallback: (n) => any) {
         this.editionCallback = editionCallback
         this.renderQueue = renderQueue
         this.$container = $container
@@ -177,7 +183,6 @@ export class NodeLayer extends RootRenderableElement {
     }
 
     render() {
-        console.log('in')
         super.render()
     }
 
@@ -192,7 +197,6 @@ export class NodeLayer extends RootRenderableElement {
             })
         }
     }
-
 }
 
 export class NodeTopbar extends Panel {
@@ -236,7 +240,11 @@ export class NodeTopbar extends Panel {
     refresh() {
         if (this.$node.is(':visible')) {
             this.node_offset = this.$node.offset()
-            this.$elem.css({ left: this.node_offset.left, top: this.node_offset.top, width: this.$node.width() })
+            this.$elem.css({
+                left: this.node_offset.left,
+                top: this.node_offset.top,
+                width: this.$node.width()
+            })
         }
     }
 
