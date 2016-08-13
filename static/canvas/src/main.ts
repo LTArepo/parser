@@ -10,6 +10,7 @@ var $canvas = $('#canvas-container')
 var $body = $('body')
 
 var _panels = []
+var _editionPanel: EditionPanel
 
 
 // ==================================================
@@ -25,6 +26,7 @@ function init() {
     addTestNodes()
 
     // Configure drag and drop
+    // @TODO: Refresh on drop
     dragula([document.querySelector('#canvas-container')])
 }
 
@@ -50,15 +52,21 @@ function render() {
 
 function configureInterface() {
     configureTestButton()
-    configureEditionPanel()
     configureTopbar()
     configureMouseEvents()
 }
 
-function configureEditionPanel() {
-    var edition_panel = new EditionPanel($interface, $body, _panels, $interface.width() - 400, 300)
-    edition_panel.render()
+function createEditionPanel($target_node) {
+    destroyEditionPanel()
+    _editionPanel = new EditionPanel($interface, $target_node, _panels, $interface.width() - 400, 300)
+    _editionPanel.render()
+}
 
+function destroyEditionPanel() {
+    if (_editionPanel) {
+        _editionPanel.destroy()
+        _editionPanel = undefined
+    }
 }
 
 function configureTopbar() {
@@ -221,25 +229,19 @@ function loadUploadedPage(text: string) {
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
 
-    let node_interface = new NodeInterface($interface, $node, _panels)
+    let node_interface = new NodeInterface($interface, $node, _panels, selectNode)
     node_interface.render()
-    if ($node.hasClass('in-container')) {
-        // let $interface_layer = $('<div class="in-node-layer" style="border: 1px dashed black; position: absolute;"></div>')
-
-        // // add to refresh!!
-        // $interface.append($interface_layer)
-        // $interface_layer.css({
-        //     left: node_offset.left,
-        //     top: node_offset.top,
-        //     width: $node.width(),
-        //     height: $node.height()
-        // })
-
-
-    }
 
     function parseNodeOptions($node) {
         // Ids para tabs ?
+    }
+}
+
+function selectNode($node) {
+    if (_editionPanel) {
+        _editionPanel.targetNode($node)
+    } else {
+        createEditionPanel($node)
     }
 }
 

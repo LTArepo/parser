@@ -19,11 +19,23 @@ export class EditionPanel extends Window {
         this.configureContents()
     }
 
+    targetNode($node) {
+        this.$node = $node
+        this.destroy()
+        this.render()
+    }
+
     configureContents() {
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
-        this.tabSubpanel.addTab({ icon_path: '/static/canvas/img/icons-panel/format-icon.png', tabGenerator: this.posicionamientoTab })
-        this.tabSubpanel.addTab({ icon_path: '/static/canvas/img/icons-panel/style-icon.png', tabGenerator: this.estiloTab })
+        this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/format-icon.png',
+            tabGenerator: this.posicionamientoTab
+        })
+        this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/style-icon.png',
+            tabGenerator: this.estiloTab
+        })
         this.tabSubpanel.loadTab(this.posicionamientoTab)
     }
 
@@ -31,9 +43,22 @@ export class EditionPanel extends Window {
 
         let align_label = new Cells.Label('Alineación')
         let buttons: Array<Cells.IconButton> = [
-            { label: 'Izquierda', icon_path: '/static/canvas/img/icons-panel/icon-align-left-inactive.png', callback: () => console.log('Izquierda') },
-            { label: 'Centrado', icon_path: '/static/canvas/img/icons-panel/icon-align-center-inactive.png', callback: () => console.log('Centrado') },
-            { label: 'Derecha', icon_path: '/static/canvas/img/icons-panel/icon-align-right-inactive.png', callback: () => console.log('Derecha') }]
+            {
+                label: 'Izquierda',
+                icon_path: '/static/canvas/img/icons-panel/icon-align-left-inactive.png',
+                callback: () => console.log('Izquierda')
+            },
+            {
+                label: 'Centrado',
+                icon_path: '/static/canvas/img/icons-panel/icon-align-center-inactive.png',
+                callback: () => console.log('Centrado')
+            },
+            {
+                label: 'Derecha',
+                icon_path: '/static/canvas/img/icons-panel/icon-align-right-inactive.png',
+                callback: () => console.log('Derecha')
+            }]
+
         let align_entry = new Cells.IconButtons(buttons)
 
         let margin_label = new Cells.Label('Márgenes exteriores')
@@ -122,17 +147,19 @@ export class NodeInterface {
     nodeLayer: NodeLayer
     nodeTopbar: NodeTopbar
     renderQueue: Array<RenderableElement>
+    editionCallback: ($node) => any
     $container: any
     $node: any
 
-    constructor($container, $node, renderQueue: Array<RenderableElement>) {
+    constructor($container, $node, renderQueue: Array<RenderableElement>, editionCallback: (n) => any) {
+        this.editionCallback = editionCallback
         this.renderQueue = renderQueue
         this.$container = $container
         this.$node = $node
     }
 
     render() {
-        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.renderQueue)
+        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.renderQueue, this.editionCallback)
         this.nodeTopbar.render()
 
         if (this.$node.hasClass('in-container')) {
@@ -156,7 +183,6 @@ export class NodeLayer extends RootRenderableElement {
     }
 
     render() {
-        console.log('in')
         super.render()
     }
 
@@ -171,11 +197,11 @@ export class NodeLayer extends RootRenderableElement {
             })
         }
     }
-
 }
 
 export class NodeTopbar extends Panel {
     cssClasses = this.cssClasses + 'in-node-topbar '
+    editionCallback: ($node) => any
     node_offset: any
     mouseOver: boolean = true
     mouseOut1: boolean = false
@@ -183,9 +209,10 @@ export class NodeTopbar extends Panel {
     width: number
     $node: any
 
-    constructor($container, $node, renderQueue: Array<RenderableElement>) {
+    constructor($container, $node, renderQueue: Array<RenderableElement>, editionCallback: ($node) => any) {
         super($container, renderQueue)
         let node_offset = $node.offset()
+        this.editionCallback = editionCallback
         this.x = node_offset.left
         this.y = node_offset.top
         this.width = $node.width()
@@ -205,12 +232,19 @@ export class NodeTopbar extends Panel {
         let $duplicate_button = $('<div class="in-node-topbar-duplicate-button">x<div>')
         let $delete_button = $('<div class="in-node-topbar-delete-button">x<div>')
         this.$elem.append([$title, $append_button, $duplicate_button, $delete_button])
+
+
+        $append_button.click(() => this.editionCallback(this.$node))
     }
 
     refresh() {
         if (this.$node.is(':visible')) {
             this.node_offset = this.$node.offset()
-            this.$elem.css({ left: this.node_offset.left, top: this.node_offset.top, width: this.$node.width() })
+            this.$elem.css({
+                left: this.node_offset.left,
+                top: this.node_offset.top,
+                width: this.$node.width()
+            })
         }
     }
 

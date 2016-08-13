@@ -1,6 +1,7 @@
 import { RenderableElement, RootRenderableElement, ChildRenderableElement } from './screen'
 import * as Cells from './cells'
 
+
 declare var $: any
 
 class Panel extends RootRenderableElement {
@@ -173,6 +174,9 @@ class WindowTopbar extends Subpanel {
         $body.mouseup($.proxy(function () {
             this.mouseDown = false
             $body.unbind('mousemove')
+            let offset = this.$elem.offset()
+            this.parent.x = offset.left
+            this.parent.y = offset.top
         }, this))
 
         function onMouseMove(e) {
@@ -187,6 +191,7 @@ class WindowTopbar extends Subpanel {
     }
 
     destroy() {
+        //@TODO: remove body mouseup listener
         this.$elem.unbind('mouseup')
         this.$elem.unbind('mousedown')
         this.$elem.unbind('mousemove')
