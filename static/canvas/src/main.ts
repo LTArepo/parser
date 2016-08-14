@@ -1,17 +1,17 @@
 import { Panel, Window } from './panels'
-import { SettingsPanel, EditionPanel, NodeTopbar, NodeInterface } from './interface'
+import { GUInterface, SettingsPanel, EditionPanel, NodeTopbar, NodeInterface } from './interface'
 
 declare var $: any
 declare var dragula: any
 declare var requestAnimFrame: any
 
 var $interface = $('#interface-container')
+var _GUI
 var $canvas = $('#canvas-container')
 var $body = $('body')
 
 var _panels = []
 var _editionPanel: EditionPanel
-
 
 // ==================================================
 //		   INITIALIZATION 
@@ -28,22 +28,22 @@ function init() {
     // Configure drag and drop
     // @TODO: Refresh on drop
     dragula([document.querySelector('#canvas-container')])
+    startRenderLoop()
 }
 
 // ==================================================
 //		     RENDER LOOP
 // ==================================================
 
-(function animloop() {
-    requestAnimationFrame(animloop)
-    render()
-})()
+function startRenderLoop() {
+    (function animloop() {
+        requestAnimationFrame(animloop)
+        render()
+    })()
+}
 
 function render() {
-    var panels_length = _panels.length
-    for (var i = 0; i < panels_length; i++) {
-        _panels[i].refresh()
-    }
+    _GUI.refresh()
 }
 
 // ==================================================
@@ -51,6 +51,7 @@ function render() {
 // ==================================================
 
 function configureInterface() {
+    _GUI = new GUInterface($('#interface-container'))
     configureTestButton()
     configureTopbar()
     configureMouseEvents()
@@ -58,7 +59,7 @@ function configureInterface() {
 
 function createEditionPanel($target_node) {
     destroyEditionPanel()
-    _editionPanel = new EditionPanel($interface, $target_node, _panels, $interface.width() - 400, 300)
+    _editionPanel = new EditionPanel($interface, $target_node, _GUI, $interface.width() - 400, 300)
     _editionPanel.render()
 }
 
@@ -76,7 +77,7 @@ function configureTopbar() {
     $settingsMenu.click(function () {
         let x = $settingsMenu.offset().left
         let y = $settingsMenu.offset().top + $settingsMenu.height()
-        let settings_panel = new SettingsPanel($interface, _panels, x, y, {
+        let settings_panel = new SettingsPanel($interface, _GUI, x, y, {
             slideUpOnClickOut: true
         })
         settings_panel.render()
@@ -229,7 +230,7 @@ function loadUploadedPage(text: string) {
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
 
-    let node_interface = new NodeInterface($interface, $node, _panels, selectNode)
+    let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
     node_interface.render()
 
     function parseNodeOptions($node) {
