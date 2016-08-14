@@ -5,12 +5,41 @@ import * as Cells from './cells'
 
 declare var $: any
 
+export class GUInterface {
+    renderQueue: Array<RenderableElement> = []
+    $container
+
+    constructor($container) {
+        this.$container = $container
+    }
+
+    refresh() {
+        let length = this.renderQueue.length
+        for (var i = 0; i < length; i++) {
+            this.renderQueue[i].refresh()
+        }
+    }
+
+    addElement(element: RenderableElement) {
+        // Add __id or substract specific element from array passing it
+        this.renderQueue.push(element)
+
+    }
+
+    removeElement(element: RenderableElement) {
+        element.destroy()
+        // loop renderQueue until matching id and splice
+
+    }
+
+}
+
 export class EditionPanel extends Window {
     tabSubpanel: TabbedMatrixSubpanel
     $node: any
 
-    constructor($container, $node, renderQueue: Array<RenderableElement>, x, y) {
-        super($container, renderQueue, x, y)
+    constructor($container, $node, GUI: GUInterface, x, y) {
+        super($container, GUI, x, y)
         this.$node = $node
     }
 
@@ -146,24 +175,24 @@ export class EditionPanel extends Window {
 export class NodeInterface {
     nodeLayer: NodeLayer
     nodeTopbar: NodeTopbar
-    renderQueue: Array<RenderableElement>
     editionCallback: ($node) => any
+    GUI: GUInterface
     $container: any
     $node: any
 
-    constructor($container, $node, renderQueue: Array<RenderableElement>, editionCallback: (n) => any) {
+    constructor($container, $node, GUI: GUInterface, editionCallback: (n) => any) {
         this.editionCallback = editionCallback
-        this.renderQueue = renderQueue
+        this.GUI = GUI
         this.$container = $container
         this.$node = $node
     }
 
     render() {
-        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.renderQueue, this.editionCallback)
+        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this.editionCallback)
         this.nodeTopbar.render()
 
         if (this.$node.hasClass('in-container')) {
-            this.nodeLayer = new NodeLayer(this.$container, this.$node, this.renderQueue)
+            this.nodeLayer = new NodeLayer(this.$container, this.$node, this.GUI)
             this.nodeLayer.render()
         }
     }
@@ -177,8 +206,8 @@ export class NodeLayer extends RootRenderableElement {
     $node: any
 
 
-    constructor($container, $node, renderQueue: Array<RenderableElement>) {
-        super($container, renderQueue)
+    constructor($container, $node, GUI: GUInterface) {
+        super($container, GUI)
         this.$node = $node
     }
 
@@ -209,8 +238,8 @@ export class NodeTopbar extends Panel {
     width: number
     $node: any
 
-    constructor($container, $node, renderQueue: Array<RenderableElement>, editionCallback: ($node) => any) {
-        super($container, renderQueue)
+    constructor($container, $node, GUI: GUInterface, editionCallback: ($node) => any) {
+        super($container, GUI)
         let node_offset = $node.offset()
         this.editionCallback = editionCallback
         this.x = node_offset.left
@@ -235,6 +264,7 @@ export class NodeTopbar extends Panel {
 
 
         $append_button.click(() => this.editionCallback(this.$node))
+        $delete_button.click()
     }
 
     refresh() {

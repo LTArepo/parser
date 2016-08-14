@@ -1,3 +1,5 @@
+import { GUInterface } from './interface'
+
 declare var $: any
 
 interface Refreshable {
@@ -27,6 +29,8 @@ class RenderableElement {
         this.$container = $container
     }
 
+    refresh() { }
+
     destroy() { }
 
 }
@@ -35,13 +39,13 @@ class RenderableElement {
     Render method is called directly, once instantiated.
 */
 class RootRenderableElement extends RenderableElement {
-    renderQueue: Array<RenderableElement>
+    GUI: GUInterface
     x: number
     y: number
 
-    constructor($container: any, renderQueue: Array<RenderableElement>, x: number = 0, y: number = 0, options = {}) {
+    constructor($container: any, GUI: GUInterface, x: number = 0, y: number = 0, options = {}) {
         super(options)
-        this.renderQueue = renderQueue
+        this.GUI = GUI
         this.$container = $container
         this.x = x
         this.y = y
@@ -52,7 +56,7 @@ class RootRenderableElement extends RenderableElement {
         this.$container.append(this.$elem)
         this.$elem.addClass(this.cssClasses)
         this.$elem.css({ left: this.x, top: this.y })
-        this.renderQueue.push(this)
+        this.GUI.addElement(this)
     }
 
     destroy() {
