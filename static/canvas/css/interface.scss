@@ -156,6 +156,7 @@
 
 .in-window{
     //max-width: 300px;
+    z-index: 250;
 }
 
 .in-subpanel{
@@ -191,6 +192,7 @@
     display: none;
     height: 40px;
     background-color: #525151;
+    pointer-events: none;
 }
 .in-node-topbar-title {
     float: left;
@@ -203,6 +205,7 @@
     width: 19px;
     height: 17px;
     cursor: pointer;
+    pointer-events: all;
 }
 .in-node-topbar-append-button {
     background: url(../img/icons-node/edit-icon-inactive.png)no-repeat center;
