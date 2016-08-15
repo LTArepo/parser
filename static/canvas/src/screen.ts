@@ -13,6 +13,7 @@ class RenderableElement {
     $container: any
     $elem: any
     options: any
+    render_id: string
 
     constructor(options = {}) {
         this.options = options
@@ -61,6 +62,7 @@ class RootRenderableElement extends RenderableElement {
 
     destroy() {
         this.$elem.remove()
+        this.GUI.removeElement(this)
     }
 
 }

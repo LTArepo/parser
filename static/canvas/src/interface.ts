@@ -21,14 +21,19 @@ export class GUInterface {
     }
 
     addElement(element: RenderableElement) {
-        // Add __id or substract specific element from array passing it
+        element.render_id = generateID()
         this.renderQueue.push(element)
-
     }
 
     removeElement(element: RenderableElement) {
-        element.destroy()
-        // loop renderQueue until matching id and splice
+        let length = this.renderQueue.length
+        let target_id = element.render_id
+        for (var i = 0; i < length; i++) {
+            if (this.renderQueue[i].render_id == target_id) {
+                this.renderQueue.splice(i, 1)
+                break
+            }
+        }
 
     }
 
@@ -188,13 +193,18 @@ export class NodeInterface {
     }
 
     render() {
-        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this.editionCallback)
+        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
         this.nodeTopbar.render()
 
         if (this.$node.hasClass('in-container')) {
-            this.nodeLayer = new NodeLayer(this.$container, this.$node, this.GUI)
+            this.nodeLayer = new NodeLayer(this.$container, this.$node, this.GUI, this)
             this.nodeLayer.render()
         }
+    }
+
+    destroy() {
+        this.nodeLayer.destroy()
+        this.nodeTopbar.destroy()
     }
 }
 
@@ -203,12 +213,14 @@ export class NodeLayer extends RootRenderableElement {
     renderQueue: Array<RenderableElement>
     elemHTML = '<div></div>'
     node_offset: any
+    node_interface: NodeInterface
     $node: any
 
 
-    constructor($container, $node, GUI: GUInterface) {
+    constructor($container, $node, GUI: GUInterface, node_interface: NodeInterface) {
         super($container, GUI)
         this.$node = $node
+        this.node_interface = node_interface
     }
 
     render() {
@@ -232,18 +244,20 @@ export class NodeTopbar extends Panel {
     cssClasses = this.cssClasses + 'in-node-topbar '
     editionCallback: ($node) => any
     node_offset: any
+    node_interface: NodeInterface
     mouseOver: boolean = true
     mouseOut1: boolean = false
     mouseOut2: boolean = false
     width: number
     $node: any
 
-    constructor($container, $node, GUI: GUInterface, editionCallback: ($node) => any) {
+    constructor($container, $node, GUI: GUInterface, node_interface: NodeInterface, editionCallback: ($node) => any) {
         super($container, GUI)
         let node_offset = $node.offset()
         this.editionCallback = editionCallback
         this.x = node_offset.left
         this.y = node_offset.top
+        this.node_interface = node_interface
         this.width = $node.width()
         this.$node = $node
     }
@@ -264,7 +278,10 @@ export class NodeTopbar extends Panel {
 
 
         $append_button.click(() => this.editionCallback(this.$node))
-        $delete_button.click()
+        $delete_button.click($.proxy(function () {
+            this.$node.remove()
+            this.node_interface.destroy()
+        }, this))
     }
 
     refresh() {
@@ -331,5 +348,14 @@ export class SettingsPanel extends Panel {
         this.contentSubpanel.addCell(doctype_label)
         this.contentSubpanel.addCell(doctype_select)
     }
+}
+
+
+// ==================================================
+//		     	UTILITIES
+// ==================================================
+
+function generateID() {
+    return Math.random().toString(36).substr(2, 5)
 }
 
