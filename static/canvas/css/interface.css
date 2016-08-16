@@ -236,7 +236,6 @@ table {
 
 /* NODE INTERFACE */
 .in-node-layer {
-  border: 1px dashed black;
   position: absolute; }
 
 .in-node-topbar {
@@ -267,6 +266,10 @@ table {
 .in-node-topbar-delete-button {
   background: url(../img/icons-node/erase-icon-inactive.png) no-repeat center; }
 
+.in-container-topbar {
+  width: 250px;
+  pointer-events: all; }
+
 /* HELPERS */
 .no-text-select {
   -webkit-touch-callout: none;
@@ -288,6 +291,7 @@ table {
 
 /* CONTAINERS */
 .in-container {
-  min-height: 120px; }
+  min-height: 120px;
+  border: 1px dashed black; }
 
 /*# sourceMappingURL=interface.css.map */

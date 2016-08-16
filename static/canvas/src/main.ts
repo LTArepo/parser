@@ -27,7 +27,7 @@ function init() {
 
     // Configure drag and drop
     // @TODO: Refresh on drop
-    _dragula = dragula([document.querySelector('#canvas-container')])
+    _dragula = dragula([document.querySelector('#canvas-container'), { allowNestedContainers: true }])
     startRenderLoop()
 }
 

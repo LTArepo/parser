@@ -193,13 +193,15 @@ export class NodeInterface {
     }
 
     render() {
-        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
-        this.nodeTopbar.render()
-
         if (this.$node.hasClass('in-container')) {
             this.nodeLayer = new NodeLayer(this.$container, this.$node, this.GUI, this)
             this.nodeLayer.render()
+            this.nodeTopbar = new ContainerNodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
+        } else {
+            this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
         }
+
+        this.nodeTopbar.render()
     }
 
     destroy() {
@@ -246,8 +248,8 @@ export class NodeTopbar extends Panel {
     node_offset: any
     node_interface: NodeInterface
     mouseOver: boolean = true
-    mouseOut1: boolean = false
-    mouseOut2: boolean = false
+    mouseOut1: boolean = true
+    mouseOut2: boolean = true
     width: number
     $node: any
 
@@ -258,7 +260,6 @@ export class NodeTopbar extends Panel {
         this.x = node_offset.left
         this.y = node_offset.top
         this.node_interface = node_interface
-        this.width = $node.width()
         this.$node = $node
     }
 
@@ -307,12 +308,12 @@ export class NodeTopbar extends Panel {
             this.show()
         }, this))
         this.$node.mouseout($.proxy(function () {
-            this.mouseOut1 = false
-            if (!this.mouseOut1 && !this.mouseOut2) this.hide()
+            this.mouseOut1 = true
+            if (this.mouseOut1 && this.mouseOut2) this.hide()
         }, this))
         this.$elem.mouseout($.proxy(function () {
-            this.mouseOut2 = false
-            if (!this.mouseOut1 && !this.mouseOut2) this.hide()
+            this.mouseOut2 = true
+            if (this.mouseOut1 && this.mouseOut2) this.hide()
         }, this))
     }
 
@@ -324,6 +325,19 @@ export class NodeTopbar extends Panel {
         this.$elem.hide()
     }
 
+}
+
+export class ContainerNodeTopbar extends NodeTopbar {
+    cssClasses = this.cssClasses + 'in-container-topbar '
+
+    refresh() {
+        this.node_offset = this.$node.offset()
+        this.$elem.css({
+            left: this.$node.width() - this.$elem.width(),
+            top: this.node_offset.top + this.$node.height(),
+            //width: this.$node.width()
+        })
+    }
 }
 
 export class SettingsPanel extends Panel {
