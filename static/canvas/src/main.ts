@@ -12,6 +12,7 @@ var $body = $('body')
 
 var _panels = []
 var _editionPanel: EditionPanel
+var _dragula
 
 // ==================================================
 //		   INITIALIZATION 
@@ -23,11 +24,10 @@ $(document).ready(function () {
 
 function init() {
     configureInterface()
-    addTestNodes()
 
     // Configure drag and drop
     // @TODO: Refresh on drop
-    dragula([document.querySelector('#canvas-container')])
+    _dragula = dragula([document.querySelector('#canvas-container')])
     startRenderLoop()
 }
 
@@ -193,13 +193,6 @@ function closeCloseOnClickOutElements() {
     })
 }
 
-function addTestNodes() {
-    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
-    // getComponent('/blocks/test2.html', x => addComponentToCanvas($(x.html), x.options))
-    // getComponent('/blocks/test.html', x => addComponentToCanvas($(x.html), x.options))
-}
-
-
 // ==================================================
 //		    CANVAS METHODS
 // ==================================================
@@ -230,12 +223,20 @@ function loadUploadedPage(text: string) {
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
 
+    parseNodeOptions($node)
+    function parseNodeOptions($node) {
+        if ($node.hasClass('in-container')) {
+            addContainerToDragAndDrop($node[0])
+        }
+    }
+
     let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
     node_interface.render()
+}
 
-    function parseNodeOptions($node) {
-        // Ids para tabs ?
-    }
+function addContainerToDragAndDrop(container) {
+    _dragula.containers.push(container)
+    console.log('appending')
 }
 
 function selectNode($node) {

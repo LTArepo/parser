@@ -88,8 +88,10 @@ table {
   z-index: 100; }
 
 #canvas-container {
+  padding-top: 5px;
   position: relative;
-  z-index: 0; }
+  z-index: 0;
+  height: 120%; }
 
 .in-interface {
   z-index: 100; }
