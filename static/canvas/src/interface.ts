@@ -70,56 +70,62 @@ export class EditionPanel extends Window {
         this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/format-icon.png',
             tabGenerator: this.posicionamientoTab,
-            options: { '$node': this.$node }
+            options: { '$node': this.$node, GUI: this.GUI }
         })
         this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/style-icon.png',
             tabGenerator: this.estiloTab,
             options: { '$node': this.$node, GUI: this.GUI }
         })
-        this.tabSubpanel.loadTab(this.posicionamientoTab, { '$node': this.$node })
+        this.tabSubpanel.loadTab(this.posicionamientoTab, { '$node': this.$node, GUI: this.GUI })
     }
 
     posicionamientoTab(panel, options = {}) {
 
         var $node = options['$node']
+        var GUI = options['GUI']
 
+        function css(label: string, value) {
+            let css_dict = {}
+            css_dict[label] = value
+            GUI.changeNodeCSS($node, css_dict)
+        }
 
         let align_label = new Cells.Label('Alineación')
         let buttons: Array<Cells.IconButton> = [
             {
                 label: 'Izquierda',
                 icon_path: '/static/canvas/img/icons-panel/icon-align-left-inactive.png',
-                callback: () => $node.css({ 'text-align': 'left' })
+                callback: () => css('text-align', 'left')
             },
             {
                 label: 'Centrado',
                 icon_path: '/static/canvas/img/icons-panel/icon-align-center-inactive.png',
-                callback: () => $node.css({ 'text-align': 'center' })
+                callback: () => css('text-align', 'center')
             },
             {
                 label: 'Derecha',
                 icon_path: '/static/canvas/img/icons-panel/icon-align-right-inactive.png',
-                callback: () => $node.css({ 'text-align': 'right' })
+                callback: () => css('text-align', 'right')
             }]
 
         let align_entry = new Cells.IconButtons(buttons)
 
         let margin_label = new Cells.Label('Márgenes exteriores')
         let number_inputs: Array<Cells.NumberInput> = [
-            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => css('margin-top', x) },
+            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => css('margin-right', x) },
+            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => css('margin-bottom', x) },
+            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => css('margin-left', x) },
         ]
         let margin_entry = new Cells.NumberInputs(number_inputs)
 
         let padding_label = new Cells.Label('Márgenes interiores')
         number_inputs = [
-            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => css('padding-top', x) },
+            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => css('padding-right', x) },
+            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => css('padding-bottom', x) },
+            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => css('padding-left', x) },
         ]
         let padding_entry = new Cells.NumberInputs(number_inputs)
 
@@ -133,20 +139,29 @@ export class EditionPanel extends Window {
 
     estiloTab(panel, options = {}) {
 
+        var $node = options['$node']
+        var GUI = options['GUI']
+
+        function css(label: string, value) {
+            let css_dict = {}
+            css_dict[label] = value
+            GUI.changeNodeCSS($node, css_dict)
+        }
+
         let bgimage_label = new Cells.Label('Imagen de fondo')
         let bgimage_entry = new Cells.FileUpload('placeholder')
         let bgimage_helper = new Cells.TextHelper('Selecciona una imagen de tu ordenador')
 
         let bgcolor_label = new Cells.Label('Color de fondo')
-        let bgcolor_entry = new Cells.ColorPicker(x => console.log(x))
+        let bgcolor_entry = new Cells.ColorPicker(x => css('background-color', x))
         let bgcolor_helper = new Cells.TextHelper('Si consultas las paletas, abrirá otra pestaña')
 
         let borders_label = new Cells.Label('Bordes')
         let number_inputs: Array<Cells.NumberInput> = [
-            { label: 'Grosor', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            { label: 'Grosor', min: 0, max: 500, step: 1, callback: x => css('border-width', x) },
         ]
         let borders_entry = new Cells.NumberInputs(number_inputs)
-        let borders_color = new Cells.ColorPicker(x => console.log(x))
+        let borders_color = new Cells.ColorPicker(x => css('border-color', x))
         let borders_helper = new Cells.TextHelper('Color del borde. Si consultas las paletas, abrirá otra pestaña')
 
         let sombra_label = new Cells.Label('Sombra')

@@ -13,7 +13,7 @@ export class Cell extends ChildRenderableElement {
     }
 
     renderContents() { }
-}
+
 
 export class Row extends Cell {
     cssClasses = this.cssClasses + 'ce-row '
@@ -233,7 +233,11 @@ export class ColorPicker extends Cell {
         this.$elem.append(this.$color_picker)
         this.$elem.append(this.$button)
 
-        this.$color_picker.spectrum({ color: '#f00' })
+        //this.$color_picker.change(this.callback(this.$color_picker.val()))
+
+        this.$color_picker.spectrum({
+            color: '#f00', 'changeCallback': this.callback, showInput: true
+        })
 
     }
 }

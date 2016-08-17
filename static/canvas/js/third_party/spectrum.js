@@ -44,6 +44,7 @@
         appendTo: "body",
         maxSelectionSize: 7,
         cancelText: "cancel",
+	changeCallback: false,
         chooseText: "choose",
         togglePaletteMoreText: "more",
         togglePaletteLessText: "less",
@@ -362,6 +363,13 @@
 
                 if (isValid()) {
                     updateOriginalInput(true);
+
+		    // callback!
+		    if(opts.callback !== false) {
+			let code = getColorCode()
+			opts.changeCallback(code)
+		    }
+
                     hide();
                 }
             });
@@ -734,7 +742,19 @@
             boundElement.trigger('move.spectrum', [ get() ]);
         }
 
+	function getColorCode(){
+            var flatColor = tinycolor.fromRatio({ h: currentHue, s: currentSaturation, v: currentValue });
+	    return flatColor.toHexString()
+
+	}
+
+	var firstTime = 0
         function updateUI() {
+	    if (firstTime > 2){
+		opts.changeCallback(getColorCode())
+		console.log('in')
+	    }
+	    firstTime++
 
             textInput.removeClass("sp-validation-error");
 
