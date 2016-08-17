@@ -460,7 +460,7 @@ function dragula (initialContainers, options) {
       reference !== nextEl(item)
     ) {
       _currentSibling = reference;
-      dropTarget.insertBefore(item, reference);
+	try{dropTarget.insertBefore(item, reference);}catch(e){}
       drake.emit('shadow', item, dropTarget, _source);
     }
     function moved (type) { drake.emit(type, item, _lastDropTarget, _source); }
