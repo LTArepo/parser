@@ -67,6 +67,7 @@ class MatrixSubpanel extends Subpanel {
 interface Tab {
     icon_path: string
     tabGenerator: (subanel: MatrixSubpanel) => void
+    options: any
 }
 
 class TabRow extends Subpanel {
@@ -92,7 +93,7 @@ class TabRow extends Subpanel {
 			<img class='in-tabrow-tab-icon' src='${t.icon_path}'>
 		</div>`
             let $node = $(html)
-            $node.click(() => parent.loadTab(t.tabGenerator))
+            $node.click(() => parent.loadTab(t.tabGenerator, t.options))
             return $node
         })
         this.$elem.append(this.$tabs)

@@ -64,28 +64,32 @@ export class EditionPanel extends Window {
         this.addSubpanel(this.tabSubpanel)
         this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/format-icon.png',
-            tabGenerator: this.posicionamientoTab
+            tabGenerator: this.posicionamientoTab,
+            options: { '$node': this.$node }
         })
         this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/style-icon.png',
-            tabGenerator: this.estiloTab
+            tabGenerator: this.estiloTab,
+            options: { '$node': this.$node }
         })
-        this.tabSubpanel.loadTab(this.posicionamientoTab)
+        this.tabSubpanel.loadTab(this.posicionamientoTab, { '$node': this.$node })
     }
 
-    posicionamientoTab(panel) {
+    posicionamientoTab(panel, options = {}) {
+
+        var $node = options['$node']
 
         let align_label = new Cells.Label('Alineación')
         let buttons: Array<Cells.IconButton> = [
             {
                 label: 'Izquierda',
                 icon_path: '/static/canvas/img/icons-panel/icon-align-left-inactive.png',
-                callback: () => console.log('Izquierda')
+                callback: () => $node.css({ 'text-align': 'left' })
             },
             {
                 label: 'Centrado',
                 icon_path: '/static/canvas/img/icons-panel/icon-align-center-inactive.png',
-                callback: () => console.log('Centrado')
+                callback: () => $node.css({ 'text-align': 'center' })
             },
             {
                 label: 'Derecha',
@@ -121,7 +125,7 @@ export class EditionPanel extends Window {
         panel.addCell(padding_entry)
     }
 
-    estiloTab(panel) {
+    estiloTab(panel, options = {}) {
 
         let bgimage_label = new Cells.Label('Imagen de fondo')
         let bgimage_entry = new Cells.FileUpload('placeholder')
