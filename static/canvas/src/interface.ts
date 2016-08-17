@@ -37,6 +37,11 @@ export class GUInterface {
 
     }
 
+    // This class is handy if we want to log css changes, revert them and so on
+    changeNodeCSS($node, css_dict) {
+        $node.css(css_dict)
+    }
+
 }
 
 export class EditionPanel extends Window {
@@ -70,7 +75,7 @@ export class EditionPanel extends Window {
         this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/style-icon.png',
             tabGenerator: this.estiloTab,
-            options: { '$node': this.$node }
+            options: { '$node': this.$node, GUI: this.GUI }
         })
         this.tabSubpanel.loadTab(this.posicionamientoTab, { '$node': this.$node })
     }
@@ -78,6 +83,7 @@ export class EditionPanel extends Window {
     posicionamientoTab(panel, options = {}) {
 
         var $node = options['$node']
+
 
         let align_label = new Cells.Label('Alineación')
         let buttons: Array<Cells.IconButton> = [
@@ -94,7 +100,7 @@ export class EditionPanel extends Window {
             {
                 label: 'Derecha',
                 icon_path: '/static/canvas/img/icons-panel/icon-align-right-inactive.png',
-                callback: () => console.log('Derecha')
+                callback: () => $node.css({ 'text-align': 'right' })
             }]
 
         let align_entry = new Cells.IconButtons(buttons)

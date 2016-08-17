@@ -53,6 +53,7 @@ class RootRenderableElement extends RenderableElement {
     }
 
     render() {
+        var test = this.GUI
         this.$elem = $(this.elemHTML)
         this.$container.append(this.$elem)
         this.$elem.addClass(this.cssClasses)
