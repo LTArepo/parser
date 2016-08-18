@@ -199,14 +199,21 @@ body{
     background-color: #525151;
     pointer-events: none;
 }
+.in-node-topbar-icon {
+    vertical-align:middle;
+    margin-right: 5px;
+}
 .in-node-topbar-title {
     float: left;
-    margin: 5px 0 0 20px;
+    margin: 5px 0 0 10px;
+}
+.in-node-topbar-actions-container {
+    float: right;
 }
 .in-node-topbar-append-button, .in-node-topbar-duplicate-button, .in-node-topbar-delete-button {
-    float: right;
+    display: inline-block;
     padding: 2px;
-    margin: 8px 10px;
+    margin: 10px;
     width: 19px;
     height: 17px;
     cursor: pointer;
@@ -220,6 +227,8 @@ body{
 }
 .in-node-topbar-delete-button {
     background: url(../img/icons-node/erase-icon-inactive.png)no-repeat center;
+    border-left: 1px dotted #000;
+    padding-left: 15px;
 }
 
 .in-container-topbar{
