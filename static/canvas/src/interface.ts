@@ -70,7 +70,7 @@ export class EditionPanel extends Window {
         this.$nodeTitleSubpanel = new Subpanel()
         this.$nodeTitleSubpanel.generate(this)
         this.$nodeTitleSubpanel.$elem.addClass('edition-panel-node-title-container')
-        this.$nodeTitleSubpanel.addFragment('<img class="edition-panel-node-title-icon" src="#">')
+        this.$nodeTitleSubpanel.addFragment('<img class="edition-panel-node-title-icon" src="/static/canvas/img/icons-node/edition-node-icon.png">')
         this.$nodeTitleSubpanel.addFragment('<div class="edition-panel-node-title">Contenedor x</div>')
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
