@@ -172,6 +172,38 @@ body{
     height: 50px;
     background-color: #525151;
     cursor: move;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    > img {
+        vertical-align: middle;
+    }
+    .window-topbar-maximize-minimize {
+        position: relative;
+        top: 8px;
+    }
+}
+.window-topbar-title {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+}
+.window-topbar-maximize-minimize {
+    float: right;
+}
+
+.edition-panel-node-title-container {
+    width: 100%;
+    height: 50px;
+    background-color: #383838;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    > img {
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+}
+.edition-panel-node-title-icon, .edition-panel-node-title {
+    display: inline-block;
 }
 
 .in-tabrow-subpanel {
@@ -199,14 +231,21 @@ body{
     background-color: #525151;
     pointer-events: none;
 }
+.in-node-topbar-icon {
+    vertical-align:middle;
+    margin-right: 5px;
+}
 .in-node-topbar-title {
     float: left;
-    margin: 5px 0 0 20px;
+    margin: 5px 0 0 10px;
+}
+.in-node-topbar-actions-container {
+    float: right;
 }
 .in-node-topbar-append-button, .in-node-topbar-duplicate-button, .in-node-topbar-delete-button {
-    float: right;
+    display: inline-block;
     padding: 2px;
-    margin: 8px 10px;
+    margin: 10px;
     width: 19px;
     height: 17px;
     cursor: pointer;
@@ -220,6 +259,8 @@ body{
 }
 .in-node-topbar-delete-button {
     background: url(../img/icons-node/erase-icon-inactive.png)no-repeat center;
+    border-left: 1px dotted #000;
+    padding-left: 15px;
 }
 
 .in-container-topbar{

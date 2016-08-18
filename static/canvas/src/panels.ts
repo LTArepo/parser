@@ -162,9 +162,9 @@ class WindowTopbar extends Subpanel {
     }
 
     renderContents() {
-        this.$elem.append('<img src="#">')
-        this.$elem.append('<div class="window-topbar-title">' + this.parent.topbarTitle + '</div>')
-        this.$elem.append('<img class="window-topbar-maximize-minimize" src="#">')
+        this.$elem.append('<img src="/static/canvas/img/icons-node/drag-icon.png">')
+        this.$elem.append('<div class="window-topbar-title text-uppercase">' + this.parent.topbarTitle + '</div>')
+        this.$elem.append('<img class="window-topbar-maximize-minimize" src="/static/canvas/img/icons-node/maximize-minimize-icon.png">')
 
     }
 

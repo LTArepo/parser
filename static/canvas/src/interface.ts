@@ -81,7 +81,7 @@ export class EditionPanel extends Window {
         this.$nodeTitleSubpanel = new Subpanel()
         this.$nodeTitleSubpanel.generate(this)
         this.$nodeTitleSubpanel.$elem.addClass('edition-panel-node-title-container')
-        this.$nodeTitleSubpanel.addFragment('<img class="edition-panel-node-title-icon" src="#">')
+        this.$nodeTitleSubpanel.addFragment('<img class="edition-panel-node-title-icon" src="/static/canvas/img/icons-node/edition-node-icon.png">')
         this.$nodeTitleSubpanel.addFragment('<div class="edition-panel-node-title">Contenedor x</div>')
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
@@ -330,11 +330,13 @@ export class NodeTopbar extends Panel {
     }
 
     renderContents() {
-        let $title = $('<div class="in-node-topbar-title">title<div>')
-        let $append_button = $('<div class="in-node-topbar-append-button"><div>')
-        let $duplicate_button = $('<div class="in-node-topbar-duplicate-button"><div>')
-        let $delete_button = $('<div class="in-node-topbar-delete-button"><div>')
-        this.$elem.append([$title, $append_button, $duplicate_button, $delete_button])
+        let $title = $('<div class="in-node-topbar-title"><img class="in-node-topbar-icon" src="/static/canvas/img/icons-node/drag-icon.png" width="19" height="17"> title</div>')
+        let $actions_container = $('<div class="in-node-topbar-actions-container"></div>')
+        let $append_button = $('<div class="in-node-topbar-append-button"></div>')
+        let $duplicate_button = $('<div class="in-node-topbar-duplicate-button"></div>')
+        let $delete_button = $('<div class="in-node-topbar-delete-button"></div>')
+        this.$elem.append([$title,$actions_container])
+        $actions_container.append([$append_button, $duplicate_button, $delete_button])
 
 
         $append_button.click(() => this.editionCallback(this.$node))
