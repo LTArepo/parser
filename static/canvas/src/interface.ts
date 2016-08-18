@@ -46,6 +46,8 @@ export class GUInterface {
 
 export class EditionPanel extends Window {
     tabSubpanel: TabbedMatrixSubpanel
+    topbarTitle = 'Panel de edición'
+    $nodeTitleSubpanel: Subpanel
     $node: any
 
     constructor($container, $node, GUI: GUInterface, x, y) {
@@ -65,6 +67,11 @@ export class EditionPanel extends Window {
     }
 
     configureContents() {
+        this.$nodeTitleSubpanel = new Subpanel()
+        this.$nodeTitleSubpanel.generate(this)
+        this.$nodeTitleSubpanel.$elem.addClass('edition-panel-node-title-container')
+        this.$nodeTitleSubpanel.addFragment('<img class="edition-panel-node-title-icon" src="#">')
+        this.$nodeTitleSubpanel.addFragment('<div class="edition-panel-node-title">Contenedor x</div>')
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
         this.tabSubpanel.addTab({

@@ -23,6 +23,7 @@ class Panel extends RootRenderableElement {
 
 class Window extends Panel {
     cssClasses = this.cssClasses + 'in-interface in-window '
+    topbarTitle = ''
     topbar: WindowTopbar
 
     render() {
@@ -33,6 +34,10 @@ class Window extends Panel {
     configureTopbar() {
         this.topbar = new WindowTopbar()
         this.topbar.generate(this)
+    }
+
+    setTitle(title: string) {
+        this.topbarTitle = title
     }
 }
 
@@ -152,11 +157,14 @@ class WindowTopbar extends Subpanel {
 
     render($container) {
         super.render($container)
-        this.configureButtons()
+        this.renderContents()
         this.configureDrag()
     }
 
-    configureButtons() {
+    renderContents() {
+        this.$elem.append('<img src="#">')
+        this.$elem.append('<div class="window-topbar-title">' + this.parent.topbarTitle + '</div>')
+        this.$elem.append('<img class="window-topbar-maximize-minimize" src="#">')
 
     }
 
