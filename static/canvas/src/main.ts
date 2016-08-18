@@ -221,6 +221,7 @@ function loadUploadedPage(text: string) {
 }
 
 function addComponentToCanvas($node, options = {}) {
+    $node.addClass('component')
     $canvas.append($node)
 
     parseNodeOptions($node)
