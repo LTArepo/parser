@@ -52,6 +52,7 @@ function render() {
 
 function configureInterface() {
     _GUI = new GUInterface($('#interface-container'))
+    _GUI.setAddComponentToCanvasFunction(addComponentToCanvas)
     configureTestButton()
     configureTopbar()
     configureMouseEvents()
@@ -231,6 +232,13 @@ function addComponentToCanvas($node, options = {}) {
         }
     }
 
+    addInterfaceToNode($node)
+    $node.find('.canvas-component').each(function () {
+        addInterfaceToNode($(this))
+    })
+}
+
+function addInterfaceToNode($node) {
     let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
     node_interface.render()
 }

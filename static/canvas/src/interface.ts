@@ -7,6 +7,7 @@ declare var $: any
 
 export class GUInterface {
     renderQueue: Array<RenderableElement> = []
+    addComponentToCanvas: ($node, options) => any
     $container
 
     constructor($container) {
@@ -35,6 +36,16 @@ export class GUInterface {
             }
         }
 
+    }
+
+    addNodeToCanvas($node, options) {
+        let $cloned_node = $node.clone()
+        this.addComponentToCanvas($cloned_node, options)
+    }
+
+    setAddComponentToCanvasFunction(fun: ($node, options) => any) {
+        console.log(fun)
+        this.addComponentToCanvas = fun
     }
 
     // This class is handy if we want to log css changes, revert them and so on
@@ -327,6 +338,7 @@ export class NodeTopbar extends Panel {
 
 
         $append_button.click(() => this.editionCallback(this.$node))
+        $duplicate_button.click(() => this.GUI.addNodeToCanvas(this.$node, {}))
         $delete_button.click($.proxy(function () {
             this.$node.remove()
             this.node_interface.destroy()
