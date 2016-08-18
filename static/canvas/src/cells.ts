@@ -81,6 +81,7 @@ export class TextArea extends Cell {
     cssClasses = this.cssClasses + 'ce-textArea '
     placeholder: string
     callback: (val: string) => any
+    $button: any
     $input: any
 
     constructor(callback, placeholder = '') {
@@ -91,13 +92,15 @@ export class TextArea extends Cell {
 
     renderContents() {
         this.$input = $('<textarea class="ce-textArea-input" >' + this.placeholder + '</textarea>')
+        this.$button = $('<div class="ce-textArea-button">Aplicar</div>')
         this.$elem.append(this.$input)
-        onEnter(this.$input, this.callback)
+        this.$elem.append(this.$button)
+
+        this.$button.click(() => this.callback(this.$input.val()))
     }
 
     destroy() {
         super.destroy()
-        this.$input.unbind('keyup')
     }
 
 }

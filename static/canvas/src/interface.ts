@@ -78,7 +78,7 @@ export class EditionPanel extends Window {
             options: { '$node': this.$node, GUI: this.GUI }
         })
         this.tabSubpanel.addTab({
-            icon_path: '/static/canvas/img/icons-panel/style-icon.png',
+            icon_path: '/static/canvas/img/icons-panel/code-icon.png',
             tabGenerator: this.HTMLTab,
             options: { '$node': this.$node, GUI: this.GUI }
         })
@@ -211,7 +211,7 @@ export class EditionPanel extends Window {
         var GUI = options['GUI']
 
         let html_label = new Cells.Label('Código HTML')
-        let html_entry = new Cells.TextArea(x => console.log(x), $node.html())
+        let html_entry = new Cells.TextArea(x => $node.html(x), $node.get(0).innerHTML)
 
         panel.addCell(html_label)
         panel.addCell(html_entry)
