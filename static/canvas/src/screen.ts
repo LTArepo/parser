@@ -88,6 +88,10 @@ class ChildRenderableElement extends RenderableElement {
         this.$elem.addClass(this.cssClasses)
     }
 
+    addFragment(frag) {
+        this.$elem.append(frag)
+    }
+
     destroy() {
         this.$elem.remove()
     }
