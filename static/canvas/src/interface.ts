@@ -77,6 +77,11 @@ export class EditionPanel extends Window {
             tabGenerator: this.estiloTab,
             options: { '$node': this.$node, GUI: this.GUI }
         })
+        this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/style-icon.png',
+            tabGenerator: this.HTMLTab,
+            options: { '$node': this.$node, GUI: this.GUI }
+        })
         this.tabSubpanel.loadTab(this.posicionamientoTab, { '$node': this.$node, GUI: this.GUI })
     }
 
@@ -200,6 +205,17 @@ export class EditionPanel extends Window {
 
         }
     }
+
+    HTMLTab(panel, options = {}) {
+        var $node = options['$node']
+        var GUI = options['GUI']
+
+        let html_label = new Cells.Label('Código HTML')
+        let html_entry = new Cells.TextArea(x => console.log(x), $node.html())
+
+        panel.addCell(html_label)
+        panel.addCell(html_entry)
+    }
 }
 
 export class NodeInterface {
@@ -297,9 +313,9 @@ export class NodeTopbar extends Panel {
 
     renderContents() {
         let $title = $('<div class="in-node-topbar-title">title<div>')
-        let $append_button = $('<div class="in-node-topbar-append-button">x<div>')
-        let $duplicate_button = $('<div class="in-node-topbar-duplicate-button">x<div>')
-        let $delete_button = $('<div class="in-node-topbar-delete-button">x<div>')
+        let $append_button = $('<div class="in-node-topbar-append-button"><div>')
+        let $duplicate_button = $('<div class="in-node-topbar-duplicate-button"><div>')
+        let $delete_button = $('<div class="in-node-topbar-delete-button"><div>')
         this.$elem.append([$title, $append_button, $duplicate_button, $delete_button])
 
 

@@ -76,6 +76,32 @@ export class TextInput extends Cell {
 
 }
 
+
+export class TextArea extends Cell {
+    cssClasses = this.cssClasses + 'ce-textArea '
+    placeholder: string
+    callback: (val: string) => any
+    $input: any
+
+    constructor(callback, placeholder = '') {
+        super()
+        this.placeholder = placeholder
+        this.callback = callback
+    }
+
+    renderContents() {
+        this.$input = $('<textarea class="ce-textArea-input" >' + this.placeholder + '</textarea>')
+        this.$elem.append(this.$input)
+        onEnter(this.$input, this.callback)
+    }
+
+    destroy() {
+        super.destroy()
+        this.$input.unbind('keyup')
+    }
+
+}
+
 export class Select extends Cell {
     cssClasses = this.cssClasses + 'ce-select '
     callback: (val: string) => any

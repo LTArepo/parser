@@ -221,7 +221,7 @@ function loadUploadedPage(text: string) {
 }
 
 function addComponentToCanvas($node, options = {}) {
-    $node.addClass('component')
+    $node.addClass('canvas-component')
     $canvas.append($node)
 
     parseNodeOptions($node)
@@ -237,7 +237,6 @@ function addComponentToCanvas($node, options = {}) {
 
 function addContainerToDragAndDrop(container) {
     _dragula.containers.push(container)
-    console.log('appending')
 }
 
 function selectNode($node) {

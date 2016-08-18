@@ -1,6 +1,10 @@
 @import 'reset';
 @import 'helpers';
 
+body{
+    position: relative;
+}
+
 #interface-container{
     font-family: 'Titillium Web';
     overflow: hidden;
