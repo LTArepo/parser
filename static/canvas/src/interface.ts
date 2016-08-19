@@ -59,6 +59,7 @@ export class EditionPanel extends Window {
     tabSubpanel: TabbedMatrixSubpanel
     topbarTitle = 'Panel de edición'
     $nodeTitleSubpanel: Subpanel
+    minimized: boolean = false
     $node: any
 
     constructor($container, $node, GUI: GUInterface, x, y) {
@@ -71,7 +72,20 @@ export class EditionPanel extends Window {
         this.configureContents()
     }
 
+    minimize() {
+        if (this.minimized) {
+            this.tabSubpanel.$elem.show()
+            this.$nodeTitleSubpanel.$elem.show()
+            this.minimized = false
+        } else {
+            this.tabSubpanel.$elem.hide()
+            this.$nodeTitleSubpanel.$elem.hide()
+            this.minimized = true
+        }
+    }
+
     targetNode($node) {
+        this.minimized = false
         this.$node = $node
         this.destroy()
         this.render()
@@ -174,7 +188,12 @@ export class EditionPanel extends Window {
         let bgimage_label = new Cells.Label('Imagen de fondo')
         let bgimage_entry = new Cells.FileUpload('Inserta URL',
             (x) => console.log(x),
-            (x) => css('background-image', 'url(' + x + ')'))
+            function (x) {
+                css('background-image', 'url(' + x + ')')
+                css('background-repeat', 'no-repeat')
+                css('background-size', '100% auto')
+                css('background-position', 'center top')
+            })
         let bgimage_helper = new Cells.TextHelper('Selecciona una imagen de tu ordenador')
 
         let bgcolor_label = new Cells.Label('Color de fondo')

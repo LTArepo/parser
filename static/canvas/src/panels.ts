@@ -39,6 +39,10 @@ class Window extends Panel {
     setTitle(title: string) {
         this.topbarTitle = title
     }
+
+    minimize() {
+
+    }
 }
 
 /** panel inside a panel */
@@ -159,6 +163,7 @@ class WindowTopbar extends Subpanel {
         super.render($container)
         this.renderContents()
         this.configureDrag()
+        this.addListeners()
     }
 
     renderContents() {
@@ -166,6 +171,10 @@ class WindowTopbar extends Subpanel {
         this.$elem.append('<div class="window-topbar-title text-uppercase">' + this.parent.topbarTitle + '</div>')
         this.$elem.append('<img class="window-topbar-maximize-minimize" src="/static/canvas/img/icons-node/maximize-minimize-icon.png">')
 
+    }
+
+    addListeners() {
+        this.$elem.dblclick(() => this.parent.minimize())
     }
 
     configureDrag() {
