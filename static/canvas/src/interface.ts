@@ -374,7 +374,7 @@ export class NodeTopbar extends Panel {
             this.$elem.css({
                 left: this.node_offset.left,
                 top: this.node_offset.top,
-                width: this.$node.width()
+                width: this.$node.outerWidth()
             })
         }
     }

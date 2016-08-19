@@ -167,6 +167,11 @@ function activateTopbarCarousel() {
 
 function configureTestButton() {
     $('#test-button').click(toggleInterface)
+    $(document).keyup(function (e) {
+        if (e.keyCode == 27) {
+            toggleInterface()
+        }
+    })
 }
 
 var interface_visibility = 1
@@ -183,11 +188,13 @@ function toggleInterface() {
 function hideInterface() {
     $('#interface-container').hide()
     $body.removeClass('editing')
+    $('#ed-ghost-topbar').hide()
 }
 
 function showInterface() {
     $('#interface-container').show()
     $body.addClass('editing')
+    $('#ed-ghost-topbar').show()
 }
 
 function configureMouseEvents() {
