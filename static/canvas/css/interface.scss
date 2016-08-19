@@ -284,13 +284,18 @@ body{
 
 
 /* CONTAINERS */
-.in-container {
-    min-height: 120px;
-    border: 1px dashed black;
-}
-
 .editing {
     .canvas-component {
         padding-top: 30px;
+	border: 1px dashed black;
     }
+}
+
+.in-container {
+    min-height: 120px;
+    border: 1px dashed red;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    box-sizing: content-box;
 }
