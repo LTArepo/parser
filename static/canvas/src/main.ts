@@ -147,7 +147,7 @@ function configureNodeList() {
 	<p class="no-margin option-label">${component_name}</p></a></div>`
         let $node = $(html)
         $node.click(function () {
-            getComponent(path + '/' + component_filename, x => addComponentToCanvas($(x.html), x.options))
+            getComponent(path + '/' + component_filename, x => _GUI.addComponentToCanvas($(x.html), x.options))
             $topbar_options.slideUp()
             $('.in-topbar-item.active').removeClass('active')
         })
@@ -164,10 +164,30 @@ function activateTopbarCarousel() {
     })
 }
 
+
 function configureTestButton() {
-    $('#test-button').click(function () {
-        downloadPage()
-    })
+    $('#test-button').click(toggleInterface)
+}
+
+var interface_visibility = 1
+function toggleInterface() {
+    if (interface_visibility) {
+        interface_visibility = 0
+        hideInterface()
+    } else {
+        interface_visibility = 1
+        showInterface()
+    }
+}
+
+function hideInterface() {
+    $('#interface-container').hide()
+    $body.removeClass('editing')
+}
+
+function showInterface() {
+    $('#interface-container').show()
+    $body.addClass('editing')
 }
 
 function configureMouseEvents() {

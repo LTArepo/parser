@@ -255,7 +255,7 @@ export class NodeInterface {
         if (this.$node.hasClass('in-container')) {
             this.nodeLayer = new NodeLayer(this.$container, this.$node, this.GUI, this)
             this.nodeLayer.render()
-            this.nodeTopbar = new ContainerNodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
+            this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
         } else {
             this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
         }
@@ -264,7 +264,7 @@ export class NodeInterface {
     }
 
     destroy() {
-        this.nodeLayer.destroy()
+        if (this.nodeLayer) this.nodeLayer.destroy()
         this.nodeTopbar.destroy()
     }
 }
@@ -325,7 +325,7 @@ export class NodeTopbar extends Panel {
     render() {
         super.render()
         this.$elem.css({ width: this.width })
-        this.addListeners()
+        //this.addListeners()
         this.renderContents()
     }
 
@@ -335,7 +335,7 @@ export class NodeTopbar extends Panel {
         let $append_button = $('<div class="in-node-topbar-append-button"></div>')
         let $duplicate_button = $('<div class="in-node-topbar-duplicate-button"></div>')
         let $delete_button = $('<div class="in-node-topbar-delete-button"></div>')
-        this.$elem.append([$title,$actions_container])
+        this.$elem.append([$title, $actions_container])
         $actions_container.append([$append_button, $duplicate_button, $delete_button])
 
 
