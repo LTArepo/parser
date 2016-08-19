@@ -227,7 +227,7 @@ body{
 
 .in-node-topbar{
     display: none;
-    height: 40px;
+    height: 30px;
     background-color: #525151;
     pointer-events: none;
 }
@@ -237,7 +237,7 @@ body{
 }
 .in-node-topbar-title {
     float: left;
-    margin: 5px 0 0 10px;
+    margin-left: 10px;
 }
 .in-node-topbar-actions-container {
     float: right;
@@ -245,7 +245,7 @@ body{
 .in-node-topbar-append-button, .in-node-topbar-duplicate-button, .in-node-topbar-delete-button {
     display: inline-block;
     padding: 2px;
-    margin: 10px;
+    margin: 5px 10px;
     width: 19px;
     height: 17px;
     cursor: pointer;
@@ -288,4 +288,10 @@ body{
 .in-container {
     min-height: 120px;
     border: 1px dashed black;
-} 
+}
+
+.editing {
+    .canvas-component {
+        padding-top: 30px;
+    }
+}
