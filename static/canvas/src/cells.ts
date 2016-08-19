@@ -207,14 +207,18 @@ export class NumberInputs extends Cell {
 
 export class FileUpload extends Cell {
     cssClasses = this.cssClasses + 'ce-file-upload '
+    inputCallback: (file: string) => any
+    fileCallback: (file: string) => any
     placeholder: string
     $text_input: any
     $file_input: any
     $label: any
 
-    constructor(placeholder: string) {
+    constructor(placeholder: string, fileCallback: (file: string) => any, inputCallback: (path: string) => any) {
         super()
         this.placeholder = placeholder
+        this.fileCallback = fileCallback
+        this.inputCallback = inputCallback
     }
 
     renderContents() {
@@ -226,6 +230,8 @@ export class FileUpload extends Cell {
         this.$elem.append(this.$text_input)
         this.$elem.append(this.$file_input)
         this.$elem.append(this.$label)
+
+        this.$text_input.change(() => this.inputCallback(this.$text_input.val()))
 
         document.getElementById(id).addEventListener('change', function (event) {
             var reader = new FileReader()

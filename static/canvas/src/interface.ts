@@ -172,7 +172,9 @@ export class EditionPanel extends Window {
         }
 
         let bgimage_label = new Cells.Label('Imagen de fondo')
-        let bgimage_entry = new Cells.FileUpload('placeholder')
+        let bgimage_entry = new Cells.FileUpload('Inserta URL',
+            (x) => console.log(x),
+            (x) => css('background-image', 'url(' + x + ')'))
         let bgimage_helper = new Cells.TextHelper('Selecciona una imagen de tu ordenador')
 
         let bgcolor_label = new Cells.Label('Color de fondo')
