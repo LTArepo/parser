@@ -286,8 +286,9 @@ body{
 /* CONTAINERS */
 .editing {
     .canvas-component {
-        padding-top: 30px;
-	border: 1px dashed black;
+        padding: 30px;
+	    border: 1px dashed black;
+        box-sizing: border-box;
     }
 }
 
