@@ -34,9 +34,14 @@ def downloadPage():
     end = document.find('<!-- end of canvas -->')
 
     canvas = document[start:end]
+    print canvas
     generateDownloadZip(canvas)
 
     return send_file('output/tmp/output.zip', attachment_filename='output.zip', as_attachment=True, mimetype='application/zip')
+
+@app.route('/loadpage/', methods=['POST'])
+def loadPage():
+    data = request.form.get('save_file')
 
 # ==================================================
 #                       Logic
@@ -54,7 +59,6 @@ def generateSave(canvas):
     return json.dumps(output)
     
 def generateDownloadZip(canvas):
-
     if os.path.exists('output/zip_template'): rmtree('output/zip_template')
     
     # Directory structure generation
