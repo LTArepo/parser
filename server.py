@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request, render_template, send_file
 
 import os, json
-from shutil import copyfile, make_archive
+from shutil import copyfile, make_archive, rmtree
 
 app = Flask(__name__)
 
@@ -28,16 +28,13 @@ def getComponent(path):
 @app.route('/downloadpage/', methods=['POST'])
 def downloadPage():
     document = request.form.get('document')
-
     document = document.encode('utf-8')
 
     start = document.find('<!-- start of canvas -->')+24
     end = document.find('<!-- end of canvas -->')
 
     canvas = document[start:end]
-    index = generateIndex(canvas)
-
-    generateDownloadZip(index)
+    generateDownloadZip(canvas)
 
     return send_file('output/tmp/output.zip', attachment_filename='output.zip', as_attachment=True, mimetype='application/zip')
 
@@ -50,17 +47,28 @@ def generateIndex(canvas):
         content = f.read()
         content = replace(content, canvas, '<!-- {{canvas}} -->')
         return content
+
+def generateSave(canvas):
+    output = {} 
+    output['canvas'] = canvas
+    return json.dumps(output)
     
-def generateDownloadZip(index):
+def generateDownloadZip(canvas):
+
+    if os.path.exists('output/zip_template'): rmtree('output/zip_template')
+    
     # Directory structure generation
-    dirs = ['output/zip_template/css', 'output/zip_template/js']
+    dirs = ['output/zip_template/css', 'output/zip_template/js', 'output/zip_template/data']
     for d in dirs:
         if not os.path.exists(d): os.makedirs(d)
 
     # Move updated files in
     copyfile('static/components/css/components.css', 'output/zip_template/css/main.css')
     copyfile('static/components/js/main.js', 'output/zip_template/js/main.js')
+    with open('output/zip_template/data/save.json', 'w') as save_file:
+        save_file.write(generateSave(canvas))
     with open('output/zip_template/index.html', 'w') as index_file:
+        index = generateIndex(canvas)
         index_file.write(index)
     
     # Zip generation
