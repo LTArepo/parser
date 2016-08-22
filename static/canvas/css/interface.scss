@@ -18,8 +18,6 @@ body{
 }
 
 #canvas-container{
-    padding-top: 10px;
-    padding-bottom: 40px;
     position: relative;
     z-index: 0;
 }
@@ -295,6 +293,11 @@ body{
     .in-container{
 	padding: 10px;
 	padding-top: 30px;
+    }
+
+    #canvas-container{
+	padding-top: 10px;
+	padding-bottom: 40px;
     }
 }
 

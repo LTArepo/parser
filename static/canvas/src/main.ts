@@ -95,6 +95,9 @@ function configureTopbar() {
         }
     })
 
+    // Descargar button
+    $('#downloadMenu').click(downloadPage)
+
     configureNodeList() // Barra desplegable de seleccion de nodos
 }
 

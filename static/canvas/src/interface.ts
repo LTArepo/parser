@@ -44,7 +44,6 @@ export class GUInterface {
     }
 
     setAddComponentToCanvasFunction(fun: ($node, options) => any) {
-        console.log(fun)
         this.addComponentToCanvas = fun
     }
 

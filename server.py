@@ -1,6 +1,8 @@
 from flask import Flask
-from flask import request, render_template
+from flask import request, render_template, send_file
+
 import os, json
+from shutil import copyfile, make_archive
 
 app = Flask(__name__)
 
@@ -26,13 +28,46 @@ def getComponent(path):
 @app.route('/downloadpage/', methods=['POST'])
 def downloadPage():
     document = request.form.get('document')
-    return str(document)[20:40]
+
+    document = document.encode('utf-8')
+
+    start = document.find('<!-- start of canvas -->')+24
+    end = document.find('<!-- end of canvas -->')
+
+    canvas = document[start:end]
+    index = generateIndex(canvas)
+
+    generateDownloadZip(index)
+
+    return send_file('output/tmp/output.zip', attachment_filename='output.zip', as_attachment=True, mimetype='application/zip')
 
 # ==================================================
 #                       Logic
 # ==================================================
 
+def generateIndex(canvas):
+    with open('output/canvas_templates/standard.html') as f:
+        content = f.read()
+        content = replace(content, canvas, '<!-- {{canvas}} -->')
+        return content
+    
+def generateDownloadZip(index):
+    # Directory structure generation
+    dirs = ['output/zip_template/css', 'output/zip_template/js']
+    for d in dirs:
+        if not os.path.exists(d): os.makedirs(d)
 
+    # Move updated files in
+    copyfile('static/components/css/components.css', 'output/zip_template/css/main.css')
+    copyfile('static/components/js/main.js', 'output/zip_template/js/main.js')
+    with open('output/zip_template/index.html', 'w') as index_file:
+        index_file.write(index)
+    
+    # Zip generation
+    if os.path.exists('output/tmp/output.zip'):
+        os.remove('output/tmp/output.zip')
+
+    make_archive('output/tmp/output', 'zip', 'output/zip_template')
 
 
 # ==================================================
@@ -51,6 +86,10 @@ def parsePath(encoded_path, root):
     path = encoded_path.replace('|', '/')
     path = root+'/'+path
     return path
+
+def replace(content, addition, token):
+	x = content.find(token)
+	return content[:x] + addition + content[x:].replace(token, '')
 
 def chcdir():
     """ Changes dir to the current working directory """
