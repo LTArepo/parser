@@ -109,7 +109,7 @@ function configureNodeList() {
     var $topbar_options = $('.in-topbar-options')
 
     // Collapse node list
-    $('.in-topbar-item').click(function (e) {
+    $('.in-topbar-item.with-children').click(function (e) {
         e.preventDefault()
         if (!$(this).hasClass('active')) {
             var target = $(this).attr('href')
