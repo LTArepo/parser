@@ -261,13 +261,6 @@ function addComponentToCanvas($node, options = {}) {
     $node.addClass('canvas-component')
     $canvas.append($node)
 
-    parseNodeOptions($node)
-    function parseNodeOptions($node) {
-        if ($node.hasClass('in-container')) {
-            addContainerToDragAndDrop($node[0])
-        }
-    }
-
     addInterfaceToNode($node)
     $node.find('.canvas-component').each(function () {
         addInterfaceToNode($(this))
@@ -275,6 +268,13 @@ function addComponentToCanvas($node, options = {}) {
 }
 
 function addInterfaceToNode($node) {
+    parseNodeOptions($node)
+    function parseNodeOptions($node) {
+        if ($node.hasClass('in-container')) {
+            addContainerToDragAndDrop($node[0])
+        }
+    }
+
     let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
     _GUI.addElement(node_interface)
     node_interface.render()
