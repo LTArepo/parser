@@ -248,7 +248,12 @@ function downloadPage() {
 
 /** Loads a backup file selected with the page-uploader input */
 function loadUploadedPage(text: string) {
-    console.log(text)
+    _GUI.removeFragment($canvas)
+    $canvas.children().remove()
+    let $new_canvas = $($.parseJSON(text)['canvas'])
+    $canvas.append($new_canvas.children())
+    setTimeout(() => addInterfaceToFragment($('#canvas-container')))
+    //addInterfaceToFragment($canvas)
 }
 
 function addComponentToCanvas($node, options = {}) {
@@ -270,7 +275,14 @@ function addComponentToCanvas($node, options = {}) {
 
 function addInterfaceToNode($node) {
     let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
+    _GUI.addElement(node_interface)
     node_interface.render()
+}
+
+function addInterfaceToFragment($fragment) {
+    $fragment.find('.canvas-component').each(function () {
+        addInterfaceToNode($(this))
+    })
 }
 
 function addContainerToDragAndDrop(container) {

@@ -20,6 +20,11 @@ class RenderableElement {
         this.initialConfig()
     }
 
+    addID(id: string) {
+        this.render_id = id
+        this.$elem.data('render-id', this.render_id)
+    }
+
     initialConfig() {
         if (this.options.cssClasses) this.cssClasses += this.options.cssClasses
         if (this.options.closeOnClickOut) this.cssClasses += 'close-on-click-out '

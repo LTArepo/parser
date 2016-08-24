@@ -22,20 +22,42 @@ export class GUInterface {
     }
 
     addElement(element: RenderableElement) {
-        element.render_id = generateID()
+        element.addID(generateID())
         this.renderQueue.push(element)
     }
 
-    removeElement(element: RenderableElement) {
+    removeElementFromID(target_id: string) {
+        let elem_data = this.getElementFromID(target_id)
+        this.renderQueue.splice(elem_data.index, 1)
+    }
+
+    getElementFromID(target_id: string) {
+        var element, index
         let length = this.renderQueue.length
-        let target_id = element.render_id
         for (var i = 0; i < length; i++) {
             if (this.renderQueue[i].render_id == target_id) {
-                this.renderQueue.splice(i, 1)
+                element = this.renderQueue[i]
+                index = i
                 break
             }
         }
+        return { element: element, index: index }
+    }
 
+    reset() {
+        this.renderQueue.forEach(x => x.destroy())
+    }
+
+    removeElement(element: RenderableElement) {
+        let target_id = element.render_id
+        this.removeElementFromID(target_id)
+    }
+
+    removeFragment($fragment) {
+        $fragment.find('.canvas-component').each($.proxy(function (i, e) {
+            let elem_id = $(e).data('render-id')
+            this.getElementFromID(elem_id).element.destroy()
+        }, this))
     }
 
     addNodeToCanvas($node, options) {
@@ -256,7 +278,7 @@ export class EditionPanel extends Window {
     }
 }
 
-export class NodeInterface {
+export class NodeInterface extends RenderableElement {
     nodeLayer: NodeLayer
     nodeTopbar: NodeTopbar
     editionCallback: ($node) => any
@@ -265,10 +287,16 @@ export class NodeInterface {
     $node: any
 
     constructor($container, $node, GUI: GUInterface, editionCallback: (n) => any) {
+        super()
         this.editionCallback = editionCallback
         this.GUI = GUI
         this.$container = $container
         this.$node = $node
+    }
+
+    addID(id: string) {
+        this.render_id = id
+        this.$node.data('render-id', this.render_id)
     }
 
     render() {
@@ -362,8 +390,9 @@ export class NodeTopbar extends Panel {
         $append_button.click(() => this.editionCallback(this.$node))
         $duplicate_button.click(() => this.GUI.addNodeToCanvas(this.$node, {}))
         $delete_button.click($.proxy(function () {
-            this.$node.remove()
+            this.GUI.removeFragment(this.$node)
             this.node_interface.destroy()
+            this.$node.remove()
         }, this))
     }
 
