@@ -92,6 +92,7 @@ function configureTopbar() {
         function onReaderLoad(event) {
             var text = event.target.result
             loadUploadedPage(text)
+            $('#page-uploader').val('')
         }
     })
 
