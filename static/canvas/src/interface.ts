@@ -8,10 +8,37 @@ declare var $: any
 export class GUInterface {
     renderQueue: Array<RenderableElement> = []
     addComponentToCanvas: ($node, options) => any
+    nodeConfigurationDict: {}
     $container
+
+
 
     constructor($container) {
         this.$container = $container
+        //$.getJSON('/static/components/data/nodeConfigurationdict.json', this.setNodeConfigurationDict)
+    }
+
+    setNodeConfigurationDict(data) {
+        this.nodeConfigurationDict = data
+    }
+
+    parseNodeConfigurationData($node) {
+        var output = []
+        $node.find('.ed-configuration').each(function () {
+            let $elem = $(this)
+            let data = $elem.data()
+            for (var key in data) {
+                if (key.indexOf('Label') < 0) {
+                    let configuration_parameter = {
+                        key: key,
+                        label: data[key + 'Label'],
+                        value: data[key]
+                    }
+                    output.push(configuration_parameter)
+                }
+            }
+        })
+        return output
     }
 
     refresh() {
@@ -133,6 +160,11 @@ export class EditionPanel extends Window {
         this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/code-icon.png',
             tabGenerator: this.HTMLTab,
+            options: { '$node': this.$node, GUI: this.GUI }
+        })
+        this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/settings-icon.png',
+            tabGenerator: this.configuracionTab,
             options: { '$node': this.$node, GUI: this.GUI }
         })
         this.tabSubpanel.loadTab(this.posicionamientoTab, { '$node': this.$node, GUI: this.GUI })
@@ -276,9 +308,25 @@ export class EditionPanel extends Window {
         panel.addCell(html_label)
         panel.addCell(html_entry)
     }
+
+    configuracionTab(panel, options = {}) {
+        var $node = options['$node']
+        var GUI = options['GUI']
+
+        var node_options = GUI.parseNodeConfigurationData($node)
+        node_options.forEach(function (entry) {
+            let label = new Cells.Label(entry.label)
+            panel.addCell(label)
+        })
+        console.log(node_options)
+
+
+    }
+
 }
 
 export class NodeInterface extends RenderableElement {
+    nodeOptions: {}
     nodeLayer: NodeLayer
     nodeTopbar: NodeTopbar
     editionCallback: ($node) => any

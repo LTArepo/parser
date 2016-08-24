@@ -278,6 +278,7 @@ function addInterfaceToNode($node) {
     let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
     _GUI.addElement(node_interface)
     node_interface.render()
+
 }
 
 function addInterfaceToFragment($fragment) {
