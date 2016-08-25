@@ -42,7 +42,7 @@ export class GUInterface {
     }
 
     // Returns the invisible ed-configuration element containing the JS configuration
-    getConfigNode($node) {
+    getNodeConfigElement($node) {
         return $node.find('.ed-configuration').first()
     }
 
@@ -316,8 +316,8 @@ export class EditionPanel extends Window {
 
     configuracionTab(panel, options = {}) {
         var $node = options['$node']
-        var $config = getNodeConfig($node)
         var GUI = options['GUI']
+        var $config = GUI.getNodeConfigElement($node)
 
         var node_options = GUI.getNodeConfigurationData($node)
         node_options.forEach(function (entry) {
@@ -538,8 +538,5 @@ export class SettingsPanel extends Panel {
 
 function generateID() {
     return Math.random().toString(36).substr(2, 5)
-}
-
-function getNodeConfig($node) {
 }
 
