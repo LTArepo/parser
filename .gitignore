@@ -3,6 +3,5 @@
 *.pyc
 node_modules
 *.css.map
-*.css
 output/zip_template
 tmp
