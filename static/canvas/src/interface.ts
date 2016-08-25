@@ -22,16 +22,16 @@ export class GUInterface {
         this.nodeConfigurationDict = data
     }
 
-    parseNodeConfigurationData($node) {
+    getNodeConfigurationData($node) {
         var output = []
         $node.find('.ed-configuration').each(function () {
             let $elem = $(this)
             let data = $elem.data()
             for (var key in data) {
-                if (key.indexOf('Label') < 0) {
+                if (key.indexOf('label') < 0) {
                     let configuration_parameter = {
                         key: key,
-                        label: data[key + 'Label'],
+                        label: data[key + 'label'],
                         value: data[key]
                     }
                     output.push(configuration_parameter)
@@ -39,6 +39,11 @@ export class GUInterface {
             }
         })
         return output
+    }
+
+    // Returns the invisible ed-configuration element containing the JS configuration
+    getConfigNode($node) {
+        return $node.find('.ed-configuration').first()
     }
 
     refresh() {
@@ -311,18 +316,21 @@ export class EditionPanel extends Window {
 
     configuracionTab(panel, options = {}) {
         var $node = options['$node']
+        var $config = getNodeConfig($node)
         var GUI = options['GUI']
 
-        var node_options = GUI.parseNodeConfigurationData($node)
+        var node_options = GUI.getNodeConfigurationData($node)
         node_options.forEach(function (entry) {
             let label = new Cells.Label(entry.label)
+            let input = new Cells.TextInput((x) => changeParameter(entry, x), 'default: ' + entry.value)
             panel.addCell(label)
+            panel.addCell(input)
         })
-        console.log(node_options)
 
-
+        function changeParameter(parameter, value) {
+            $config.data(parameter.key, value)
+        }
     }
-
 }
 
 export class NodeInterface extends RenderableElement {
@@ -530,5 +538,8 @@ export class SettingsPanel extends Panel {
 
 function generateID() {
     return Math.random().toString(36).substr(2, 5)
+}
+
+function getNodeConfig($node) {
 }
 

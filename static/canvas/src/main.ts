@@ -164,7 +164,8 @@ function activateTopbarCarousel() {
     $(".owl-topbar").owlCarousel({
         items: 8,
         navigation: true,
-        navigationText: ['<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-left.png" width="16" height="16">', '<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-right.png" width="16" height="16">']
+        navigationText: ['<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-left.png" width="16" height="16">',
+            '<img class="in-topbar-icon" src="/static/canvas/img/owl-arrow-right.png" width="16" height="16">']
     })
 }
 
@@ -278,7 +279,6 @@ function addInterfaceToNode($node) {
     let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
     _GUI.addElement(node_interface)
     node_interface.render()
-
 }
 
 function addInterfaceToFragment($fragment) {
