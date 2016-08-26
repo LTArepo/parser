@@ -27,14 +27,13 @@ def getComponent(path):
     
 @app.route('/downloadpage/', methods=['POST'])
 def downloadPage():
-    document = request.form.get('document')
-    document = document.encode('utf-8')
+    doc = request.form.get('document')
+    doc = doc.encode('utf-8')
 
-    start = document.find('<!-- start of canvas -->')+24
-    end = document.find('<!-- end of canvas -->')
+    start = doc.find('<!-- start of canvas -->')+24
+    end = doc.find('<!-- end of canvas -->')
+    canvas = doc[start:end]
 
-    canvas = document[start:end]
-    print canvas
     generateDownloadZip(canvas)
 
     return send_file('output/tmp/output.zip', attachment_filename='output.zip', as_attachment=True, mimetype='application/zip')

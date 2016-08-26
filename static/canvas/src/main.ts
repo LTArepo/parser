@@ -244,6 +244,8 @@ function getComponent(path, callback) {
 }
 
 function downloadPage() {
+    console.log(document.body.innerHTML.length)
+    $('#ed-document').val('')
     $('#ed-document').val(document.body.innerHTML)
     document.getElementById('ed-save-form').submit()
 }
