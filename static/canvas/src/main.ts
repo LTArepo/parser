@@ -152,7 +152,12 @@ function configureNodeList() {
 	<p class="no-margin option-label">${component_name}</p></a></div>`
         let $node = $(html)
         $node.click(function () {
-            getComponent(path + '/' + component_filename, x => _GUI.addComponentToCanvas($(x.html), x.options))
+            getComponent(path + '/' + component_filename, function (data) {
+                let options = $.extend(data.options, {
+                    title: component_name
+                })
+                _GUI.addComponentToCanvas($(data.html), options)
+            })
             $topbar_options.slideUp()
             $('.in-topbar-item.active').removeClass('active')
         })
@@ -245,7 +250,8 @@ function getComponent(path, callback) {
 }
 
 function downloadPage() {
-    console.log(document.body.innerHTML.length)
+    console.log('in')
+    console.log($body.serialize())
     $('#ed-document').val('')
     $('#ed-document').val(document.body.innerHTML)
     document.getElementById('ed-save-form').submit()
@@ -263,28 +269,32 @@ function loadUploadedPage(text: string) {
 
 function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
-    addInterfaceToNode($node)
+    addInterfaceToNode($node, options)
     addInterfaceToFragment($node)
 }
 
 function addComponentAfter($node, $after, options = {}) {
     $after.after($node)
-    addInterfaceToNode($node)
+    addInterfaceToNode($node, options)
     addInterfaceToFragment($node)
 }
 
-function addInterfaceToNode($node) {
+function addInterfaceToNode($node, options = {}) {
+    let stored_options = $node.attr('data-interface-options')
+    if (stored_options) options = $.extend(JSON.parse(stored_options), options)
     $node.addClass('canvas-component')
-    parseNodeOptions($node)
-    function parseNodeOptions($node) {
+    parseNodeOptions($node, options)
+
+    let node_interface = new NodeInterface($interface, $node, _GUI, selectNode, options)
+    _GUI.addElement(node_interface)
+    node_interface.render()
+
+    function parseNodeOptions($node, options) {
+        $node.attr('data-interface-options', JSON.stringify(options))
         if ($node.hasClass('in-container')) {
             addContainerToDragAndDrop($node[0])
         }
     }
-
-    let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
-    _GUI.addElement(node_interface)
-    node_interface.render()
 }
 
 function addInterfaceToFragment($fragment) {
