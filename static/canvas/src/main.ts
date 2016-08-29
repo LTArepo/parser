@@ -53,6 +53,7 @@ function render() {
 function configureInterface() {
     _GUI = new GUInterface($('#interface-container'))
     _GUI.setAddComponentToCanvasFunction(addComponentToCanvas)
+    _GUI.setAddComponentAfterFunction(addComponentAfter)
     configureTestButton()
     configureTopbar()
     configureMouseEvents()
@@ -261,16 +262,19 @@ function loadUploadedPage(text: string) {
 }
 
 function addComponentToCanvas($node, options = {}) {
-    $node.addClass('canvas-component')
     $canvas.append($node)
-
     addInterfaceToNode($node)
-    $node.find('.canvas-component').each(function () {
-        addInterfaceToNode($(this))
-    })
+    addInterfaceToFragment($node)
+}
+
+function addComponentAfter($node, $after, options = {}) {
+    $after.after($node)
+    addInterfaceToNode($node)
+    addInterfaceToFragment($node)
 }
 
 function addInterfaceToNode($node) {
+    $node.addClass('canvas-component')
     parseNodeOptions($node)
     function parseNodeOptions($node) {
         if ($node.hasClass('in-container')) {
