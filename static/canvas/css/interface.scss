@@ -1,6 +1,10 @@
 @import 'reset';
 @import 'helpers';
 
+b {
+    font-weight: bold;
+}
+
 body{
     position: relative;
 }
@@ -124,6 +128,15 @@ body{
     }
 }
 
+.owl-carousel .owl-wrapper-outer{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    -webkit-transform-style:preserve-3d;
+    -moz-transform-style:preserve-3d;
+    transform-style:preserve-3d;
+}
+
 
 .page-uploader {
     width: 0.1px;
@@ -230,9 +243,15 @@ body{
 
 .in-node-topbar{
     height: 30px;
+    min-width: 200px;
     background-color: #525151;
     pointer-events: none;
 }
+
+.in-node-topbar.active{
+    background-color: #727171 ;
+}
+
 .in-node-topbar-icon {
     vertical-align:middle;
     margin-right: 5px;
@@ -279,6 +298,10 @@ body{
     -ms-user-select: none;       /* Internet Explorer/Edge */
     user-select: none;           /* Non-prefixed version, currently
 				not supported by any browser */
+}
+
+.pointer{
+    cursor: pointer;
 }
 
 .in-hidden{

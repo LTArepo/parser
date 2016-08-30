@@ -19,10 +19,6 @@ export class GUInterface {
         //$.getJSON('/static/components/data/nodeConfigurationdict.json', this.setNodeConfigurationDict)
     }
 
-    setNodeConfigurationDict(data) {
-        this.nodeConfigurationDict = data
-    }
-
     getNodeConfigurationData($node) {
         var output = []
         $node.find('.ed-configuration').each(function () {
@@ -45,6 +41,10 @@ export class GUInterface {
     // Returns the invisible ed-configuration element containing the JS configuration
     getNodeConfigElement($node) {
         return $node.find('.ed-configuration').first()
+    }
+
+    getNodeOptions($node) {
+        return JSON.parse($node.attr('data-interface-options'))
     }
 
     refresh() {
@@ -118,6 +118,7 @@ export class EditionPanel extends Window {
     tabSubpanel: TabbedMatrixSubpanel
     topbarTitle = 'Panel de edición'
     $nodeTitleSubpanel: Subpanel
+    targetNodeLabel: string = '[indefinido]'
     minimized: boolean = false
     $node: any
 
@@ -129,6 +130,10 @@ export class EditionPanel extends Window {
     render() {
         super.render()
         this.configureContents()
+    }
+
+    changeTargetNodeLabel(label: string) {
+        this.targetNodeLabel = label
     }
 
     minimize() {
@@ -146,6 +151,9 @@ export class EditionPanel extends Window {
     targetNode($node) {
         this.minimized = false
         this.$node = $node
+        let options = this.GUI.getNodeOptions(this.$node)
+        this.changeTargetNodeLabel(options['title'])
+
         this.destroy()
         this.render()
     }
@@ -155,7 +163,7 @@ export class EditionPanel extends Window {
         this.$nodeTitleSubpanel.generate(this)
         this.$nodeTitleSubpanel.$elem.addClass('edition-panel-node-title-container')
         this.$nodeTitleSubpanel.addFragment('<img class="edition-panel-node-title-icon" src="/static/canvas/img/icons-node/edition-node-icon.png">')
-        this.$nodeTitleSubpanel.addFragment('<div class="edition-panel-node-title">Contenedor x</div>')
+        this.$nodeTitleSubpanel.addFragment('<div class="edition-panel-node-title">' + this.targetNodeLabel + '</div>')
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
         this.tabSubpanel.addTab({
@@ -452,13 +460,21 @@ export class NodeTopbar extends Panel {
         this.$elem.append([$title, $actions_container])
         $actions_container.append([$append_button, $duplicate_button, $delete_button])
 
-        $append_button.click(() => this.editionCallback(this.$node))
+        $append_button.click($.proxy(function () {
+            this.highlightTopbar()
+            this.editionCallback(this.$node)
+        }, this))
         $duplicate_button.click(() => this.GUI.addComponentAfter(this.$node.clone(true), this.$node))
         $delete_button.click($.proxy(function () {
             this.GUI.removeFragment(this.$node)
             this.node_interface.destroy()
             this.$node.remove()
         }, this))
+    }
+
+    highlightTopbar() {
+        $('.in-node-topbar').removeClass('active')
+        this.$elem.addClass('active')
     }
 
     refresh() {

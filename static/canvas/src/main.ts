@@ -24,11 +24,19 @@ $(document).ready(function () {
 
 function init() {
     configureInterface()
-
-    // Configure drag and drop
     // @TODO: Refresh on drop
-    _dragula = dragula([document.querySelector('#canvas-container'), { allowNestedContainers: true }])
+    dragulaConfiguration()
     startRenderLoop()
+}
+
+function dragulaConfiguration() {
+    _dragula = dragula([document.querySelector('#canvas-container')], {
+        accepts: function (elem, target, source, sibling) {
+            if (!hasClassJS(elem, 'in-column') && hasClassJS(target, 'in-row')) return false
+            else if (hasClassJS(elem, 'in-column') && !hasClassJS(target, 'in-row')) return false
+            return true
+        }
+    })
 }
 
 // ==================================================
@@ -63,6 +71,7 @@ function createEditionPanel($target_node) {
     destroyEditionPanel()
     _editionPanel = new EditionPanel($interface, $target_node, _GUI, $interface.width() - 400, 300)
     _editionPanel.render()
+    _editionPanel.targetNode($target_node)
 }
 
 function destroyEditionPanel() {
@@ -146,10 +155,10 @@ function configureNodeList() {
     function generateComponentOptionNode(component_filename, path) {
         let component_name = component_filename.replace('.html', '')
         let thumbnails_path = '/static/canvas/img/components_thumbnails'
-        let html = `<div class="option-container text-center"><a href="#">
+        let html = `<div class="option-container text-center"><div class="pointer">
 	<img class="option-img" src="${thumbnails_path}/${component_name}.gif" width="87" height="60"
 	alt="${component_name}" title="${component_name}">
-	<p class="no-margin option-label">${component_name}</p></a></div>`
+	<p class="no-margin option-label">${component_name}</p></div></div>`
         let $node = $(html)
         $node.click(function () {
             getComponent(path + '/' + component_filename, function (data) {
@@ -326,4 +335,8 @@ function formatPath(path) {
 
 function replace(str: string, search: string, replacement: string) {
     return str.split(search).join(replacement)
+}
+
+function hasClassJS(elem, cl: string) {
+    return elem.classList.contains(cl)
 }

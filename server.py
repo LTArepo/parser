@@ -61,7 +61,7 @@ def generateDownloadZip(canvas):
     if os.path.exists('output/zip_template'): rmtree('output/zip_template')
     
     # Directory structure generation
-    dirs = ['output/zip_template/css', 'output/zip_template/js', 'output/zip_template/data']
+    dirs = ['output/zip_template/css', 'output/zip_template/js/third_party', 'output/zip_template/data']
     for d in dirs:
         if not os.path.exists(d): os.makedirs(d)
 
@@ -73,6 +73,9 @@ def generateDownloadZip(canvas):
     with open('output/zip_template/index.html', 'w') as index_file:
         index = generateIndex(canvas)
         index_file.write(index)
+
+    # Move libraries in
+    copyfile('static/canvas/js/node_modules/jquery/dist/jquery.min.js', 'output/zip_template/js/third_party/jquery.min.js')
     
     # Zip generation
     if os.path.exists('output/tmp/output.zip'):
