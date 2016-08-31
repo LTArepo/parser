@@ -24,11 +24,19 @@ $(document).ready(function () {
 
 function init() {
     configureInterface()
-
-    // Configure drag and drop
     // @TODO: Refresh on drop
-    _dragula = dragula([document.querySelector('#canvas-container'), { allowNestedContainers: true }])
+    dragulaConfiguration()
     startRenderLoop()
+}
+
+function dragulaConfiguration() {
+    _dragula = dragula([document.querySelector('#canvas-container')], {
+        accepts: function (elem, target, source, sibling) {
+            if (!hasClassJS(elem, 'in-column') && hasClassJS(target, 'in-row')) return false
+            else if (hasClassJS(elem, 'in-column') && !hasClassJS(target, 'in-row')) return false
+            return true
+        }
+    })
 }
 
 // ==================================================
@@ -53,6 +61,7 @@ function render() {
 function configureInterface() {
     _GUI = new GUInterface($('#interface-container'))
     _GUI.setAddComponentToCanvasFunction(addComponentToCanvas)
+    _GUI.setAddComponentAfterFunction(addComponentAfter)
     configureTestButton()
     configureTopbar()
     configureMouseEvents()
@@ -62,6 +71,7 @@ function createEditionPanel($target_node) {
     destroyEditionPanel()
     _editionPanel = new EditionPanel($interface, $target_node, _GUI, $interface.width() - 400, 300)
     _editionPanel.render()
+    _editionPanel.targetNode($target_node)
 }
 
 function destroyEditionPanel() {
@@ -145,13 +155,18 @@ function configureNodeList() {
     function generateComponentOptionNode(component_filename, path) {
         let component_name = component_filename.replace('.html', '')
         let thumbnails_path = '/static/canvas/img/components_thumbnails'
-        let html = `<div class="option-container text-center"><a href="#">
+        let html = `<div class="option-container text-center"><div class="pointer">
 	<img class="option-img" src="${thumbnails_path}/${component_name}.gif" width="87" height="60"
 	alt="${component_name}" title="${component_name}">
-	<p class="no-margin option-label">${component_name}</p></a></div>`
+	<p class="no-margin option-label">${component_name}</p></div></div>`
         let $node = $(html)
         $node.click(function () {
-            getComponent(path + '/' + component_filename, x => _GUI.addComponentToCanvas($(x.html), x.options))
+            getComponent(path + '/' + component_filename, function (data) {
+                let options = $.extend(data.options, {
+                    title: component_name
+                })
+                _GUI.addComponentToCanvas($(data.html), options)
+            })
             $topbar_options.slideUp()
             $('.in-topbar-item.active').removeClass('active')
         })
@@ -244,7 +259,8 @@ function getComponent(path, callback) {
 }
 
 function downloadPage() {
-    console.log(document.body.innerHTML.length)
+    console.log('in')
+    console.log($body.serialize())
     $('#ed-document').val('')
     $('#ed-document').val(document.body.innerHTML)
     document.getElementById('ed-save-form').submit()
@@ -261,26 +277,33 @@ function loadUploadedPage(text: string) {
 }
 
 function addComponentToCanvas($node, options = {}) {
-    $node.addClass('canvas-component')
     $canvas.append($node)
-
-    addInterfaceToNode($node)
-    $node.find('.canvas-component').each(function () {
-        addInterfaceToNode($(this))
-    })
+    addInterfaceToNode($node, options)
+    addInterfaceToFragment($node)
 }
 
-function addInterfaceToNode($node) {
-    parseNodeOptions($node)
-    function parseNodeOptions($node) {
+function addComponentAfter($node, $after, options = {}) {
+    $after.after($node)
+    addInterfaceToNode($node, options)
+    addInterfaceToFragment($node)
+}
+
+function addInterfaceToNode($node, options = {}) {
+    let stored_options = $node.attr('data-interface-options')
+    if (stored_options) options = $.extend(JSON.parse(stored_options), options)
+    $node.addClass('canvas-component')
+    parseNodeOptions($node, options)
+
+    let node_interface = new NodeInterface($interface, $node, _GUI, selectNode, options)
+    _GUI.addElement(node_interface)
+    node_interface.render()
+
+    function parseNodeOptions($node, options) {
+        $node.attr('data-interface-options', JSON.stringify(options))
         if ($node.hasClass('in-container')) {
             addContainerToDragAndDrop($node[0])
         }
     }
-
-    let node_interface = new NodeInterface($interface, $node, _GUI, selectNode)
-    _GUI.addElement(node_interface)
-    node_interface.render()
 }
 
 function addInterfaceToFragment($fragment) {
@@ -312,4 +335,8 @@ function formatPath(path) {
 
 function replace(str: string, search: string, replacement: string) {
     return str.split(search).join(replacement)
+}
+
+function hasClassJS(elem, cl: string) {
+    return elem.classList.contains(cl)
 }

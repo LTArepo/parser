@@ -8,6 +8,7 @@ declare var $: any
 export class GUInterface {
     renderQueue: Array<RenderableElement> = []
     addComponentToCanvas: ($node, options) => any
+    addComponentAfter: ($node, $after) => any
     nodeConfigurationDict: {}
     $container
 
@@ -16,10 +17,6 @@ export class GUInterface {
     constructor($container) {
         this.$container = $container
         //$.getJSON('/static/components/data/nodeConfigurationdict.json', this.setNodeConfigurationDict)
-    }
-
-    setNodeConfigurationDict(data) {
-        this.nodeConfigurationDict = data
     }
 
     getNodeConfigurationData($node) {
@@ -44,6 +41,10 @@ export class GUInterface {
     // Returns the invisible ed-configuration element containing the JS configuration
     getNodeConfigElement($node) {
         return $node.find('.ed-configuration').first()
+    }
+
+    getNodeOptions($node) {
+        return JSON.parse($node.attr('data-interface-options'))
     }
 
     refresh() {
@@ -93,12 +94,16 @@ export class GUInterface {
     }
 
     addNodeToCanvas($node, options) {
-        let $cloned_node = $node.clone()
+        let $cloned_node = $node.clone(true)
         this.addComponentToCanvas($cloned_node, options)
     }
 
     setAddComponentToCanvasFunction(fun: ($node, options) => any) {
         this.addComponentToCanvas = fun
+    }
+
+    setAddComponentAfterFunction(fun: ($node, options) => any) {
+        this.addComponentAfter = fun
     }
 
     // This class is handy if we want to log css changes, revert them and so on
@@ -109,9 +114,11 @@ export class GUInterface {
 }
 
 export class EditionPanel extends Window {
+    cssClasses = this.cssClasses += 'in-edition-panel '
     tabSubpanel: TabbedMatrixSubpanel
     topbarTitle = 'Panel de edición'
     $nodeTitleSubpanel: Subpanel
+    targetNodeLabel: string = '[indefinido]'
     minimized: boolean = false
     $node: any
 
@@ -123,6 +130,10 @@ export class EditionPanel extends Window {
     render() {
         super.render()
         this.configureContents()
+    }
+
+    changeTargetNodeLabel(label: string) {
+        this.targetNodeLabel = label
     }
 
     minimize() {
@@ -140,6 +151,9 @@ export class EditionPanel extends Window {
     targetNode($node) {
         this.minimized = false
         this.$node = $node
+        let options = this.GUI.getNodeOptions(this.$node)
+        this.changeTargetNodeLabel(options['title'])
+
         this.destroy()
         this.render()
     }
@@ -149,7 +163,7 @@ export class EditionPanel extends Window {
         this.$nodeTitleSubpanel.generate(this)
         this.$nodeTitleSubpanel.$elem.addClass('edition-panel-node-title-container')
         this.$nodeTitleSubpanel.addFragment('<img class="edition-panel-node-title-icon" src="/static/canvas/img/icons-node/edition-node-icon.png">')
-        this.$nodeTitleSubpanel.addFragment('<div class="edition-panel-node-title">Contenedor x</div>')
+        this.$nodeTitleSubpanel.addFragment('<div class="edition-panel-node-title">' + this.targetNodeLabel + '</div>')
         this.tabSubpanel = new TabbedMatrixSubpanel()
         this.addSubpanel(this.tabSubpanel)
         this.tabSubpanel.addTab({
@@ -160,6 +174,11 @@ export class EditionPanel extends Window {
         this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/style-icon.png',
             tabGenerator: this.estiloTab,
+            options: { '$node': this.$node, GUI: this.GUI }
+        })
+        this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/text-icon.png',
+            tabGenerator: this.textoTab,
             options: { '$node': this.$node, GUI: this.GUI }
         })
         this.tabSubpanel.addTab({
@@ -215,7 +234,7 @@ export class EditionPanel extends Window {
         ]
         let margin_entry = new Cells.NumberInputs(number_inputs)
 
-        let padding_label = new Cells.Label('Márgenes interiores')
+        let padding_label = new Cells.Label('Padding interior')
         number_inputs = [
             { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => css('padding-top', x) },
             { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => css('padding-right', x) },
@@ -296,6 +315,80 @@ export class EditionPanel extends Window {
         panel.addCell(sombra_helper)
     }
 
+    textoTab(panel, options = {}) {
+        var $node = options['$node']
+        var GUI = options['GUI']
+
+        function css(label: string, value) {
+            let css_dict = {}
+            css_dict[label] = value
+            GUI.changeNodeCSS($node, css_dict)
+        }
+
+        let tipografia_label = new Cells.Label('Tipografía')
+        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'Milio'])
+
+        let estilos_label = new Cells.Label('Estilos')
+        //let estilos_entry = new Cells.
+        let checkbox_inputs: Array<Cells.CheckboxInput> = [
+            {
+                label: 'Cursiva',
+                callback_checked: () => css('font-style', 'italic'),
+                callback_unchecked: () => css('font-style', 'normal')
+            },
+            {
+                label: 'Subrayado',
+                callback_checked: () => css('text-decoration', 'underline'),
+                callback_unchecked: () => css('text-decoration', 'none')
+            },
+            {
+                label: 'Tachado',
+                callback_checked: () => css('text-decoration', 'line-through'),
+                callback_unchecked: () => css('text-decoration', 'none')
+            },
+        ]
+        let estilos_entry = new Cells.CheckboxInputs(checkbox_inputs)
+        let estilos_helper = new Cells.TextHelper('Se aplicará a todo el texto')
+
+        let tamano_label = new Cells.Label('Tamaño')
+        let number_inputs = [
+            { label: 'Dimension', min: 0, max: 120, step: 1, callback: x => css('font-size', x) },
+            { label: 'Grosor', min: 300, max: 800, step: 100, callback: x => css('font-weight', x) },
+        ]
+        let tamano_entry = new Cells.NumberInputs(number_inputs)
+
+        let color_label = new Cells.Label('Color de texto')
+        let color_color = new Cells.ColorPicker(x => css('color', x))
+        let color_helper = new Cells.TextHelper('Se aplicará a todo el texto')
+
+        let bgcolor_label = new Cells.Label('Color de fondo del texto')
+        let bgcolor_color = new Cells.ColorPicker(x => css('background-color', x))
+        let bgcolor_helper = new Cells.TextHelper('Se aplicará a todo el texto')
+
+        let espaciado_label = new Cells.Label('Espaciado')
+        number_inputs = [
+            { label: 'Vertical', min: 0, max: 120, step: 0.1, callback: x => css('line-height', x) },
+            { label: 'Horizontal', min: 0, max: 120, step: 0.5, callback: x => css('letter-spacing', x) },
+        ]
+        let espaciado_entry = new Cells.NumberInputs(number_inputs)
+
+        panel.addCell(tipografia_label)
+        panel.addCell(tipografia_entry)
+        panel.addCell(estilos_label)
+        panel.addCell(estilos_entry)
+        panel.addCell(estilos_helper)
+        panel.addCell(tamano_label)
+        panel.addCell(tamano_entry)
+        panel.addCell(color_label)
+        panel.addCell(color_color)
+        panel.addCell(color_helper)
+        panel.addCell(bgcolor_label)
+        panel.addCell(bgcolor_color)
+        panel.addCell(bgcolor_helper)
+        panel.addCell(espaciado_label)
+        panel.addCell(espaciado_entry)
+    }
+
     preferenciasTab(panel, options = {}) {
 
         if (options['classes'].indexOf('in-image')) {
@@ -342,12 +435,15 @@ export class NodeInterface extends RenderableElement {
     $container: any
     $node: any
 
-    constructor($container, $node, GUI: GUInterface, editionCallback: (n) => any) {
+    constructor($container, $node, GUI: GUInterface, editionCallback: (n) => any, options = undefined) {
         super()
         this.editionCallback = editionCallback
         this.GUI = GUI
         this.$container = $container
         this.$node = $node
+        this.options = options || {
+            title: '[indefinido]',
+        }
     }
 
     addID(id: string) {
@@ -359,11 +455,9 @@ export class NodeInterface extends RenderableElement {
         if (this.$node.hasClass('in-container')) {
             this.nodeLayer = new NodeLayer(this.$container, this.$node, this.GUI, this)
             this.nodeLayer.render()
-            this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
-        } else {
-            this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback)
         }
 
+        this.nodeTopbar = new NodeTopbar(this.$container, this.$node, this.GUI, this, this.editionCallback, this.options)
         this.nodeTopbar.render()
     }
 
@@ -413,16 +507,19 @@ export class NodeTopbar extends Panel {
     mouseOver: boolean = true
     mouseOut1: boolean = true
     mouseOut2: boolean = true
+    options: {}
     width: number
     $node: any
 
-    constructor($container, $node, GUI: GUInterface, node_interface: NodeInterface, editionCallback: ($node) => any) {
+    constructor($container, $node, GUI: GUInterface, node_interface: NodeInterface,
+        editionCallback: ($node) => any, options = {}) {
         super($container, GUI)
         let node_offset = $node.offset()
         this.editionCallback = editionCallback
+        this.node_interface = node_interface
         this.x = node_offset.left
         this.y = node_offset.top
-        this.node_interface = node_interface
+        this.options = options
         this.$node = $node
     }
 
@@ -434,7 +531,7 @@ export class NodeTopbar extends Panel {
     }
 
     renderContents() {
-        let $title = $('<div class="in-node-topbar-title"><img class="in-node-topbar-icon" src="/static/canvas/img/icons-node/drag-icon.png" width="19" height="17"> title</div>')
+        let $title = $('<div class="in-node-topbar-title"><img class="in-node-topbar-icon" src="/static/canvas/img/icons-node/drag-icon.png" width="19" height="17"> ' + this.options['title'] + '</div>')
         let $actions_container = $('<div class="in-node-topbar-actions-container"></div>')
         let $append_button = $('<div class="in-node-topbar-append-button"></div>')
         let $duplicate_button = $('<div class="in-node-topbar-duplicate-button"></div>')
@@ -442,14 +539,21 @@ export class NodeTopbar extends Panel {
         this.$elem.append([$title, $actions_container])
         $actions_container.append([$append_button, $duplicate_button, $delete_button])
 
-
-        $append_button.click(() => this.editionCallback(this.$node))
-        $duplicate_button.click(() => this.GUI.addNodeToCanvas(this.$node, {}))
+        $append_button.click($.proxy(function () {
+            this.highlightTopbar()
+            this.editionCallback(this.$node)
+        }, this))
+        $duplicate_button.click(() => this.GUI.addComponentAfter(this.$node.clone(true), this.$node))
         $delete_button.click($.proxy(function () {
             this.GUI.removeFragment(this.$node)
             this.node_interface.destroy()
             this.$node.remove()
         }, this))
+    }
+
+    highlightTopbar() {
+        $('.in-node-topbar').removeClass('active')
+        this.$elem.addClass('active')
     }
 
     refresh() {

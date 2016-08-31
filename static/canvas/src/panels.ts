@@ -183,8 +183,9 @@ class WindowTopbar extends Subpanel {
         this.$elem.mousedown($.proxy(function (e) {
             e.preventDefault()
             this.mouseDown = true
-            this.mouseDownX = e.pageX - this.$elem.offset().left
-            this.mouseDownY = e.pageY - this.$elem.offset().top
+            let viewportOffset = this.$elem.get(0).getBoundingClientRect();
+            this.mouseDownX = e.pageX - viewportOffset.left
+            this.mouseDownY = e.pageY - viewportOffset.top
             $body.mousemove($.proxy(onMouseMove, this))
             this.$elem.mouseout($.proxy(onMouseOut, this))
         }, this))
