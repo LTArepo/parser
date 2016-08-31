@@ -177,6 +177,11 @@ export class EditionPanel extends Window {
             options: { '$node': this.$node, GUI: this.GUI }
         })
         this.tabSubpanel.addTab({
+            icon_path: '/static/canvas/img/icons-panel/text-icon.png',
+            tabGenerator: this.textoTab,
+            options: { '$node': this.$node, GUI: this.GUI }
+        })
+        this.tabSubpanel.addTab({
             icon_path: '/static/canvas/img/icons-panel/code-icon.png',
             tabGenerator: this.HTMLTab,
             options: { '$node': this.$node, GUI: this.GUI }
@@ -308,6 +313,80 @@ export class EditionPanel extends Window {
         panel.addCell(sombra_entry)
         panel.addCell(sombra_color)
         panel.addCell(sombra_helper)
+    }
+
+    textoTab(panel, options = {}) {
+        var $node = options['$node']
+        var GUI = options['GUI']
+
+        function css(label: string, value) {
+            let css_dict = {}
+            css_dict[label] = value
+            GUI.changeNodeCSS($node, css_dict)
+        }
+
+        let tipografia_label = new Cells.Label('Tipografía')
+        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'Milio'])
+
+        let estilos_label = new Cells.Label('Estilos')
+        //let estilos_entry = new Cells.
+        let checkbox_inputs: Array<Cells.CheckboxInput> = [
+            {
+                label: 'Cursiva',
+                callback_checked: () => css('font-style', 'italic'),
+                callback_unchecked: () => css('font-style', 'normal')
+            },
+            {
+                label: 'Subrayado',
+                callback_checked: () => css('text-decoration', 'underline'),
+                callback_unchecked: () => css('text-decoration', 'none')
+            },
+            {
+                label: 'Tachado',
+                callback_checked: () => css('text-decoration', 'line-through'),
+                callback_unchecked: () => css('text-decoration', 'none')
+            },
+        ]
+        let estilos_entry = new Cells.CheckboxInputs(checkbox_inputs)
+        let estilos_helper = new Cells.TextHelper('Se aplicará a todo el texto')
+
+        let tamano_label = new Cells.Label('Tamaño')
+        let number_inputs = [
+            { label: 'Dimension', min: 0, max: 120, step: 1, callback: x => css('font-size', x) },
+            { label: 'Grosor', min: 300, max: 800, step: 100, callback: x => css('font-weight', x) },
+        ]
+        let tamano_entry = new Cells.NumberInputs(number_inputs)
+
+        let color_label = new Cells.Label('Color de texto')
+        let color_color = new Cells.ColorPicker(x => css('color', x))
+        let color_helper = new Cells.TextHelper('Se aplicará a todo el texto')
+
+        let bgcolor_label = new Cells.Label('Color de fondo del texto')
+        let bgcolor_color = new Cells.ColorPicker(x => css('background-color', x))
+        let bgcolor_helper = new Cells.TextHelper('Se aplicará a todo el texto')
+
+        let espaciado_label = new Cells.Label('Espaciado')
+        number_inputs = [
+            { label: 'Vertical', min: 0, max: 120, step: 0.1, callback: x => css('line-height', x) },
+            { label: 'Horizontal', min: 0, max: 120, step: 0.5, callback: x => css('letter-spacing', x) },
+        ]
+        let espaciado_entry = new Cells.NumberInputs(number_inputs)
+
+        panel.addCell(tipografia_label)
+        panel.addCell(tipografia_entry)
+        panel.addCell(estilos_label)
+        panel.addCell(estilos_entry)
+        panel.addCell(estilos_helper)
+        panel.addCell(tamano_label)
+        panel.addCell(tamano_entry)
+        panel.addCell(color_label)
+        panel.addCell(color_color)
+        panel.addCell(color_helper)
+        panel.addCell(bgcolor_label)
+        panel.addCell(bgcolor_color)
+        panel.addCell(bgcolor_helper)
+        panel.addCell(espaciado_label)
+        panel.addCell(espaciado_entry)
     }
 
     preferenciasTab(panel, options = {}) {

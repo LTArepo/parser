@@ -205,6 +205,50 @@ export class NumberInputs extends Cell {
     }
 }
 
+
+export interface CheckboxInput {
+    callback_checked: () => any
+    callback_unchecked: () => any
+    label: string
+}
+
+export class CheckboxInputs extends Cell {
+
+    cssClasses = this.cssClasses + 'ce-checkbox-inputs clearfix '
+    inputs: Array<CheckboxInput>
+    $inputs: any
+
+    constructor(inputs: Array<CheckboxInput>) {
+        super()
+        this.inputs = inputs
+    }
+
+    renderContents() {
+        this.$inputs = this.inputs.map(function (b) {
+            let html =
+                `<div class="ce-number-input-container">
+			<input type="checkbox">
+			<div class="ce-number-input-label">${b.label}</div>
+		</div>`
+            let $node = $(html)
+            $node.change(function () {
+                let state = $node.find('input').get(0).checked
+                let callback = state ? b.callback_checked : b.callback_unchecked
+                callback()
+            })
+            return $node
+        })
+        this.$elem.append(this.$inputs)
+    }
+
+    destroy() {
+        super.destroy()
+    }
+}
+
+
+
+
 export class FileUpload extends Cell {
     cssClasses = this.cssClasses + 'ce-file-upload '
     inputCallback: (file: string) => any
