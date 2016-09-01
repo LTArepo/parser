@@ -154,6 +154,10 @@ export class EditionPanel extends Window {
         let options = this.GUI.getNodeOptions(this.$node)
         this.changeTargetNodeLabel(options['title'])
 
+        let viewportOffset = this.$elem.get(0).getBoundingClientRect();
+        console.log(viewportOffset)
+        this.x = viewportOffset.left
+        this.y = viewportOffset.top
         this.destroy()
         this.render()
     }
@@ -326,7 +330,7 @@ export class EditionPanel extends Window {
         }
 
         let tipografia_label = new Cells.Label('Tipografía')
-        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'Milio'])
+        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'milio-font'])
 
         let estilos_label = new Cells.Label('Estilos')
         //let estilos_entry = new Cells.
