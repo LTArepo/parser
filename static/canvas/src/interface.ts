@@ -5,6 +5,17 @@ import * as Cells from './cells'
 
 declare var $: any
 
+export var nodeShortTitles = {
+    'one half': '1/2',
+    'one third': '1/3',
+    'two third': '2/3',
+    'one fourth': '1/4',
+    'three fourth': '3/4',
+    'large 1338px': 'lg.',
+    'small 996px': 'sm.',
+    'fullwidth': 'fw.',
+}
+
 export class GUInterface {
     renderQueue: Array<RenderableElement> = []
     addComponentToCanvas: ($node, options) => any

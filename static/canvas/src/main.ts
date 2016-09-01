@@ -1,5 +1,5 @@
 import { Panel, Window } from './panels'
-import { GUInterface, SettingsPanel, EditionPanel, NodeTopbar, NodeInterface } from './interface'
+import { GUInterface, SettingsPanel, EditionPanel, NodeTopbar, NodeInterface, nodeShortTitles } from './interface'
 
 declare var $: any
 declare var dragula: any
@@ -34,6 +34,7 @@ function dragulaConfiguration() {
         accepts: function (elem, target, source, sibling) {
             if (!hasClassJS(elem, 'in-column') && hasClassJS(target, 'in-row')) return false
             else if (hasClassJS(elem, 'in-column') && !hasClassJS(target, 'in-row')) return false
+            else if (hasClassJS(elem, 'fixed')) return false
             return true
         }
     })
@@ -163,7 +164,7 @@ function configureNodeList() {
         $node.click(function () {
             getComponent(path + '/' + component_filename, function (data) {
                 let options = $.extend(data.options, {
-                    title: component_name
+                    title: nodeShortTitles[component_name] || component_name
                 })
                 _GUI.addComponentToCanvas($(data.html), options)
             })
