@@ -447,7 +447,7 @@ function dragula (initialContainers, options) {
       reference = getReference(dropTarget, immediate, clientX, clientY);
     } else if (o.revertOnSpill === true && !_copy) {
       reference = _initialSibling;
-      dropTarget = _source;
+      dropTarget = _source;aaaaaa
     } else {
       if (_copy && parent) {
         parent.removeChild(item);
@@ -460,7 +460,7 @@ function dragula (initialContainers, options) {
       reference !== nextEl(item)
     ) {
       _currentSibling = reference;
-      dropTarget.insertBefore(item, reference);
+      try{dropTarget.insertBefore(item, reference);
       drake.emit('shadow', item, dropTarget, _source);
     }
     function moved (type) { drake.emit(type, item, _lastDropTarget, _source); }

@@ -154,6 +154,10 @@ export class EditionPanel extends Window {
         let options = this.GUI.getNodeOptions(this.$node)
         this.changeTargetNodeLabel(options['title'])
 
+        let viewportOffset = this.$elem.get(0).getBoundingClientRect();
+        console.log(viewportOffset)
+        this.x = viewportOffset.left
+        this.y = viewportOffset.top
         this.destroy()
         this.render()
     }
