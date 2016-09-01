@@ -9,6 +9,8 @@ export class GUInterface {
     renderQueue: Array<RenderableElement> = []
     addComponentToCanvas: ($node, options) => any
     addComponentAfter: ($node, $after) => any
+    eventHistoryQueue: Array<any> = []
+    redoHistoryQueue: Array<any> = []
     nodeConfigurationDict: {}
     $container
 
@@ -16,7 +18,19 @@ export class GUInterface {
 
     constructor($container) {
         this.$container = $container
+        this.configureKeyboardInput()
         //$.getJSON('/static/components/data/nodeConfigurationdict.json', this.setNodeConfigurationDict)
+    }
+
+    configureKeyboardInput() {
+        $(document).keydown($.proxy(function (e) {
+            if (e.which === 90 && e.ctrlKey && e.shiftKey) {
+                this.redoNext()
+            }
+            else if (e.which === 90 && e.ctrlKey) {
+                this.undoNext()
+            }
+        }, this));
     }
 
     getNodeConfigurationData($node) {
@@ -106,9 +120,67 @@ export class GUInterface {
         this.addComponentAfter = fun
     }
 
-    // This class is handy if we want to log css changes, revert them and so on
+    // Apply css change
     changeNodeCSS($node, css_dict) {
         $node.css(css_dict)
+    }
+
+    // This class is handy if we want to log css changes, revert them and so on
+    css($node, label: string, value) {
+        let old_value = $node.css(label)
+        let css_dict = {}
+        css_dict[label] = value
+        this.changeNodeCSS($node, css_dict)
+        this.addCSSEventToHistory($node, label, old_value)
+    }
+
+    addCSSEventToHistory($node, property_name: string, old_value: any) {
+        let event = {
+            event_type: 'css_property_change',
+            $node: $node,
+            property_name: property_name,
+            value: old_value,
+        }
+        this.eventHistoryQueue.push(event)
+    }
+
+    undoNext() {
+        let event = this.eventHistoryQueue.pop()
+        if (event) this.undoEvent(event)
+    }
+
+
+    redoNext() {
+        let event = this.redoHistoryQueue.pop()
+        if (event) this.redoEvent(event)
+    }
+
+    applyCSSEvent(event) {
+        let css_dict = {}
+        css_dict[event.property_name] = event.value
+        this.changeNodeCSS(event.$node, css_dict)
+    }
+
+    undoEvent(event) {
+        if (event.event_type = 'css_property_change') {
+            let current_value = event.$node.css(event.property_name)
+            this.applyCSSEvent(event)
+
+            let redo_event = event
+            redo_event.value = current_value
+            this.redoHistoryQueue.push(redo_event)
+        }
+    }
+
+    redoEvent(event) {
+        if (event.event_type = 'css_property_change') {
+            let current_value = event.$node.css(event.property_name)
+            this.applyCSSEvent(event)
+
+            let undo_event = event
+            undo_event.value = current_value
+            this.eventHistoryQueue.push(undo_event)
+        }
     }
 
 }
@@ -126,6 +198,7 @@ export class EditionPanel extends Window {
         super($container, GUI, x, y)
         this.$node = $node
     }
+
 
     render() {
         super.render()
@@ -155,7 +228,6 @@ export class EditionPanel extends Window {
         this.changeTargetNodeLabel(options['title'])
 
         let viewportOffset = this.$elem.get(0).getBoundingClientRect();
-        console.log(viewportOffset)
         this.x = viewportOffset.left
         this.y = viewportOffset.top
         this.destroy()
@@ -203,10 +275,9 @@ export class EditionPanel extends Window {
         var $node = options['$node']
         var GUI = options['GUI']
 
+
         function css(label: string, value) {
-            let css_dict = {}
-            css_dict[label] = value
-            GUI.changeNodeCSS($node, css_dict)
+            GUI.css($node, label, value)
         }
 
         let align_label = new Cells.Label('Alineación')
