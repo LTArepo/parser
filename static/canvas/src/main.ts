@@ -27,6 +27,11 @@ function init() {
     // @TODO: Refresh on drop
     dragulaConfiguration()
     startRenderLoop()
+
+    /*window.onbeforeunload = function () {
+        return "AVISO: Si se cierra el editor se perderán todos los cambios que no hayan sido guardados. (Se almacenan copias de seguridad en la carpeta autobackups)";
+    }*/
+
 }
 
 function dragulaConfiguration() {
@@ -63,6 +68,7 @@ function configureInterface() {
     _GUI = new GUInterface($('#interface-container'))
     _GUI.setAddComponentToCanvasFunction(addComponentToCanvas)
     _GUI.setAddComponentAfterFunction(addComponentAfter)
+    _GUI.setAutosave(autosavePage)
     configureTestButton()
     configureTopbar()
     configureMouseEvents()
@@ -108,7 +114,7 @@ function configureTopbar() {
     })
 
     // Descargar button
-    $('#downloadMenu').click(downloadPage)
+    $('#downloadMenu').click(x => downloadPage('download'))
 
     configureNodeList() // Barra desplegable de seleccion de nodos
 }
@@ -167,6 +173,7 @@ function configureNodeList() {
                     title: nodeShortTitles[component_name] || component_name
                 })
                 _GUI.addComponentToCanvas($(data.html), options)
+                autosavePage()
             })
             $topbar_options.slideUp()
             $('.in-topbar-item.active').removeClass('active')
@@ -259,12 +266,15 @@ function getComponent(path, callback) {
     $.getJSON('http://localhost:5000/getcomponent/' + path, callback)
 }
 
-function downloadPage() {
-    console.log('in')
-    console.log($body.serialize())
+function downloadPage(flag: string = 'download') {
     $('#ed-document').val('')
     $('#ed-document').val(document.body.innerHTML)
+    $('#ed-flag').val(flag)
     document.getElementById('ed-save-form').submit()
+}
+
+function autosavePage() {
+    downloadPage('autosave')
 }
 
 /** Loads a backup file selected with the page-uploader input */
@@ -281,6 +291,7 @@ function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
     addInterfaceToNode($node, options)
     addInterfaceToFragment($node)
+    $body.scrollTop($canvas[0].scrollHeight)
 }
 
 function addComponentAfter($node, $after, options = {}) {
@@ -290,6 +301,9 @@ function addComponentAfter($node, $after, options = {}) {
 }
 
 function addInterfaceToNode($node, options = {}) {
+    // ghost top-padding for topbar
+    //$node.prepend('<div class="in-ghost in-ghost-node-top-padding"></div>')
+
     let stored_options = $node.attr('data-interface-options')
     if (stored_options) options = $.extend(JSON.parse(stored_options), options)
     $node.addClass('canvas-component')

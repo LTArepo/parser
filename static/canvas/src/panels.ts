@@ -52,7 +52,7 @@ class Subpanel extends ChildRenderableElement {
 
 }
 
-/** subpanel that contains Cell objects */
+/** subpanel that contains Cell objects in a matrix structure */
 class MatrixSubpanel extends Subpanel {
     cssClasses = this.cssClasses + 'in-matrix-subpanel '
     cells: Array<Cells.Cell> = []
@@ -73,7 +73,7 @@ class MatrixSubpanel extends Subpanel {
     }
 }
 
-interface Tab {
+interface TabData {
     icon_path: string
     tabGenerator: (subanel: MatrixSubpanel) => void
     options: any
@@ -81,7 +81,7 @@ interface Tab {
 
 class TabRow extends Subpanel {
     cssClasses = this.cssClasses + 'in-tabrow-subpanel clearfix '
-    tabs: Array<Tab>
+    tabs: Array<TabData>
     $tabs: any
 
     constructor(tabs = []) {
@@ -96,15 +96,19 @@ class TabRow extends Subpanel {
 
     renderTabs() {
         var parent = <TabbedMatrixSubpanel>this.parent
-        this.$tabs = this.tabs.map(function (t) {
+        this.$tabs = this.tabs.map($.proxy(function (t) {
             let html =
                 `<div class='in-tabrow-tab'>
 			<img class='in-tabrow-tab-icon' src='${t.icon_path}'>
 		</div>`
             let $node = $(html)
-            $node.click(() => parent.loadTab(t.tabGenerator, t.options))
+            $node.click($.proxy(function () {
+                this.$elem.find('.in-tabrow-tab').removeClass('active')
+                $node.addClass('active')
+                parent.loadTab(t.tabGenerator, t.options)
+            }, this))
             return $node
-        })
+        }, this))
         this.$elem.append(this.$tabs)
     }
 
@@ -113,7 +117,7 @@ class TabRow extends Subpanel {
         this.renderTabs()
     }
 
-    addTab(tab: Tab) {
+    addTab(tab: TabData) {
         this.tabs.push(tab)
         this.refreshTabs()
     }
@@ -133,7 +137,7 @@ class TabbedMatrixSubpanel extends Subpanel {
         }
     }
 
-    addTab(tab: Tab) {
+    addTab(tab: TabData) {
         this.tabRow.addTab(tab)
     }
 

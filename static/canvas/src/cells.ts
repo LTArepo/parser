@@ -169,6 +169,7 @@ export class IconButtons extends Cell {
 
 export interface NumberInput {
     callback: (number) => any
+    value: number
     label: string
     step: number
     min: number
@@ -188,9 +189,11 @@ export class NumberInputs extends Cell {
 
     renderContents() {
         this.$inputs = this.inputs.map(function (b) {
+            let current_value = parseInt(b.value)
             let html =
                 `<div class="ce-number-input-container">
-			<input type="number" value=0 class="ce-number-input" min="${b.min}" max="${b.max}" step="${b.step}">
+			<input type="number" value=${current_value} class="ce-number-input" 
+			min="${b.min}" max="${b.max}" step="${b.step}">
 			<div class="ce-number-input-label">${b.label}</div>
 		</div>`
             let $node = $(html)

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, render_template, send_file
 
-import os, json
+import os, json, datetime
 from shutil import copyfile, make_archive, rmtree
 
 app = Flask(__name__)
@@ -27,16 +27,21 @@ def getComponent(path):
     
 @app.route('/downloadpage/', methods=['POST'])
 def downloadPage():
+    flag = request.form.get('flag')
     doc = request.form.get('document')
     doc = doc.encode('utf-8')
+    canvas = getCanvasFromDoc(doc)
 
-    start = doc.find('<!-- start of canvas -->')+24
-    end = doc.find('<!-- end of canvas -->')
-    canvas = doc[start:end]
+    print flag
 
-    generateDownloadZip(canvas)
+    if flag == 'download':
+        generateDownloadZip(canvas)
+        return send_file('output/tmp/output.zip', attachment_filename='output.zip', as_attachment=True,\
+                         mimetype='application/zip')
 
-    return send_file('output/tmp/output.zip', attachment_filename='output.zip', as_attachment=True, mimetype='application/zip')
+    elif flag == 'autosave':
+        storeAutosave(canvas)
+        return ('', 204)
 
 @app.route('/loadpage/', methods=['POST'])
 def loadPage():
@@ -61,13 +66,13 @@ def generateDownloadZip(canvas):
     if os.path.exists('output/zip_template'): rmtree('output/zip_template')
     
     # Directory structure generation
-    dirs = ['output/zip_template/css', 'output/zip_template/js/third_party', 'output/zip_template/data']
-    for d in dirs:
-        if not os.path.exists(d): os.makedirs(d)
+    generateDirs(['output/zip_template/css', 'output/zip_template/js/third_party', 'output/zip_template/data'])
+
 
     # Move updated files in
     copyfile('static/components/css/components.css', 'output/zip_template/css/main.css')
     copyfile('static/components/js/main.js', 'output/zip_template/js/main.js')
+    
     with open('output/zip_template/data/save.json', 'w') as save_file:
         save_file.write(generateSave(canvas))
     with open('output/zip_template/index.html', 'w') as index_file:
@@ -83,10 +88,26 @@ def generateDownloadZip(canvas):
 
     make_archive('output/tmp/output', 'zip', 'output/zip_template')
 
+def getCanvasFromDoc(doc):
+    start = doc.find('<!-- start of canvas -->')+24
+    end = doc.find('<!-- end of canvas -->')
+    return doc[start:end]
+
+def storeAutosave(canvas):
+    generateDirs(['autosaves'])
+    now = datetime.datetime.now()
+    filename = '_'.join([str(now.day), str(now.month), str(now.year)])
+    with open('autosaves/'+filename+'.json', 'w') as save_file:
+        save_file.write(generateSave(canvas))
+    
 
 # ==================================================
 #                      Utilities
 # ==================================================
+
+def generateDirs(dirs):
+    for d in dirs:
+        if not os.path.exists(d): os.makedirs(d)
 
 def parseComponent(path):
     """ Returns a json string with the component's html and options """
