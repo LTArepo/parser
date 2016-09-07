@@ -28,10 +28,12 @@ function init() {
     dragulaConfiguration()
     startRenderLoop()
 
-    /*window.onbeforeunload = function () {
-        return "AVISO: Si se cierra el editor se perderán todos los cambios que no hayan sido guardados. (Se almacenan copias de seguridad en la carpeta autobackups)";
-    }*/
+    window.onbeforeunload = onbeforeunloadFunction
 
+}
+
+function onbeforeunloadFunction() {
+    return "AVISO: Si se cierra el editor se perderán todos los cambios que no hayan sido guardados. (Se almacenan copias de seguridad en la carpeta autobackups)";
 }
 
 function dragulaConfiguration() {
@@ -130,7 +132,7 @@ function configureNodeList() {
     $('.in-topbar-item.with-children').click(function (e) {
         e.preventDefault()
         if (!$(this).hasClass('active')) {
-            var target = $(this).attr('href')
+            var target = $(this).data('target')
             $('.in-topbar-item').removeClass('active')
             $('.options-container').hide()
             $(target).show()
@@ -267,10 +269,14 @@ function getComponent(path, callback) {
 }
 
 function downloadPage(flag: string = 'download') {
+    window.onbeforeunload = undefined
     $('#ed-document').val('')
     $('#ed-document').val(document.body.innerHTML)
     $('#ed-flag').val(flag)
     document.getElementById('ed-save-form').submit()
+    setTimeout(x => window.onbeforeunload = onbeforeunloadFunction, 100)
+
+
 }
 
 function autosavePage() {
