@@ -1,5 +1,5 @@
 import { Panel, Window } from './panels'
-import { GUInterface, SettingsPanel, EditionPanel, NodeTopbar, NodeInterface } from './interface'
+import { GUInterface, SettingsPanel, EditionPanel, NodeTopbar, NodeInterface, nodeShortTitles } from './interface'
 
 declare var $: any
 declare var dragula: any
@@ -27,6 +27,13 @@ function init() {
     // @TODO: Refresh on drop
     dragulaConfiguration()
     startRenderLoop()
+
+    window.onbeforeunload = onbeforeunloadFunction
+
+}
+
+function onbeforeunloadFunction() {
+    return "AVISO: Si se cierra el editor se perderán todos los cambios que no hayan sido guardados. (Se almacenan copias de seguridad en la carpeta autobackups)";
 }
 
 function dragulaConfiguration() {
@@ -34,6 +41,7 @@ function dragulaConfiguration() {
         accepts: function (elem, target, source, sibling) {
             if (!hasClassJS(elem, 'in-column') && hasClassJS(target, 'in-row')) return false
             else if (hasClassJS(elem, 'in-column') && !hasClassJS(target, 'in-row')) return false
+            else if (hasClassJS(elem, 'fixed')) return false
             return true
         }
     })
@@ -62,6 +70,7 @@ function configureInterface() {
     _GUI = new GUInterface($('#interface-container'))
     _GUI.setAddComponentToCanvasFunction(addComponentToCanvas)
     _GUI.setAddComponentAfterFunction(addComponentAfter)
+    _GUI.setAutosave(autosavePage)
     configureTestButton()
     configureTopbar()
     configureMouseEvents()
@@ -107,7 +116,7 @@ function configureTopbar() {
     })
 
     // Descargar button
-    $('#downloadMenu').click(downloadPage)
+    $('#downloadMenu').click(x => downloadPage('download'))
 
     configureNodeList() // Barra desplegable de seleccion de nodos
 }
@@ -123,7 +132,7 @@ function configureNodeList() {
     $('.in-topbar-item.with-children').click(function (e) {
         e.preventDefault()
         if (!$(this).hasClass('active')) {
-            var target = $(this).attr('href')
+            var target = $(this).data('target')
             $('.in-topbar-item').removeClass('active')
             $('.options-container').hide()
             $(target).show()
@@ -163,9 +172,10 @@ function configureNodeList() {
         $node.click(function () {
             getComponent(path + '/' + component_filename, function (data) {
                 let options = $.extend(data.options, {
-                    title: component_name
+                    title: nodeShortTitles[component_name] || component_name
                 })
                 _GUI.addComponentToCanvas($(data.html), options)
+                autosavePage()
             })
             $topbar_options.slideUp()
             $('.in-topbar-item.active').removeClass('active')
@@ -258,12 +268,19 @@ function getComponent(path, callback) {
     $.getJSON('http://localhost:5000/getcomponent/' + path, callback)
 }
 
-function downloadPage() {
-    console.log('in')
-    console.log($body.serialize())
+function downloadPage(flag: string = 'download') {
+    window.onbeforeunload = undefined
     $('#ed-document').val('')
     $('#ed-document').val(document.body.innerHTML)
+    $('#ed-flag').val(flag)
     document.getElementById('ed-save-form').submit()
+    setTimeout(x => window.onbeforeunload = onbeforeunloadFunction, 100)
+
+
+}
+
+function autosavePage() {
+    downloadPage('autosave')
 }
 
 /** Loads a backup file selected with the page-uploader input */
@@ -280,6 +297,7 @@ function addComponentToCanvas($node, options = {}) {
     $canvas.append($node)
     addInterfaceToNode($node, options)
     addInterfaceToFragment($node)
+    $body.scrollTop($canvas[0].scrollHeight)
 }
 
 function addComponentAfter($node, $after, options = {}) {
@@ -289,6 +307,9 @@ function addComponentAfter($node, $after, options = {}) {
 }
 
 function addInterfaceToNode($node, options = {}) {
+    // ghost top-padding for topbar
+    //$node.prepend('<div class="in-ghost in-ghost-node-top-padding"></div>')
+
     let stored_options = $node.attr('data-interface-options')
     if (stored_options) options = $.extend(JSON.parse(stored_options), options)
     $node.addClass('canvas-component')

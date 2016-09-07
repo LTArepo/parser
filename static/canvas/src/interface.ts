@@ -5,10 +5,24 @@ import * as Cells from './cells'
 
 declare var $: any
 
+export var nodeShortTitles = {
+    'one half': '1/2',
+    'one third': '1/3',
+    'two third': '2/3',
+    'one fourth': '1/4',
+    'three fourth': '3/4',
+    'large 1338px': 'lg.',
+    'small 996px': 'sm.',
+    'fullwidth': 'fw.',
+}
+
 export class GUInterface {
     renderQueue: Array<RenderableElement> = []
     addComponentToCanvas: ($node, options) => any
     addComponentAfter: ($node, $after) => any
+    autosaveFunction: () => void
+    eventHistoryQueue: Array<any> = []
+    redoHistoryQueue: Array<any> = []
     nodeConfigurationDict: {}
     $container
 
@@ -16,7 +30,19 @@ export class GUInterface {
 
     constructor($container) {
         this.$container = $container
+        this.configureKeyboardInput()
         //$.getJSON('/static/components/data/nodeConfigurationdict.json', this.setNodeConfigurationDict)
+    }
+
+    configureKeyboardInput() {
+        $(document).keydown($.proxy(function (e) {
+            if (e.which === 90 && e.ctrlKey && e.shiftKey) {
+                this.redoNext()
+            }
+            else if (e.which === 90 && e.ctrlKey) {
+                this.undoNext()
+            }
+        }, this));
     }
 
     getNodeConfigurationData($node) {
@@ -45,6 +71,14 @@ export class GUInterface {
 
     getNodeOptions($node) {
         return JSON.parse($node.attr('data-interface-options'))
+    }
+
+    setAutosave(autosaveFunction) {
+        this.autosaveFunction = autosaveFunction
+    }
+
+    autosave() {
+        if (this.autosaveFunction) this.autosaveFunction()
     }
 
     refresh() {
@@ -96,6 +130,7 @@ export class GUInterface {
     addNodeToCanvas($node, options) {
         let $cloned_node = $node.clone(true)
         this.addComponentToCanvas($cloned_node, options)
+        this.autosave()
     }
 
     setAddComponentToCanvasFunction(fun: ($node, options) => any) {
@@ -106,9 +141,68 @@ export class GUInterface {
         this.addComponentAfter = fun
     }
 
-    // This class is handy if we want to log css changes, revert them and so on
+    // Apply css change
     changeNodeCSS($node, css_dict) {
         $node.css(css_dict)
+        this.autosave()
+    }
+
+    // This class is handy if we want to log css changes, revert them and so on
+    css($node, label: string, value) {
+        let old_value = $node.css(label)
+        let css_dict = {}
+        css_dict[label] = value
+        this.changeNodeCSS($node, css_dict)
+        this.addCSSEventToHistory($node, label, old_value)
+    }
+
+    addCSSEventToHistory($node, property_name: string, old_value: any) {
+        let event = {
+            event_type: 'css_property_change',
+            $node: $node,
+            property_name: property_name,
+            value: old_value,
+        }
+        this.eventHistoryQueue.push(event)
+    }
+
+    undoNext() {
+        let event = this.eventHistoryQueue.pop()
+        if (event) this.undoEvent(event)
+    }
+
+
+    redoNext() {
+        let event = this.redoHistoryQueue.pop()
+        if (event) this.redoEvent(event)
+    }
+
+    applyCSSEvent(event) {
+        let css_dict = {}
+        css_dict[event.property_name] = event.value
+        this.changeNodeCSS(event.$node, css_dict)
+    }
+
+    undoEvent(event) {
+        if (event.event_type = 'css_property_change') {
+            let current_value = event.$node.css(event.property_name)
+            this.applyCSSEvent(event)
+
+            let redo_event = event
+            redo_event.value = current_value
+            this.redoHistoryQueue.push(redo_event)
+        }
+    }
+
+    redoEvent(event) {
+        if (event.event_type = 'css_property_change') {
+            let current_value = event.$node.css(event.property_name)
+            this.applyCSSEvent(event)
+
+            let undo_event = event
+            undo_event.value = current_value
+            this.eventHistoryQueue.push(undo_event)
+        }
     }
 
 }
@@ -155,7 +249,6 @@ export class EditionPanel extends Window {
         this.changeTargetNodeLabel(options['title'])
 
         let viewportOffset = this.$elem.get(0).getBoundingClientRect();
-        console.log(viewportOffset)
         this.x = viewportOffset.left
         this.y = viewportOffset.top
         this.destroy()
@@ -203,10 +296,9 @@ export class EditionPanel extends Window {
         var $node = options['$node']
         var GUI = options['GUI']
 
+
         function css(label: string, value) {
-            let css_dict = {}
-            css_dict[label] = value
-            GUI.changeNodeCSS($node, css_dict)
+            GUI.css($node, label, value)
         }
 
         let align_label = new Cells.Label('Alineación')
@@ -231,21 +323,63 @@ export class EditionPanel extends Window {
 
         let margin_label = new Cells.Label('Márgenes exteriores')
         let number_inputs: Array<Cells.NumberInput> = [
-            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => css('margin-top', x) },
-            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => css('margin-right', x) },
-            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => css('margin-bottom', x) },
-            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => css('margin-left', x) },
+            {
+                label: 'Arriba',
+                value: $node.css('margin-top'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('margin-top', x)
+            },
+            {
+                label: 'Derecha',
+                value: $node.css('margin-right'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('margin-right', x)
+            },
+            {
+                label: 'Abajo',
+                value: $node.css('margin-bottom'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('margin-bottom', x)
+            },
+            {
+                label: 'Izquierda',
+                value: $node.css('margin-left'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('margin-left', x)
+            },
         ]
         let margin_entry = new Cells.NumberInputs(number_inputs)
 
         let padding_label = new Cells.Label('Padding interior')
         number_inputs = [
-            { label: 'Arriba', min: 0, max: 500, step: 1, callback: x => css('padding-top', x) },
-            { label: 'Derecha', min: 0, max: 500, step: 1, callback: x => css('padding-right', x) },
-            { label: 'Abajo', min: 0, max: 500, step: 1, callback: x => css('padding-bottom', x) },
-            { label: 'Izquierda', min: 0, max: 500, step: 1, callback: x => css('padding-left', x) },
+            {
+                label: 'Superior*',
+                value: $node.css('padding-top'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('padding-top', x)
+            },
+            {
+                label: 'Derecha',
+                value: $node.css('padding-right'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('padding-right', x)
+            },
+            {
+                label: 'Inferior',
+                value: $node.css('padding-bottom'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('padding-bottom', x)
+            },
+            {
+                label: 'Izquierda',
+                value: $node.css('padding-left'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('padding-left', x)
+            },
         ]
+
         let padding_entry = new Cells.NumberInputs(number_inputs)
+        let padding_helper = new Cells.TextHelper('* Invisible en modo edicion')
 
         panel.addCell(align_label)
         panel.addCell(align_entry)
@@ -253,6 +387,7 @@ export class EditionPanel extends Window {
         panel.addCell(margin_entry)
         panel.addCell(padding_label)
         panel.addCell(padding_entry)
+        panel.addCell(padding_helper)
     }
 
     estiloTab(panel, options = {}) {
@@ -261,14 +396,12 @@ export class EditionPanel extends Window {
         var GUI = options['GUI']
 
         function css(label: string, value) {
-            let css_dict = {}
-            css_dict[label] = value
-            GUI.changeNodeCSS($node, css_dict)
+            GUI.css($node, label, value)
         }
+
 
         let bgimage_label = new Cells.Label('Imagen de fondo')
         let bgimage_entry = new Cells.FileUpload('Inserta URL',
-            (x) => console.log(x),
             function (x) {
                 css('background-image', 'url(' + x + ')')
                 css('background-repeat', 'no-repeat')
@@ -283,22 +416,48 @@ export class EditionPanel extends Window {
 
         let borders_label = new Cells.Label('Bordes')
         let number_inputs: Array<Cells.NumberInput> = [
-            { label: 'Grosor', min: 0, max: 500, step: 1, callback: x => css('border-width', x) },
+            {
+                label: 'Grosor',
+                value: $node.css('border-width'),
+                min: 0, max: 500, step: 1,
+                callback: x => css('border-width', x)
+            },
         ]
         let borders_entry = new Cells.NumberInputs(number_inputs)
         let borders_color = new Cells.ColorPicker(x => css('border-color', x))
         let borders_helper = new Cells.TextHelper('Color del borde. Si consultas las paletas, abrirá otra pestaña')
 
-        let sombra_label = new Cells.Label('Sombra')
+        /*let sombra_label = new Cells.Label('Sombra')
         number_inputs = [
-            { label: 'Anchura', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Altura', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Radio', min: 0, max: 500, step: 1, callback: x => console.log(x) },
-            { label: 'Difusión', min: 0, max: 500, step: 1, callback: x => console.log(x) },
+            {
+                label: 'Anchura',
+                value: $node.css('border-width'),
+                min: 0, max: 500, step: 1,
+                callback: x => console.log(x)
+            },
+            {
+                label: 'Altura',
+                value: $node.css('border-width'),
+                min: 0, max: 500, step: 1,
+                callback: x => console.log(x)
+            },
+            {
+                label: 'Radio',
+                value: $node.css('border-width'),
+                min: 0, max: 500, step: 1,
+                callback: x => console.log(x)
+            },
+            {
+                label: 'Difusión',
+                value: $node.css('border-width'),
+                min: 0, max: 500, step: 1,
+                callback: x => console.log(x)
+            },
         ]
         let sombra_entry = new Cells.NumberInputs(number_inputs)
         let sombra_color = new Cells.ColorPicker(x => console.log(x))
         let sombra_helper = new Cells.TextHelper('Color sombra. Si consultas las paletas, abrirá otra pestaña')
+	*/
 
         panel.addCell(bgimage_label)
         panel.addCell(bgimage_entry)
@@ -313,10 +472,10 @@ export class EditionPanel extends Window {
         panel.addCell(borders_color)
         panel.addCell(borders_helper)
 
-        panel.addCell(sombra_label)
-        panel.addCell(sombra_entry)
-        panel.addCell(sombra_color)
-        panel.addCell(sombra_helper)
+        // panel.addCell(sombra_label)
+        // panel.addCell(sombra_entry)
+        // panel.addCell(sombra_color)
+        // panel.addCell(sombra_helper)
     }
 
     textoTab(panel, options = {}) {
@@ -324,9 +483,7 @@ export class EditionPanel extends Window {
         var GUI = options['GUI']
 
         function css(label: string, value) {
-            let css_dict = {}
-            css_dict[label] = value
-            GUI.changeNodeCSS($node, css_dict)
+            GUI.css($node, label, value)
         }
 
         let tipografia_label = new Cells.Label('Tipografía')
@@ -356,8 +513,18 @@ export class EditionPanel extends Window {
 
         let tamano_label = new Cells.Label('Tamaño')
         let number_inputs = [
-            { label: 'Dimension', min: 0, max: 120, step: 1, callback: x => css('font-size', x) },
-            { label: 'Grosor', min: 300, max: 800, step: 100, callback: x => css('font-weight', x) },
+            {
+                label: 'Dimension',
+                value: $node.css('font-size'),
+                min: 0, max: 120, step: 1,
+                callback: x => css('font-size', x)
+            },
+            {
+                label: 'Grosor',
+                value: $node.css('font-weight'),
+                min: 300, max: 800, step:
+                100, callback: x => css('font-weight', x)
+            },
         ]
         let tamano_entry = new Cells.NumberInputs(number_inputs)
 
@@ -371,8 +538,18 @@ export class EditionPanel extends Window {
 
         let espaciado_label = new Cells.Label('Espaciado')
         number_inputs = [
-            { label: 'Vertical', min: 0, max: 120, step: 0.1, callback: x => css('line-height', x) },
-            { label: 'Horizontal', min: 0, max: 120, step: 0.5, callback: x => css('letter-spacing', x) },
+            {
+                label: 'Vertical',
+                value: $node.css('line-height'),
+                min: 0, max: 120, step: 0.1,
+                callback: x => css('line-height', x)
+            },
+            {
+                label: 'Horizontal',
+                value: $node.css('letter-spacing'),
+                min: 0, max: 120, step: 0.5,
+                callback: x => css('letter-spacing', x)
+            },
         ]
         let espaciado_entry = new Cells.NumberInputs(number_inputs)
 

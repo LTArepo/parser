@@ -288,7 +288,7 @@ body {
   pointer-events: none; }
 
 .in-node-topbar.active {
-  background-color: #727171; }
+  background-color: #5d8eaa; }
 
 .in-node-topbar-icon {
   vertical-align: middle;
@@ -348,8 +348,16 @@ body {
   display: none; }
 
 /* CONTAINERS */
+.editing .in-ghost {
+  display: block; }
+.editing .in-ghost-node-top-padding {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 30px;
+  pointer-events: none; }
 .editing .canvas-component {
-  padding-top: 30px;
+  padding-top: 30px !important;
   border: 1px dashed black;
   box-sizing: border-box; }
 .editing .in-container {

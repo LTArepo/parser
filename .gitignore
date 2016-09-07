@@ -5,3 +5,5 @@ node_modules
 *.css.map
 output/zip_template
 tmp
+autosaves/*.json
+

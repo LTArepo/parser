@@ -45,6 +45,7 @@
 
 	<form id='ed-save-form' name="myform" action="http://localhost:5000/downloadpage/" method="POST">
 		<input id='ed-document' type="hidden" name="document" value="content">
+		<input id='ed-flag' type="hidden" name="flag" value="content">
 		<input id='ed-pageConfig' type="hidden" name="pageConfig" value="content">
 		<input id='ed-nodes' type="hidden" name="nodes" value="content">
 	</form>
@@ -58,10 +59,10 @@
 				<img src="/static/canvas/img/ec-logo.png" alt="El Confidencial" title="El Confidencial" width="132" height="15">
 			</div>
 			<div class="in-topbar-container in-topbar-container-menu">
-				<a id="containersMenu" class="in-topbar-item with-children" href="#containersOptions">Contenedores</a>
-				<a id="blocksMenu" class="in-topbar-item with-children" href="#blocksOptions">Bloques</a>
-				<a id="contentsMenu" class="in-topbar-item with-children" href="#contentsOptions">Contenidos</a>
-				<a id="floatsMenu" class="in-topbar-item with-children" href="#floatsOptions">Flotantes</a>
+				<a id="containersMenu" class="in-topbar-item with-children pointer" data-target="#containersOptions">Contenedores</a>
+				<a id="blocksMenu" class="in-topbar-item with-children pointer" data-target="#blocksOptions">Bloques</a>
+				<a id="contentsMenu" class="in-topbar-item with-children pointer" data-target="#contentsOptions">Contenidos</a>
+				<a id="floatsMenu" class="in-topbar-item with-children pointer" data-target="#floatsOptions">Flotantes</a>
 			</div>
 			<div class="in-topbar-container in-topbar-container-imports">
 				<a id="templatesMenu" class="in-topbar-item templates-item" href="#">Plantillas <img class="in-topbar-icon" src="/static/canvas/img/templates-icon.png" alt="Plantillas" title="Plantillas" width="12" height="14"></a>
