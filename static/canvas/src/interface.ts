@@ -487,7 +487,7 @@ export class EditionPanel extends Window {
         }
 
         let tipografia_label = new Cells.Label('Tipografía')
-        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'milio-font'])
+        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'milio-font', 'Roboto'], $node.css('font-family'))
 
         let estilos_label = new Cells.Label('Estilos')
         //let estilos_entry = new Cells.

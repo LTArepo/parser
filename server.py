@@ -24,7 +24,7 @@ def getComponent(path):
         component_data = parseComponent(path)
         return json.dumps(component_data)
     return json.dumps([])
-    
+
 @app.route('/downloadpage/', methods=['POST'])
 def downloadPage():
     flag = request.form.get('flag')
@@ -58,13 +58,13 @@ def generateIndex(canvas):
         return content
 
 def generateSave(canvas):
-    output = {} 
+    output = {}
     output['canvas'] = canvas
     return json.dumps(output)
-    
+
 def generateDownloadZip(canvas):
     if os.path.exists('output/zip_template'): rmtree('output/zip_template')
-    
+
     # Directory structure generation
     generateDirs(['output/zip_template/css', 'output/zip_template/js/third_party', 'output/zip_template/data'])
 
@@ -72,7 +72,7 @@ def generateDownloadZip(canvas):
     # Move updated files in
     copyfile('static/components/css/components.css', 'output/zip_template/css/main.css')
     copyfile('static/components/js/main.js', 'output/zip_template/js/main.js')
-    
+
     with open('output/zip_template/data/save.json', 'w') as save_file:
         save_file.write(generateSave(canvas))
     with open('output/zip_template/index.html', 'w') as index_file:
@@ -81,7 +81,7 @@ def generateDownloadZip(canvas):
 
     # Move libraries in
     copyfile('static/canvas/js/node_modules/jquery/dist/jquery.min.js', 'output/zip_template/js/third_party/jquery.min.js')
-    
+
     # Zip generation
     if os.path.exists('output/tmp/output.zip'):
         os.remove('output/tmp/output.zip')
@@ -99,7 +99,7 @@ def storeAutosave(canvas):
     filename = '_'.join([str(now.day), str(now.month), str(now.year)])
     with open('autosaves/'+filename+'.json', 'w') as save_file:
         save_file.write(generateSave(canvas))
-    
+
 
 # ==================================================
 #                      Utilities
@@ -131,4 +131,4 @@ def chcdir():
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    
+
