@@ -104,6 +104,7 @@ p {margin: 0 0 40px;}
 	margin: 0 auto;
 }
 .container-large, .container-small {width: 996px;}
+.text-container {padding: 0 150px}
 .one-fourth, .one-third, .one-half, .two-third, .three-fourth {float: left}
 .one-fourth {width: 25%}
 .one-third {width: 33%}
@@ -388,6 +389,7 @@ p {margin: 0 0 40px;}
 		padding: 0 5%;
 	}
 	.container-large, .container-small, .one-fourth, .one-third, .one-half, .two-third, .three-fourth {width: 100%}
+	.text-container {padding: 0}
 	/***** BLOCKS *****/
 	//Footer
 	.footer {
