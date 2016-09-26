@@ -105,7 +105,10 @@ p {margin: 0 0 40px;}
 }
 .container-large, .container-small {width: 996px;}
 .text-container {padding: 0 150px}
-.one-fourth, .one-third, .one-half, .two-third, .three-fourth {float: left}
+.one-fourth, .one-third, .one-half, .two-third, .three-fourth {
+	float: left;
+	box-sizing: border-box;
+}
 .one-fourth {width: 25%}
 .one-third {width: 33%}
 .one-half {width: 50%}
