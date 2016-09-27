@@ -106,22 +106,37 @@ export class TextArea extends Cell {
 }
 
 export class Select extends Cell {
+    default_option: string
     cssClasses = this.cssClasses + 'ce-select '
     callback: (val: string) => any
     options: Array<string> = []
     $select: any
 
-    constructor(callback, options) {
+    constructor(callback, options, default_option = undefined) {
         super()
+        this.default_option = default_option
         this.callback = callback
         this.options = options
     }
 
     renderContents() {
+        var default_option = this.default_option
+        default_option = this.parseFontValue(default_option)
+        console.log(default_option)
         this.$select = $('<select>')
-        this.$select.append(this.options.map(x => '<option>' + x + '</option>'))
+        this.$select.append(this.options.map(function (option) {
+            let selected_attribute = default_option == option ? ' selected="selected" ' : ''
+            return '<option' + selected_attribute + '>' + option + '</option>'
+        }))
         this.$elem.append(this.$select)
         onChange(this.$select, this.callback)
+    }
+
+    parseFontValue(str) {
+        let comma_index = str.indexOf(',')
+        if (comma_index > 0)
+            return str.substr(0, comma_index)
+        return str
     }
 
     destroy() {
@@ -261,10 +276,9 @@ export class FileUpload extends Cell {
     $file_input: any
     $label: any
 
-    constructor(placeholder: string, fileCallback: (file: string) => any, inputCallback: (path: string) => any) {
+    constructor(placeholder: string, inputCallback: (path: string) => any) {
         super()
         this.placeholder = placeholder
-        this.fileCallback = fileCallback
         this.inputCallback = inputCallback
     }
 

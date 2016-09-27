@@ -295,13 +295,14 @@ export class EditionPanel extends Window {
 
         var $node = options['$node']
         var GUI = options['GUI']
-
-
         function css(label: string, value) {
             GUI.css($node, label, value)
         }
 
-        let align_label = new Cells.Label('Alineación')
+        var cells = []
+
+        // Alineation
+        cells.push(new Cells.Label('Alineación'))
         let buttons: Array<Cells.IconButton> = [
             {
                 label: 'Izquierda',
@@ -318,10 +319,10 @@ export class EditionPanel extends Window {
                 icon_path: '/static/canvas/img/icons-panel/icon-align-right-inactive.png',
                 callback: () => css('text-align', 'right')
             }]
+        cells.push(new Cells.IconButtons(buttons))
 
-        let align_entry = new Cells.IconButtons(buttons)
-
-        let margin_label = new Cells.Label('Márgenes exteriores')
+        // Margin
+        cells.push(new Cells.Label('Márgenes exteriores'))
         let number_inputs: Array<Cells.NumberInput> = [
             {
                 label: 'Arriba',
@@ -348,9 +349,10 @@ export class EditionPanel extends Window {
                 callback: x => css('margin-left', x)
             },
         ]
-        let margin_entry = new Cells.NumberInputs(number_inputs)
+        cells.push(new Cells.NumberInputs(number_inputs))
 
-        let padding_label = new Cells.Label('Padding interior')
+        // Padding
+        cells.push(new Cells.Label('Padding interior'))
         number_inputs = [
             {
                 label: 'Superior*',
@@ -377,44 +379,99 @@ export class EditionPanel extends Window {
                 callback: x => css('padding-left', x)
             },
         ]
+        cells.push(new Cells.NumberInputs(number_inputs))
+        cells.push(new Cells.TextHelper('* Invisible en modo edicion'))
 
-        let padding_entry = new Cells.NumberInputs(number_inputs)
-        let padding_helper = new Cells.TextHelper('* Invisible en modo edicion')
+        // @TODO:TEST Absolute positioning
+        if ($node.hasClass('in-absolute')) {
+            cells.push(new Cells.Label('Posicionamiento'))
+            number_inputs = [
+                {
+                    label: 'Superior',
+                    value: $node.css('top'),
+                    min: 0, max: 500, step: 1,
+                    callback: x => css('top', x)
+                },
+                {
+                    label: 'Derecha',
+                    value: $node.css('right'),
+                    min: 0, max: 500, step: 1,
+                    callback: x => css('right', x)
+                },
+                {
+                    label: 'Inferior',
+                    value: $node.css('bottom'),
+                    min: 0, max: 500, step: 1,
+                    callback: x => css('bottom', x)
+                },
+                {
+                    label: 'Izquierda',
+                    value: $node.css('left'),
+                    min: 0, max: 500, step: 1,
+                    callback: x => css('left', x)
+                },
+            ]
+            cells.push(new Cells.NumberInputs(number_inputs))
+        }
 
-        panel.addCell(align_label)
-        panel.addCell(align_entry)
-        panel.addCell(margin_label)
-        panel.addCell(margin_entry)
-        panel.addCell(padding_label)
-        panel.addCell(padding_entry)
-        panel.addCell(padding_helper)
+        // Resize (width and height)
+        if ($node.hasClass('in-resizable')) {
+            cells.push(new Cells.Label('Dimensiones'))
+            number_inputs = [
+                {
+                    label: 'Width',
+                    value: $node.css('width'),
+                    min: 0, max: 2000, step: 20,
+                    callback: x => css('width', x)
+                },
+                {
+                    label: 'Height',
+                    value: $node.css('height'),
+                    min: 0, max: 2000, step: 20,
+                    callback: x => css('height', x)
+                },
+            ]
+            cells.push(new Cells.NumberInputs(number_inputs))
+        }
+
+        cells.forEach(x => panel.addCell(x))
     }
 
     estiloTab(panel, options = {}) {
 
+        // Resources
         var $node = options['$node']
         var GUI = options['GUI']
-
         function css(label: string, value) {
             GUI.css($node, label, value)
         }
 
 
-        let bgimage_label = new Cells.Label('Imagen de fondo')
-        let bgimage_entry = new Cells.FileUpload('Inserta URL',
-            function (x) {
-                css('background-image', 'url(' + x + ')')
-                css('background-repeat', 'no-repeat')
-                css('background-size', '100% auto')
-                css('background-position', 'center top')
-            })
-        let bgimage_helper = new Cells.TextHelper('Selecciona una imagen de tu ordenador')
+        var cells = []
 
-        let bgcolor_label = new Cells.Label('Color de fondo')
-        let bgcolor_entry = new Cells.ColorPicker(x => css('background-color', x))
-        let bgcolor_helper = new Cells.TextHelper('Si consultas las paletas, abrirá otra pestaña')
+        // Image
+        if ($node.hasClass('in-container')) {
+            cells.push(new Cells.Label('Imagen de fondo'))
+            cells.push(new Cells.FileUpload('Inserta URL',
+                function (x) {
+                    css('background-image', 'url(' + x + ')')
+                    css('background-repeat', 'no-repeat')
+                    css('background-size', '100% auto')
+                    css('background-position', 'center top')
+                }))
+            cells.push(new Cells.TextHelper('Provisionalmente, solo URLs'))
+        } else if ($node.hasClass('in-image')) {
+            cells.push(new Cells.Label('Imagen'))
+            cells.push(new Cells.FileUpload('Inserta URL',
+                function (x) { $node.attr('src', x) }))
+            cells.push(new Cells.TextHelper('Provisionalmente, solo URLs'))
+        }
 
-        let borders_label = new Cells.Label('Bordes')
+        cells.push(new Cells.Label('Color de fondo'))
+        cells.push(new Cells.ColorPicker(x => css('background-color', x)))
+        cells.push(new Cells.TextHelper('Si consultas las paletas, abrirá otra pestaña'))
+
+        cells.push(new Cells.Label('Bordes'))
         let number_inputs: Array<Cells.NumberInput> = [
             {
                 label: 'Grosor',
@@ -423,9 +480,9 @@ export class EditionPanel extends Window {
                 callback: x => css('border-width', x)
             },
         ]
-        let borders_entry = new Cells.NumberInputs(number_inputs)
-        let borders_color = new Cells.ColorPicker(x => css('border-color', x))
-        let borders_helper = new Cells.TextHelper('Color del borde. Si consultas las paletas, abrirá otra pestaña')
+        cells.push(new Cells.NumberInputs(number_inputs))
+        cells.push(new Cells.ColorPicker(x => css('border-color', x)))
+        cells.push(new Cells.TextHelper('Color del borde. Si consultas las paletas, abrirá otra pestaña'))
 
         /*let sombra_label = new Cells.Label('Sombra')
         number_inputs = [
@@ -458,24 +515,8 @@ export class EditionPanel extends Window {
         let sombra_color = new Cells.ColorPicker(x => console.log(x))
         let sombra_helper = new Cells.TextHelper('Color sombra. Si consultas las paletas, abrirá otra pestaña')
 	*/
+        cells.forEach(x => panel.addCell(x))
 
-        panel.addCell(bgimage_label)
-        panel.addCell(bgimage_entry)
-        panel.addCell(bgimage_helper)
-
-        panel.addCell(bgcolor_label)
-        panel.addCell(bgcolor_entry)
-        panel.addCell(bgcolor_helper)
-
-        panel.addCell(borders_label)
-        panel.addCell(borders_entry)
-        panel.addCell(borders_color)
-        panel.addCell(borders_helper)
-
-        // panel.addCell(sombra_label)
-        // panel.addCell(sombra_entry)
-        // panel.addCell(sombra_color)
-        // panel.addCell(sombra_helper)
     }
 
     textoTab(panel, options = {}) {
@@ -487,7 +528,7 @@ export class EditionPanel extends Window {
         }
 
         let tipografia_label = new Cells.Label('Tipografía')
-        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'milio-font'])
+        let tipografia_entry = new Cells.Select(x => css('font-family', x), ['Titillium Web', 'milio-font', 'Roboto'], $node.css('font-family'))
 
         let estilos_label = new Cells.Label('Estilos')
         //let estilos_entry = new Cells.
