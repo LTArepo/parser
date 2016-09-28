@@ -36,21 +36,21 @@ body{
     pointer-events: all;
     position: fixed;
     width: 100%;
-    background: #383838;
+    background: #0d3749;
 }
 .in-topbar-container {
-    display: inline-block;
+    display: inline;
     font-size: 0;
     line-height: 0;
 }
 .in-topbar-container-logo {
-    padding: 25px 20px;
+    padding: 24px 20px;
 }
 .in-topbar-item {
     font-size: 14px;
     padding: 25px 25px 21px;
     text-decoration: none;
-    color: #cecece;
+    color: #fff;
     &.with-children {
         -webkit-transition: background .3s ease-out, color .3s ease-out;
         -moz-transition: background .3s ease-out, color .3s ease-out;
@@ -63,17 +63,18 @@ body{
     }
     &.templates-item, &.import-item {
         display: inline-block;
-        color: #747474;
+        color: #49839c;
     }
     &.settings-item {
         display: inline-block;
-        background: #494949;
+        background: #49839c;
         padding: 24px 25px 23px;
+        color: #0d3749;
     }
     &.actions-item {
         display: inline-block;
-        color: #9aceff;
-        background: #494949;
+        color: #fff;
+        background: #49839c;
         padding: 24px 25px 23px;
     }
     .download-item {
@@ -210,7 +211,7 @@ body{
 .edition-panel-node-title-container {
     width: 100%;
     height: 50px;
-    background-color: #383838;
+    background-color: #0d3749;
     padding: 10px 20px;
     box-sizing: border-box;
     > img {
@@ -223,7 +224,7 @@ body{
 }
 
 .in-tabrow-subpanel {
-    background: #383838;
+    background: #0d3749;
 }
 .in-tabrow-tab {
     float: left;
