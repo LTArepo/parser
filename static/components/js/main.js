@@ -2,7 +2,37 @@ $(document).ready(function(){
     updateJavascript()
 })
 
+// Applies a function to all the instances of a the given selector passing
+// every instance as a parameter
+function _apply(selector, func){
+    $elem_list = $(selector)
+    $elem_list.each(function(){
+        func($(this))
+    })
+}
 
+// Version Esquembres
+function updateJS(){
+
+    console.log('updating JS')
+
+    // =============================================
+    //                SCROLL DOWN (working)
+    // =============================================
+
+    _apply('.ed-scrolldown', initScrolldown)
+    function initScrolldown($scrolldown){
+        $scrolldown.unbind('click')
+        $scrolldown.on('click',function(e) {
+            e.preventDefault()
+            $('html, body').stop().animate({
+                'scrollTop': $(window).height()
+            }, 900, 'swing')
+        })
+    }
+}
+
+// Version Luisis
 function updateJavascript(){
     var $fullScreen
     var $scrollDown

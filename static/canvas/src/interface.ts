@@ -644,6 +644,7 @@ export class EditionPanel extends Window {
 
         function changeParameter(parameter, value) {
             $config.data(parameter.key, value)
+            updateJS()
         }
     }
 }

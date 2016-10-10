@@ -15,7 +15,7 @@ var _editionPanel: EditionPanel
 var _dragula
 
 // ==================================================
-//		   INITIALIZATION 
+//		   INITIALIZATION
 // ==================================================
 
 $(document).ready(function () {
@@ -276,8 +276,6 @@ function downloadPage(flag: string = 'download') {
     $('#ed-flag').val(flag)
     document.getElementById('ed-save-form').submit()
     setTimeout(x => window.onbeforeunload = onbeforeunloadFunction, 100)
-
-
 }
 
 function autosavePage() {
@@ -299,6 +297,7 @@ function addComponentToCanvas($node, options = {}) {
     addInterfaceToNode($node, options)
     addInterfaceToFragment($node)
     $body.scrollTop($canvas[0].scrollHeight)
+    updateJS()
 }
 
 function addComponentAfter($node, $after, options = {}) {
@@ -348,7 +347,7 @@ function selectNode($node) {
 
 
 // ==================================================
-//			UTILITIES
+//             			UTILITIES
 // ==================================================
 
 function formatPath(path) {
